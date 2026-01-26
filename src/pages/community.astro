@@ -1,0 +1,136 @@
+
+---
+import '@styles/styles.css';
+---
+
+<!DOCTYPE html>
+<html lang="da">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fællesskabet | Oratorium</title>
+    <meta name="robots" content="noindex, nofollow">
+    <link rel="icon" type="image/svg+xml" href="/assets/favicon-cross.svg">
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700&family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    
+    <style>
+        body { font-family: 'Cinzel', serif; background: #020205; color: #e5e7eb; }
+        .sans { font-family: 'Inter', sans-serif; }
+        
+        .pilgrim-card {
+            background: rgba(255, 255, 255, 0.02);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            transition: all 0.3s ease;
+        }
+        .pilgrim-card:hover {
+            background: rgba(255, 255, 255, 0.05);
+            border-color: rgba(255, 215, 0, 0.3);
+            transform: translateY(-2px);
+        }
+    </style>
+</head>
+<body class="selection:bg-gold-500/30 min-h-screen flex flex-col pt-32">
+
+    <!-- Nav -->
+    <nav class="fixed top-8 left-8 z-50">
+        <a href="/" class="text-gold-500/60 hover:text-gold-400 transition-colors text-xl flex items-center gap-2 sans">
+            <i class="fa-solid fa-arrow-left"></i>
+            <span class="text-xs uppercase tracking-widest hidden md:inline">Tilbage</span>
+        </a>
+    </nav>
+
+    <!-- Header -->
+    <header class="text-center mb-16 px-4">
+        <h1 class="text-4xl md:text-5xl text-gold-500 mb-4 font-serif drop-shadow-lg">Fællesskabet</h1>
+        <p class="text-xs text-gray-500 uppercase tracking-[0.3em] sans">Pilgrimme på Vejen</p>
+    </header>
+
+    <!-- Grid -->
+    <div id="grid-container" class="w-full max-w-6xl mx-auto px-6 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 pb-20">
+        <!-- Loading -->
+        <div class="col-span-full text-center text-gray-600 text-sm italic animate-pulse">
+            Indlæser pilgrimme...
+        </div>
+    </div>
+
+    <script type="module">
+        import { createClient } from 'https://esm.sh/@supabase/supabase-js@2';
+
+        const SUPABASE_URL = 'https://sdfwawnviylwwlbnwpnj.supabase.co'; 
+        const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InNkZndhd252aXlsd3dsYm53cG5qIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjkyNzY4MjEsImV4cCI6MjA4NDg1MjgyMX0.oIR0N05DQY6ePfDXVNC0UI9DrLrM-LevsK64ANEJGag';
+        const client = createClient(SUPABASE_URL, SUPABASE_KEY);
+
+        const container = document.getElementById('grid-container');
+
+        async function fetchPilgrims() {
+            const { data: profiles, error } = await client
+                .from('profiles')
+                .select('*')
+                .order('created_at', { ascending: false }); // Newest first
+
+            if(error) {
+                console.error(error);
+                container.innerHTML = `<p class="col-span-full text-center text-red-500">Kunne ikke hente fællesskabet.</p>`;
+                return;
+            }
+
+            renderPilgrims(profiles);
+        }
+
+        function renderPilgrims(list) {
+            container.innerHTML = '';
+            
+            if(!list || list.length === 0) {
+                 container.innerHTML = `<p class="col-span-full text-center text-gray-600">Ingen pilgrimme endnu.</p>`;
+                 return;
+            }
+
+            list.forEach(p => {
+                // Name Logic
+                let name = "Anonym Pilgrim";
+                if(p.first_name || p.last_name) name = `${p.first_name||''} ${p.last_name||''}`.trim();
+                else if(p.username) name = p.username;
+                
+                // Joined Date
+                const joined = new Date(p.created_at).toLocaleDateString('da-DK', { month: 'short', year: 'numeric' });
+
+                // Stats
+                const streak = p.streak || 0;
+                const roses = p.rosary_count || 0;
+
+                const el = document.createElement('a');
+                el.href = `/pilgrim?id=${p.id}`;
+                el.className = "pilgrim-card block p-6 rounded flex items-center justify-between group decoration-transparent";
+                el.innerHTML = `
+                    <div class="flex items-center gap-4">
+                        <div class="w-12 h-12 bg-white/5 border border-white/10 rounded-full flex items-center justify-center text-gold-500/50 group-hover:text-gold-500 group-hover:border-gold-500/50 transition-colors">
+                            <i class="fa-solid fa-user"></i>
+                        </div>
+                        <div class="text-left">
+                            <h3 class="text-gray-200 group-hover:text-white font-serif text-lg leading-tight transition-colors">${name}</h3>
+                            <p class="text-[10px] text-gray-600 uppercase tracking-wider mt-1">Siden ${joined}</p>
+                        </div>
+                    </div>
+                    
+                    <div class="text-right flex flex-col gap-1 items-end">
+                        ${streak > 0 ? `
+                           <span class="text-[10px] text-orange-400 bg-orange-900/10 border border-orange-500/20 px-2 py-0.5 rounded flex items-center gap-1">
+                                <i class="fa-solid fa-fire"></i> ${streak}
+                           </span>
+                        ` : ''}
+                        ${roses > 0 ? `
+                           <span class="text-[10px] text-red-400 bg-red-900/10 border border-red-500/20 px-2 py-0.5 rounded flex items-center gap-1">
+                                <i class="fa-solid fa-rose"></i> ${roses}
+                           </span>
+                        ` : ''}
+                    </div>
+                `;
+                container.appendChild(el);
+            });
+        }
+
+        fetchPilgrims();
+    </script>
+</body>
+</html>
