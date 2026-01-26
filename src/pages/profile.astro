@@ -61,6 +61,24 @@ import '@styles/styles.css';
             <!-- Populated by JS -->
         </div>
 
+        <!-- Daily Examen -->
+        <div class="border-t border-white/10 pt-16 mb-24">
+            <h2 class="text-2xl text-gold-500/80 mb-2 font-serif">Daglig Examen</h2>
+            <p class="text-gray-500 text-xs italic mb-8">"Hvor mødte jeg Gud i dag? Hvad er jeg taknemmelig for?"</p>
+            
+            <div id="examen-container" class="max-w-2xl mx-auto bg-white/5 border border-white/10 rounded p-6 text-left relative">
+                <div id="examen-loading" class="text-center text-gray-500 text-xs py-8">Indlæser dagens tanker...</div>
+                
+                <textarea id="examen-input" class="hidden w-full h-32 bg-black/30 border border-gray-700 rounded p-4 text-gray-300 focus:border-gold-500 outline-none resize-none font-serif leading-relaxed" placeholder="Skriv dine tanker her... (Dette er privat)"></textarea>
+                
+                <div id="examen-display" class="hidden text-gray-300 font-serif leading-relaxed whitespace-pre-wrap"></div>
+                
+                <button id="save-examen" class="hidden mt-4 bg-gold-600/20 text-gold-500 border border-gold-500/50 px-6 py-2 rounded uppercase text-xs tracking-widest hover:bg-gold-500 hover:text-black transition-colors">
+                    Gem Tanker
+                </button>
+            </div>
+        </div>
+
         <button onclick="signOut()" class="text-gray-500 hover:text-red-400 text-xs uppercase tracking-widest border border-gray-800 px-6 py-3 rounded hover:border-red-500/50 transition-colors">
             Log Ud
         </button>
@@ -89,6 +107,12 @@ import '@styles/styles.css';
         const modal = document.getElementById('edit-modal');
         const editNameInp = document.getElementById('edit-name');
         const saveBtn = document.getElementById('save-btn');
+        
+        // Examen Elements
+        const examenLoading = document.getElementById('examen-loading');
+        const examenInput = document.getElementById('examen-input');
+        const examenDisplay = document.getElementById('examen-display');
+        const saveExamenBtn = document.getElementById('save-examen');
 
         let currentUser = null;
 
@@ -180,7 +204,58 @@ import '@styles/styles.css';
             } else {
                 marksContainer.innerHTML = '<p class="text-gray-600 text-xs text-center w-full col-span-4 italic">Dit Scriptorium er tomt. Besøg biblioteket for at samle visdom.</p>';
             }
+
+            // Examen Logic
+            loadExamen();
         }
+
+        async function loadExamen() {
+            const today = new Date().toISOString().split('T')[0]; // YYYY-MM-DD
+            
+            const { data: entries, error } = await client
+                .from('daily_examens')
+                .select('*')
+                .eq('user_id', currentUser.id)
+                .eq('date', today)
+                .maybeSingle();
+
+            examenLoading.classList.add('hidden');
+            
+            if(entries) {
+                // Already written today
+                examenDisplay.innerText = entries.content;
+                examenDisplay.classList.remove('hidden');
+                // Could add edit button later
+            } else {
+                // Not written yet
+                examenInput.classList.remove('hidden');
+                saveExamenBtn.classList.remove('hidden');
+            }
+        }
+
+        saveExamenBtn.addEventListener('click', async () => {
+             const content = (examenInput as HTMLTextAreaElement).value;
+             if(!content.trim()) return;
+             
+             saveExamenBtn.innerText = "Gemmer...";
+             
+             const today = new Date().toISOString().split('T')[0];
+
+             const { error } = await client.from('daily_examens').insert([
+                 { user_id: currentUser.id, content: content, date: today }
+             ]);
+             
+             if(error) {
+                 alert("Fejl: " + error.message);
+                 saveExamenBtn.innerText = "Gem Tanker";
+             } else {
+                 // Switch to display mode
+                 examenInput.classList.add('hidden');
+                 saveExamenBtn.classList.add('hidden');
+                 examenDisplay.innerText = content;
+                 examenDisplay.classList.remove('hidden');
+             }
+        });
 
         window.toggleEdit = () => {
             modal.classList.toggle('hidden');
