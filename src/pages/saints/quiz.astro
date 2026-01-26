@@ -1,0 +1,160 @@
+
+---
+import '@styles/styles.css';
+import { quizQuestions } from '../../data/saints';
+---
+
+<!DOCTYPE html>
+<html lang="da">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Find Din Helgen | Oratorium</title>
+    <meta name="robots" content="noindex, nofollow">
+    <link rel="icon" type="image/svg+xml" href="/assets/favicon-cross.svg">
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700&family=Inter:wght@300;400;600&family=Playfair+Display:ital@0;1&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    
+    <style>
+        body { font-family: 'Cinzel', serif; background: #050508; color: #e5e7eb; overflow: hidden; }
+        .sans { font-family: 'Inter', sans-serif; }
+        
+        .fade-in { animation: fadeIn 0.5s ease-out forwards; opacity: 0; }
+        @keyframes fadeIn { to { opacity: 1; } }
+        
+        .slide-up { animation: slideUp 0.5s ease-out forwards; opacity: 0; transform: translateY(20px); }
+        @keyframes slideUp { to { opacity: 1; transform: translateY(0); } }
+    </style>
+</head>
+<body class="selection:bg-gold-500/30 h-screen w-screen flex flex-col items-center justify-center relative">
+
+    <!-- Back -->
+    <a href="/saints" class="fixed top-8 left-8 z-50 text-white/40 hover:text-white transition-colors text-xl flex items-center gap-2">
+        <i class="fa-solid fa-arrow-left"></i>
+        <span class="text-xs uppercase tracking-widest hidden md:inline">Afslut</span>
+    </a>
+
+    <!-- Background -->
+    <div class="absolute inset-0 z-0 bg-[radial-gradient(circle_at_center,_var(--tw-gradient-stops))] from-gold-900/10 via-[#050508] to-black"></div>
+
+    <!-- Container -->
+    <div class="relative z-10 w-full max-w-2xl px-6 text-center" id="quiz-container">
+        
+        <!-- PROGRESS -->
+        <div class="mb-12">
+            <div class="h-1 w-full bg-white/5 rounded-full overflow-hidden">
+                <div id="progress-bar" class="h-full bg-gold-500 transition-all duration-500" style="width: 0%"></div>
+            </div>
+            <p class="text-[10px] text-gray-600 uppercase tracking-widest mt-2" id="progress-text">Spørgsmål 1 af 5</p>
+        </div>
+
+        <!-- QUESTION AREA -->
+        <div id="question-card" class="slide-up">
+            <h2 id="question-text" class="text-2xl md:text-4xl text-white font-serif mb-12 leading-tight">
+                ...
+            </h2>
+            
+            <div class="grid grid-cols-1 gap-4" id="options-grid">
+                <!-- Options injected here -->
+            </div>
+        </div>
+
+        <!-- RESULT AREA (Hidden initially) -->
+        <div id="result-card" class="hidden slide-up">
+            <div class="w-24 h-24 mx-auto bg-gold-500/10 rounded-full flex items-center justify-center text-4xl text-gold-500 mb-6 border border-gold-500/30 halo-glow">
+                <i class="fa-solid fa-crown"></i>
+            </div>
+            
+            <p class="text-xs text-gray-500 uppercase tracking-widest mb-2">Din Skytshelgen Er</p>
+            <h1 id="result-name" class="text-4xl md:text-5xl text-gold-100 font-serif mb-2">...</h1>
+            <p id="result-title" class="text-gold-500/60 font-serif italic text-xl mb-8">...</p>
+            
+            <p id="result-desc" class="text-gray-300 sans text-sm leading-relaxed max-w-lg mx-auto mb-8">...</p>
+            
+            <blockquote id="result-quote" class="border-l border-gold-500/30 pl-4 py-2 mb-12 italic text-gray-400 font-serif max-w-md mx-auto">...</blockquote>
+            
+            <button onclick="location.reload()" class="text-xs uppercase tracking-widest text-gray-500 hover:text-white transition-colors border-b border-transparent hover:border-white pb-1">
+                Tag testen igen
+            </button>
+        </div>
+
+    </div>
+
+    <script>
+        import { quizQuestions, calculateMatch, saints } from '../../data/saints';
+
+        let currentQ = 0;
+        let scores = { introvert: 5, intellectual: 5, fiery: 5, mystic: 5 }; // Baseline 5 (Neutral)
+
+        const qCard = document.getElementById('question-card');
+        const rCard = document.getElementById('result-card');
+        const qText = document.getElementById('question-text');
+        const optGrid = document.getElementById('options-grid');
+        const pBar = document.getElementById('progress-bar');
+        const pText = document.getElementById('progress-text');
+
+        function loadQuestion() {
+            if(currentQ >= quizQuestions.length) {
+                showResult();
+                return;
+            }
+
+            const q = quizQuestions[currentQ];
+            
+            // UI Update
+            qText.innerText = q.text;
+            pBar.style.width = `${((currentQ) / quizQuestions.length) * 100}%`;
+            pText.innerText = `Spørgsmål ${currentQ + 1} af ${quizQuestions.length}`;
+            
+            // Build Options
+            optGrid.innerHTML = '';
+            q.options.forEach(opt => {
+                const btn = document.createElement('button');
+                btn.className = "p-6 bg-[#1a1a20] border border-white/10 rounded-lg hover:bg-gold-900/20 hover:border-gold-500/50 hover:text-gold-100 transition-all text-left group";
+                btn.innerHTML = `<span class="sans text-sm text-gray-300 group-hover:text-white transition-colors">${opt.text}</span>`;
+                
+                btn.onclick = () => {
+                   // Apply effects
+                   if(opt.effects.introvert) scores.introvert += opt.effects.introvert;
+                   if(opt.effects.intellectual) scores.intellectual += opt.effects.intellectual;
+                   if(opt.effects.fiery) scores.fiery += opt.effects.fiery;
+                   if(opt.effects.mystic) scores.mystic += opt.effects.mystic;
+                   
+                   nextQuestion();
+                };
+                
+                optGrid.appendChild(btn);
+            });
+            
+            // Anim reset
+            qCard.classList.remove('slide-up');
+            void qCard.offsetWidth; // trigger reflow
+            qCard.classList.add('slide-up');
+        }
+
+        function nextQuestion() {
+            currentQ++;
+            loadQuestion();
+        }
+
+        function showResult() {
+            qCard.classList.add('hidden');
+            rCard.classList.remove('hidden');
+            
+            pBar.style.width = '100%';
+            pText.innerText = 'Beregner match...';
+            
+            const match = calculateMatch(scores);
+            
+            document.getElementById('result-name').innerText = match.name;
+            document.getElementById('result-title').innerText = match.title;
+            document.getElementById('result-desc').innerText = match.description;
+            document.getElementById('result-quote').innerText = `"${match.quote}"`;
+        }
+
+        // Init
+        loadQuestion();
+
+    </script>
+</body>
+</html>
