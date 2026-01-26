@@ -1,0 +1,308 @@
+
+---
+import '@styles/styles.css';
+---
+
+<!DOCTYPE html>
+<html lang="da">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Messen Forklart | Oratorium</title>
+    <meta name="robots" content="index, follow">
+    <link rel="icon" type="image/svg+xml" href="/assets/favicon-cross.svg">
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700&family=Inter:wght@300;400;600&family=UnifrakturMaguntia&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    
+    <style>
+        body { font-family: 'Cinzel', serif; background: #020205; color: #e5e7eb; transition: background 0.5s ease; }
+        .sans { font-family: 'Inter', sans-serif; }
+        .blackletter { font-family: 'UnifrakturMaguntia', cursive; }
+        
+        /* Mode Specific Styles */
+        body.mode-tlm {
+            background: #0a0502; /* Warmer, darker, incense-like */
+        }
+        
+        .mode-toggle {
+            position: relative;
+            display: inline-flex;
+            background: rgba(255,255,255,0.05);
+            border: 1px solid rgba(255,215,0,0.3);
+            border-radius: 999px;
+            padding: 4px;
+        }
+        .mode-btn {
+            padding: 8px 24px;
+            border-radius: 999px;
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            transition: all 0.3s ease;
+            cursor: pointer;
+            color: #6b7280;
+        }
+        .mode-btn.active {
+            background: #d4af37;
+            color: #000;
+            font-weight: bold;
+            box-shadow: 0 0 15px rgba(212,175,55,0.4);
+        }
+        
+        /* Card Animations */
+        @keyframes slideIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .mass-card {
+            animation: slideIn 0.6s ease-out forwards;
+            opacity: 0;
+        }
+    </style>
+</head>
+<body class="selection:bg-gold-500/30 min-h-screen flex flex-col pt-32">
+
+    <!-- Nav -->
+    <nav class="fixed top-8 left-8 z-50">
+        <a href="/seek" class="text-gold-500/60 hover:text-gold-400 transition-colors text-xl flex items-center gap-2 sans bg-black/50 p-2 rounded backdrop-blur">
+            <i class="fa-solid fa-arrow-left"></i>
+            <span class="text-xs uppercase tracking-widest hidden md:inline">Tilbage</span>
+        </a>
+    </nav>
+
+    <!-- Header & Toggle -->
+    <header class="text-center mb-16 px-4 sticky top-0 z-40 bg-[#020205]/90 backdrop-blur-md py-8 border-b border-white/5 transition-colors" id="sticky-header">
+        <h1 class="text-3xl md:text-5xl text-gold-500 mb-6 font-serif drop-shadow-lg transition-all" id="main-title">Messen Forklart</h1>
+        
+        <div class="mode-toggle">
+            <button class="mode-btn active" onclick="setMode('novus')" id="btn-novus">Novus Ordo</button>
+            <button class="mode-btn" onclick="setMode('tlm')" id="btn-tlm">Vetus Ordo (TLM)</button>
+        </div>
+        
+        <p class="text-xs text-gray-500 uppercase tracking-widest mt-6 sans transition-all" id="mode-desc">
+            Den form af messen, som fejres i de fleste katolske kirker i dag.
+        </p>
+    </header>
+
+    <!-- Content Container -->
+    <div id="content-container" class="max-w-3xl mx-auto px-6 pb-32 space-y-16">
+        <!-- Dynamic Content Injected Here -->
+    </div>
+
+    <!-- Final Call -->
+    <div class="text-center pb-24 opacity-50">
+        <p class="text-xs text-gray-600 uppercase tracking-widest">Ite, missa est.</p>
+    </div>
+
+    <script>
+        // Data Structure
+        const massData = [
+            {
+                step: "1. Indledning",
+                icon: "fa-door-open",
+                novus: {
+                    title: "Tegnet",
+                    latin: "In nomine Patris...",
+                    desc: "Vi starter med at gøre korsets tegn. Vi træder ud af verdens larm og ind i Guds tid.",
+                    detail: "Præsten står vendt mod menigheden (Versus Populum)."
+                },
+                tlm: {
+                    title: "Asperges & Bøn ved Foden af Alteret",
+                    latin: "Introibo ad altare Dei",
+                    desc: "Præsten stænker vievand over menigheden (Asperges). Derefter beder han og messedrengen vekselbønner ved alterets fod.",
+                    detail: "Præsten står vendt mod Gud (Ad Orientem), med ryggen til folket."
+                }
+            },
+            {
+                step: "2. Syndsbekendelse",
+                icon: "fa-hands-wash",
+                novus: {
+                    title: "Kyrie Eleison",
+                    latin: "Kyrie eleison",
+                    desc: "Vi beder om Guds barmhjertighed. 'Herre, forbarm dig'.",
+                    detail: "Ofte på dansk, men græsk 'Kyrie' bruges stadig ofte."
+                },
+                tlm: {
+                    title: "Confiteor & Kyrie",
+                    latin: "Confiteor Deo omnipotenti...",
+                    desc: "En dyb, tredobbelt bøn om tilgivelse. Hvert 'Kyrie' gentages 3 gange (3 for Faderen, 3 for Sønnen, 3 for Helligånden).",
+                    detail: "Meget formelt og struktureret."
+                }
+            },
+            {
+                step: "3. Lovsang",
+                icon: "fa-music",
+                novus: {
+                    title: "Gloria",
+                    latin: "Gloria in excelsis Deo",
+                    desc: "Englenes sang fra julenat. Vi priser Gud for hans storhed.",
+                    detail: "Synges på festdage og søndage (undtagen i fasten)."
+                },
+                tlm: {
+                    title: "Gloria",
+                    latin: "Gloria in excelsis Deo",
+                    desc: "Præsten intonerer 'Gloria', og koret overtager. En storslået lovprisning.",
+                    detail: "Præsten tager sin biretta (hat) af ved Jesu navn."
+                }
+            },
+            {
+                step: "4. Ordets Liturgi",
+                icon: "fa-book-bible",
+                novus: {
+                    title: "Læsningerne",
+                    latin: null,
+                    desc: "Vi hører fra Det Gamle Testamente, Brevene og Evangeliet. Præsten holder en prædiken (homilie).",
+                    detail: "Læses på modersmålet (dansk) fra ambonen."
+                },
+                tlm: {
+                    title: "Epistlen & Evangeliet",
+                    latin: "Lectio Epistolae...",
+                    desc: "Læses eller synges på latin. Ved Evangeliet flyttes messebogen fra højre (epistelsiden) til venstre (evangeliesiden).",
+                    detail: "Menigheden står op under Evangeliet."
+                }
+            },
+            {
+                step: "5. Troen",
+                icon: "fa-shield-halved",
+                novus: {
+                    title: "Credo (Trosbekendelsen)",
+                    latin: "Credo in unum Deum",
+                    desc: "Vi bekræfter vores tro på Treenigheden og Kirken.",
+                    detail: "Vi bukker hovedet ved 'ved Helligånden har han taget bolig...'."
+                },
+                tlm: {
+                    title: "Credo",
+                    latin: "Credo in unum Deum",
+                    desc: "Synges ofte gregoriansk. Hele menigheden knæler et øjeblik ved 'Et incarnatus est' for at ære Inkarnationen.",
+                    detail: "En meget fysisk markering af troens mysterium."
+                }
+            },
+            {
+                step: "6. Eukaristien (Offeret)",
+                icon: "fa-church",
+                novus: {
+                    title: "Forvandlingen",
+                    latin: "Hoc est enim Corpus meum",
+                    desc: "Messen højdepunkt. Brød og vin bliver til Kristi Legeme og Blod. Præsten løfter hostien op til tilbedelse.",
+                    detail: "Dette er ikke et symbol. Det er Jesus selv."
+                },
+                tlm: {
+                    title: "Canon Missae (Stilheden)",
+                    latin: "HOC EST ENIM CORPUS MEUM",
+                    desc: "Den mest hellige stilhed. Præsten hvisker de indstiftende ord. Kun klokkerne og røgelsen markerer miraklet.",
+                    detail: "Det føles som om tiden står stille. Den romerske kanon bedes lydløst."
+                }
+            },
+            {
+                step: "7. Kommunion",
+                icon: "fa-bread-slice",
+                novus: {
+                    title: "Nadver",
+                    latin: "Corpus Christi",
+                    desc: "Vi modtager Jesus. Vi svarer 'Amen'.",
+                    detail: "Kan modtages stående eller knælende, i hånden eller på tungen."
+                },
+                tlm: {
+                    title: "Communio",
+                    latin: "Corpus Domini nostri Jesu Christi...",
+                    desc: "Præsten siger en bøn for hver person: 'Må Jesu Kristi legeme bevare din sjæl til det evige liv. Amen.' Du siger ingenting.",
+                    detail: "Modtages altid knælende og på tungen ved alterskranken."
+                }
+            },
+            {
+                step: "8. Afslutning",
+                icon: "fa-person-walking-arrow-right",
+                novus: {
+                    title: "Udsendelse",
+                    latin: "Ite, missa est",
+                    desc: "'Gå i fred'. Vi sendes ud for at tjene Herren i verden.",
+                    detail: ""
+                },
+                tlm: {
+                    title: "Det Sidste Evangelium",
+                    latin: "Initium sancti Evangelii secundum Joannem",
+                    desc: "Efter velsignelsen læser præsten Johannesevangeliets prolog ('I begyndelsen var Ordet...').",
+                    detail: "En kraftfuld påmindelse om Kristi guddommelighed, før vi går ud."
+                }
+            }
+        ];
+
+        const container = document.getElementById('content-container');
+        const btnNovus = document.getElementById('btn-novus');
+        const btnTlm = document.getElementById('btn-tlm');
+        const modeDesc = document.getElementById('mode-desc');
+        const body = document.body;
+        const header = document.getElementById('sticky-header');
+
+        function setMode(mode) {
+            // Update UI State
+            if(mode === 'novus') {
+                btnNovus.classList.add('active');
+                btnTlm.classList.remove('active');
+                modeDesc.innerText = "Den form af messen, som fejres i de fleste katolske kirker i dag (fra 1969). Fokus på fællesskab og forståelse.";
+                body.classList.remove('mode-tlm');
+                header.classList.remove('bg-[#0a0502]/90');
+                header.classList.add('bg-[#020205]/90');
+            } else {
+                btnNovus.classList.remove('active');
+                btnTlm.classList.add('active');
+                modeDesc.innerText = "Den Traditionelle Latinske Messe (før 1962). Fokus på mysteriet, stilhed og det sakrale sprog.";
+                body.classList.add('mode-tlm'); // Adds warmer background
+                header.classList.remove('bg-[#020205]/90');
+                header.classList.add('bg-[#0a0502]/90');
+            }
+
+            renderContent(mode);
+        }
+
+        function renderContent(mode) {
+            container.innerHTML = '';
+            
+            massData.forEach((item, index) => {
+                const data = item[mode];
+                const cleanLatin = data.latin ? `<span class="block text-gold-500/60 font-serif italic text-sm mt-2">"${data.latin}"</span>` : '';
+                
+                const card = document.createElement('div');
+                card.className = `mass-card bg-white/5 border border-white/10 p-8 rounded relative overflow-hidden group hover:border-gold-500/30 transition-colors`;
+                // Stagger animation
+                card.style.animationDelay = `${index * 100}ms`;
+
+                // TLM Styling tweaks
+                if(mode === 'tlm') {
+                    card.classList.add('border-gold-900/40', 'bg-[#0f0a05]');
+                }
+
+                card.innerHTML = `
+                    <div class="absolute top-0 right-0 p-4 opacity-10 text-6xl text-gold-500">
+                        <i class="fa-solid ${item.icon}"></i>
+                    </div>
+                    
+                    <div class="relative z-10">
+                        <span class="text-[10px] uppercase tracking-widest text-gray-500 mb-2 block">${item.step}</span>
+                        <h3 class="text-2xl text-gold-200 font-serif mb-2 ${mode === 'tlm' ? 'blackletter text-3xl' : ''}">${data.title}</h3>
+                        ${cleanLatin}
+                        
+                        <p class="text-gray-300 sans text-sm leading-relaxed mt-4">
+                            ${data.desc}
+                        </p>
+                        
+                        <div class="mt-6 pt-4 border-t border-white/5 flex items-start gap-3">
+                            <i class="fa-solid fa-circle-info text-gold-500/50 mt-1 text-xs"></i>
+                            <p class="text-xs text-gray-500 sans italic">${data.detail}</p>
+                        </div>
+                    </div>
+                `;
+                
+                container.appendChild(card);
+            });
+        }
+
+        // Init
+        setMode('novus');
+        
+        // Expose to window for onclick
+        window.setMode = setMode;
+
+    </script>
+</body>
+</html>
