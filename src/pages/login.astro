@@ -76,12 +76,23 @@ import '@styles/styles.css';
     </div>
 
     <script>
-        // CLIENT CONFIG
+        // DEBUG DIAGNOSTICS
+        console.log("Login Script Starting...");
+        
+        // 1. Check Library
+        // @ts-ignore
+        if (typeof supabase === 'undefined') {
+            alert("KRITISK FEJL: Supabase biblioteket kunne ikke indlæses. Tjek din internetforbindelse eller AdBlocker.");
+            throw new Error("Supabase is undefined");
+        }
+
         const SUPABASE_URL = 'https://sdfwawnviylwwlbnwpnj.supabase.co'; 
         const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InNkZndhd252aXlsd3dsYm53cG5qIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjkyNzY4MjEsImV4cCI6MjA4NDg1MjgyMX0.oIR0N05DQY6ePfDXVNC0UI9DrLrM-LevsK64ANEJGag';
         
+        // 2. Initialize
         // @ts-ignore
         const client = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+        console.log("Supabase Client Initialized");
 
         const form = document.getElementById('auth-form');
         const emailInput = document.getElementById('email');
@@ -90,6 +101,12 @@ import '@styles/styles.css';
         const btnSignup = document.getElementById('btn-signup');
         const errorMsg = document.getElementById('error-msg');
         const successMsg = document.getElementById('success-msg');
+
+        // 3. Check Elements
+        if(!form || !emailInput || !passInput || !btnLogin || !btnSignup) {
+            alert("KRITISK FEJL: Entelementer mangler på siden. Prøv at genindlæse.");
+            console.error("Missing elements", { form, emailInput, passInput, btnLogin, btnSignup });
+        }
 
         // Login Handler
         form.addEventListener('submit', async (e) => {
