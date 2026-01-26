@@ -1,0 +1,128 @@
+
+---
+import '@styles/styles.css';
+import { dictionary } from '../data/dictionary';
+
+// Sort alphabetically
+const sortedDictionary = dictionary.sort((a, b) => a.word.localeCompare(b.word));
+---
+
+<!DOCTYPE html>
+<html lang="da">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Katolsk Ordbog | Oratorium</title>
+    <meta name="robots" content="index, follow">
+    <link rel="icon" type="image/svg+xml" href="/assets/favicon-cross.svg">
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700&family=Inter:wght@300;400;600&family=Playfair+Display:ital@0;1&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    
+    <style>
+        body { font-family: 'Cinzel', serif; background: #08080a; color: #e5e7eb; }
+        .sans { font-family: 'Inter', sans-serif; }
+        .serif-italic { font-family: 'Playfair Display', serif; font-style: italic; }
+        
+        .paper-texture {
+            background-image: url('https://www.transparenttextures.com/patterns/aged-paper.png');
+            opacity: 0.05;
+            pointer-events: none;
+        }
+    </style>
+</head>
+<body class="selection:bg-gold-500/30 min-h-screen flex flex-col pt-32 relative">
+    
+    <div class="fixed inset-0 paper-texture z-0"></div>
+
+    <!-- Nav -->
+    <nav class="fixed top-8 left-8 z-50">
+        <a href="/seek" class="text-gold-500/60 hover:text-gold-400 transition-colors text-xl flex items-center gap-2 sans bg-black/50 p-2 rounded backdrop-blur">
+            <i class="fa-solid fa-arrow-left"></i>
+            <span class="text-xs uppercase tracking-widest hidden md:inline">Tilbage</span>
+        </a>
+    </nav>
+    
+    <!-- Header -->
+    <header class="text-center mb-12 px-4 relative z-10">
+        <div class="w-16 h-16 mx-auto bg-gold-900/10 rounded-full flex items-center justify-center text-gold-500 text-2xl mb-6 border border-gold-500/20">
+            <i class="fa-solid fa-spell-check"></i>
+        </div>
+        <h1 class="text-3xl md:text-5xl text-gold-500 mb-6 font-serif drop-shadow-lg">Katolsk Ordbog</h1>
+        <p class="text-xs text-gray-500 uppercase tracking-[0.3em] sans max-w-lg mx-auto leading-loose">
+            Forstå Kirkens sprog.
+        </p>
+    </header>
+
+    <!-- Search Tool -->
+    <div class="max-w-2xl mx-auto px-6 mb-16 relative z-10 sticky top-24">
+        <div class="relative group">
+            <div class="absolute inset-0 bg-gold-500/10 blur-xl opacity-0 group-hover:opacity-100 transition-opacity"></div>
+            <input 
+                type="text" 
+                id="search-input" 
+                placeholder="Søg efter ord... (f.eks. 'Eukaristi')" 
+                class="w-full bg-[#101015]/90 backdrop-blur-md border border-gold-500/30 rounded-lg py-4 pl-12 pr-6 text-gold-100 placeholder:text-gray-600 focus:outline-none focus:border-gold-500 focus:ring-1 focus:ring-gold-500 transition-all font-serif"
+            >
+            <i class="fa-solid fa-magnifying-glass absolute left-4 top-1/2 -translate-y-1/2 text-gray-500"></i>
+        </div>
+    </div>
+
+    <!-- Content -->
+    <main class="max-w-4xl mx-auto px-6 pb-32 relative z-10">
+        
+        <div class="space-y-4" id="dictionary-list">
+            
+            {sortedDictionary.map(term => (
+                <div class="dictionary-item bg-white/5 border border-white/10 p-6 rounded hover:bg-white/10 hover:border-gold-500/30 transition-all group" data-word={term.word.toLowerCase()} data-cat={term.category}>
+                    <div class="flex flex-col md:flex-row md:items-baseline gap-2 mb-2">
+                        <h3 class="text-xl text-gold-200 font-serif font-bold group-hover:text-gold-500 transition-colors">
+                            {term.word}
+                        </h3>
+                        <span class="text-[10px] text-gray-600 uppercase tracking-widest bg-black/30 px-2 py-1 rounded border border-white/5">
+                            {term.category}
+                        </span>
+                    </div>
+                    <p class="text-gray-400 sans text-sm leading-relaxed border-l-2 border-gold-500/20 pl-4 py-1">
+                        {term.definition}
+                    </p>
+                </div>
+            ))}
+
+            <div id="no-results" class="hidden text-center py-12">
+                <p class="text-gray-500 italic font-serif">Vi fandt ikke det ord...</p>
+                <a href="/aquinas" class="text-gold-500 text-xs uppercase tracking-widest hover:text-white mt-4 inline-block border-b border-gold-500/30">Spørg Thomas Aquinas</a>
+            </div>
+
+        </div>
+
+    </main>
+
+    <script>
+        const input = document.getElementById('search-input') as HTMLInputElement;
+        const list = document.getElementById('dictionary-list');
+        const items = document.querySelectorAll('.dictionary-item');
+        const noResults = document.getElementById('no-results');
+
+        input.addEventListener('input', (e) => {
+            const query = input.value.toLowerCase().trim();
+            let matches = 0;
+
+            items.forEach((item: Element) => {
+                const word = (item as HTMLElement).dataset.word || '';
+                if(word.includes(query)) {
+                    item.classList.remove('hidden');
+                    matches++;
+                } else {
+                    item.classList.add('hidden');
+                }
+            });
+
+            if(matches === 0) {
+                noResults.classList.remove('hidden');
+            } else {
+                noResults.classList.add('hidden');
+            }
+        });
+    </script>
+</body>
+</html>
