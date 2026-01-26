@@ -44,10 +44,11 @@ const currentGradient = seasonGradients[season.color] || seasonGradients.green;
     <!-- TOP BAR -->
     <div class="absolute top-0 w-full px-8 py-6 flex justify-between items-center z-50 pointer-events-none">
         
-        <!-- Season (Left) -->
-        <div class="pointer-events-auto opacity-50 hover:opacity-100 transition-opacity cursor-help text-left" title={season.description}>
-            <div class="text-[10px] uppercase tracking-[0.3em] text-gold-500">{season.name}</div>
-        </div>
+        <!-- ABOUT LINK (Top Left) -->
+        <a href="/om" class="pointer-events-auto text-gold-500/60 hover:text-gold-400 transition-colors text-xl flex items-center gap-2 sans group z-50">
+            <i class="fa-solid fa-circle-info text-base group-hover:rotate-12 transition-transform"></i>
+            <span class="text-xs uppercase tracking-widest hidden md:inline">Om Oratorium</span>
+        </a>
 
         <!-- Audio Control (Right) -->
         <button id="mute-btn" class="pointer-events-auto text-gold-500/60 hover:text-gold-400 transition-colors flex items-center gap-2 group" aria-label="Mute/Play">
