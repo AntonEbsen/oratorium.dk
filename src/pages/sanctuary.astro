@@ -1,0 +1,276 @@
+
+---
+import '@styles/styles.css';
+---
+
+<!DOCTYPE html>
+<html lang="da">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kirkerummet | Oratorium</title>
+    <meta name="robots" content="index, follow">
+    <link rel="icon" type="image/svg+xml" href="/assets/favicon-cross.svg">
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700&family=Inter:wght@300;400;600&family=Playfair+Display:ital@0;1&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    
+    <style>
+        body { font-family: 'Cinzel', serif; background: #020205; color: #e5e7eb; overflow: hidden; }
+        .sans { font-family: 'Inter', sans-serif; }
+        
+        /* The Architecture */
+        .church-container {
+            perspective: 1000px;
+            transform-style: preserve-3d;
+        }
+        
+        .hotspot {
+            position: absolute;
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            background: rgba(255, 215, 0, 0.4);
+            border: 1px solid #ffd700;
+            cursor: pointer;
+            box-shadow: 0 0 15px #ffd700;
+            transition: all 0.3s ease;
+            z-index: 20;
+            animation: pulse-glow 2s infinite;
+        }
+        .hotspot:hover {
+            transform: scale(1.5);
+            background: #ffd700;
+            color: black;
+        }
+        
+        .hotspot::after {
+            content: '';
+            position: absolute;
+            top: -5px; bottom: -5px; left: -5px; right: -5px;
+            border: 1px solid rgba(255, 215, 0, 0.3);
+            border-radius: 50%;
+            animation: ripple 2s infinite;
+        }
+
+        @keyframes pulse-glow {
+            0% { box-shadow: 0 0 0 0 rgba(255, 215, 0, 0.4); }
+            70% { box-shadow: 0 0 0 10px rgba(255, 215, 0, 0); }
+            100% { box-shadow: 0 0 0 0 rgba(255, 215, 0, 0); }
+        }
+        @keyframes ripple {
+            0% { transform: scale(1); opacity: 0.5; }
+            100% { transform: scale(2); opacity: 0; }
+        }
+
+        /* Detail Card Animation */
+        .detail-card {
+            transition: all 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+            transform: translateY(100%);
+            opacity: 0;
+        }
+        .detail-card.active {
+            transform: translateY(0);
+            opacity: 1;
+        }
+    </style>
+</head>
+<body class="selection:bg-gold-500/30 h-screen w-screen flex flex-col relative">
+
+    <!-- Nav -->
+    <nav class="fixed top-8 left-8 z-50">
+        <a href="/seek" class="text-gold-500/60 hover:text-gold-400 transition-colors text-xl flex items-center gap-2 sans bg-black/50 p-2 rounded backdrop-blur">
+            <i class="fa-solid fa-arrow-left"></i>
+            <span class="text-xs uppercase tracking-widest hidden md:inline">Tilbage</span>
+        </a>
+    </nav>
+    
+    <div class="fixed top-8 right-8 z-50 text-right">
+        <h1 class="text-2xl text-gold-500 font-serif">Sanctuarium</h1>
+        <p class="text-[10px] text-gray-500 uppercase tracking-widest">Det Hellige Rum</p>
+    </div>
+
+    <!-- MAIN VISUAL AREA (CSS Church) -->
+    <main class="flex-1 relative flex items-center justify-center bg-gradient-to-b from-[#101015] via-[#050508] to-black overflow-hidden group" id="church-visual">
+        
+        <!-- Atmosphere -->
+        <div class="absolute inset-0 z-0 pointer-events-none opacity-20 bg-[url('https://www.transparenttextures.com/patterns/stardust.png')]"></div>
+        <!-- Light Beams -->
+        <div class="absolute top-0 left-1/4 w-32 h-full bg-gradient-to-b from-white/5 to-transparent transform -skew-x-12 blur-xl pointer-events-none"></div>
+        <div class="absolute top-0 right-1/4 w-48 h-full bg-gradient-to-b from-white/5 to-transparent transform skew-x-12 blur-xl pointer-events-none"></div>
+
+        <!-- THE CHURCH SCHEMATIC (CSS Art) -->
+        <div class="relative w-[800px] h-[600px] church-container transform transition-transform duration-1000 scale-75 md:scale-100">
+            
+            <!-- Floor (Perspective) -->
+            <div class="absolute bottom-0 left-1/2 -translate-x-1/2 w-[1200px] h-[400px] bg-gradient-to-t from-[#1a1a20] to-transparent transform perspective-origin-bottom rotate-x-60 opacity-50 blur-sm"></div>
+
+            <!-- The Sanctuary Steps (Choir) -->
+            <div class="absolute bottom-32 left-1/2 -translate-x-1/2 w-[600px] h-32 bg-[#08080a] border-t border-white/10 rounded-t-full shadow-[0_-10px_30px_rgba(0,0,0,0.8)] z-10"></div>
+
+            <!-- 1. The Altar (Center) -->
+            <div class="absolute bottom-40 left-1/2 -translate-x-1/2 w-48 h-24 bg-[#15151a] border border-white/10 shadow-2xl z-20 flex items-center justify-center">
+                <div class="w-[90%] h-[90%] border border-white/5 bg-[url('https://www.transparenttextures.com/patterns/marble.png')] opacity-50"></div>
+                <div class="hotspot absolute -top-4 left-1/2 -translate-x-1/2" data-item="altar"></div>
+            </div>
+
+            <!-- 2. The Tabernacle (Back Center, Elevated) -->
+            <div class="absolute bottom-[280px] left-1/2 -translate-x-1/2 w-24 h-32 bg-gold-900/20 border border-gold-500/30 rounded-t-lg shadow-[0_0_40px_rgba(255,215,0,0.1)] z-10 flex items-center justify-center">
+                <i class="fa-solid fa-church text-gold-500/50 text-4xl"></i>
+                <div class="hotspot absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2" data-item="tabernacle"></div>
+            </div>
+            
+            <!-- 3. The Eternal Light (Red Lamp) -->
+            <div class="absolute bottom-[320px] left-[calc(50%+80px)] w-4 h-16 bg-gradient-to-b from-black to-transparent z-20 flex flex-col items-center animate-swing origin-top">
+                <div class="w-1 h-full bg-gray-800"></div>
+                <div class="w-6 h-8 bg-red-900/80 rounded-b-full shadow-[0_0_20px_red] relative">
+                    <div class="absolute bottom-1 left-1/2 -translate-x-1/2 w-1 h-1 bg-white rounded-full animate-flicker"></div>
+                </div>
+                <div class="hotspot absolute bottom-0 left-1/2 -translate-x-1/2 translate-y-4" data-item="lamp"></div>
+            </div>
+
+            <!-- 4. The Ambo (Lectern - Left) -->
+            <div class="absolute bottom-36 left-[200px] w-16 h-48 bg-[#101015] border-r border-white/10 transform skew-y-6 z-20">
+                <div class="hotspot absolute top-0 left-1/2 -translate-x-1/2" data-item="ambo"></div>
+            </div>
+
+            <!-- 5. The Crucifix (Top Center) -->
+            <div class="absolute top-20 left-1/2 -translate-x-1/2 w-32 h-48 opacity-30 z-0">
+                <i class="fa-solid fa-cross text-8xl text-gray-800 drop-shadow-2xl"></i>
+                <div class="hotspot absolute top-1/2 left-1/2 -translate-x-1/2" data-item="crucifix"></div>
+            </div>
+
+            <!-- 6. Holy Water (Entrance - Bottom Right) -->
+            <div class="absolute bottom-10 right-20 w-16 h-12 bg-white/5 rounded-full border border-white/10 z-30 shadow-inner">
+                <div class="hotspot absolute top-0 left-1/2 -translate-x-1/2 -translate-y-1/2" data-item="holywater"></div>
+            </div>
+
+            <!-- 7. Confessional (Side - Far Left) -->
+            <div class="absolute bottom-20 left-20 w-24 h-48 bg-[#0a0505] border border-white/5 rounded-t-xl z-10 opacity-80">
+                <div class="w-full h-full bg-[repeating-linear-gradient(90deg,transparent,transparent_2px,rgba(0,0,0,0.5)_2px,rgba(0,0,0,0.5)_4px)]"></div>
+                <div class="hotspot absolute top-1/2 left-1/2 -translate-x-1/2" data-item="confessional"></div>
+            </div>
+
+        </div>
+
+    </main>
+
+    <!-- DETAIL OVERLAY (Bottom Sheet) -->
+    <div id="detail-card" class="detail-card fixed bottom-0 left-0 right-0 h-[40vh] bg-[#0f0a05] border-t border-gold-500/30 backdrop-blur-md z-40 p-8 md:p-12 flex flex-col md:flex-row gap-8 items-start shadow-[0_-10px_50px_rgba(0,0,0,0.8)]">
+        
+        <button id="close-btn" class="absolute top-6 right-6 text-gray-500 hover:text-white transition-colors">
+            <i class="fa-solid fa-xmark text-2xl"></i>
+        </button>
+
+        <div class="flex-shrink-0">
+            <div id="detail-icon" class="w-20 h-20 bg-gold-900/10 border border-gold-500/20 rounded-full flex items-center justify-center text-4xl text-gold-500">
+                <i class="fa-solid fa-church"></i>
+            </div>
+        </div>
+
+        <div class="flex-1 overflow-y-auto pr-4">
+            <p class="text-[10px] text-gold-500 uppercase tracking-widest mb-2" id="detail-type">Objekt</p>
+            <h2 class="text-3xl text-white font-serif mb-4" id="detail-title">Vælg et punkt</h2>
+            <p class="text-gray-300 sans text-sm leading-relaxed max-w-2xl mb-6" id="detail-desc">
+                Klik på de lysende punkter i kirkerummet for at forstå deres betydning.
+            </p>
+            <div class="p-4 bg-white/5 rounded border-l-2 border-gold-500/50 italic text-gray-400 font-serif text-sm" id="detail-theology">
+                ...
+            </div>
+        </div>
+
+    </div>
+
+    <!-- Data -->
+    <script>
+        const details = {
+            'tabernacle': {
+                title: 'Tabernaklet',
+                type: 'Det Allerhelligste',
+                icon: 'fa-box',
+                desc: 'Den gyldne boks, hvor de indviede hostier (Kristi Legeme) opbevares efter messen. Det er kirkens hjerte. Når du ser dette, ved du, at Jesus er fysisk til stede i rummet.',
+                theology: '"Se, Guds bolig hos mennesker." Det er derfor, kirken aldrig føles tom. Han er her.'
+            },
+            'lamp': {
+                title: 'Evighedslampen',
+                type: 'Tegnet',
+                icon: 'fa-lightbulb',
+                desc: 'Den røde lampe, der altid brænder ved siden af tabernaklet. Den signalerer "Hjemme". Så længe lyset brænder, er Det Hellige Sakramente i tabernaklet.',
+                theology: 'Lyset symboliserer Kristi vågne tilstedeværelse, der aldrig sover.'
+            },
+            'altar': {
+                title: 'Alteret',
+                type: 'Offerbordet',
+                icon: 'fa-table',
+                desc: 'Her fejres Eukaristien. Det repræsenterer både et bord (Den Sidste Nadver) og et offersted (Golgata). Præsten kysser alteret ved messens start for at ære Kristus.',
+                theology: 'Jorden og Himlen mødes her. Det er centrum for liturgien.'
+            },
+            'ambo': {
+                title: 'Ambonen',
+                type: 'Ordets Sted',
+                icon: 'fa-book-open',
+                desc: 'Pulten, hvorfra Bibelen læses og prædikenen holdes. I den katolske messe læses der altid fra både GT, Brevene og Evangeliet.',
+                theology: 'Gud nærer os fra to borde: Ordets bord (Ambonen) og Eukaristiens bord (Alteret).'
+            },
+            'holywater': {
+                title: 'Vievarandskaret',
+                type: 'Indgangen',
+                icon: 'fa-water',
+                desc: 'Ved indgangen dypper vi fingrene i vievand og gør korsets tegn. Det er en påmindelse om vores dåb, hvor vi trådte ind i Kirken.',
+                theology: 'Vi vasker verdens støv af os, før vi træder ind i det hellige.'
+            },
+            'confessional': {
+                title: 'Skriftestolen',
+                type: 'Barmhjertighedens Sted',
+                icon: 'fa-user-secret',
+                desc: 'Stedet hvor man bekender sine synder til præsten og modtager Guds tilgivelse (Absolution). Det er ikke en domstol, men et hospital for sjælen.',
+                theology: '"Hvem I forlader synderne, dem er de forladt." - Jesus til Apostlene.'
+            },
+            'crucifix': {
+                title: 'Krucifikset',
+                type: 'Symbolet',
+                icon: 'fa-cross',
+                desc: 'I enhver katolsk kirke hænger Kristus på korset (ikke kun et tomt kors). Det minder os om prisen for vores frelse og om Guds uendelige kærlighed.',
+                theology: 'Vi prædiker Kristus som korsfæstet.'
+            }
+        };
+
+        const card = document.getElementById('detail-card');
+        const title = document.getElementById('detail-title');
+        const desc = document.getElementById('detail-desc');
+        const theology = document.getElementById('detail-theology');
+        const type = document.getElementById('detail-type');
+        const icon = document.getElementById('detail-icon');
+        const closeBtn = document.getElementById('close-btn');
+
+        document.querySelectorAll('.hotspot').forEach(spot => {
+            spot.addEventListener('click', (e) => {
+                e.stopPropagation();
+                const key = spot.dataset.item;
+                const data = details[key];
+                
+                if(data) {
+                    title.innerText = data.title;
+                    type.innerText = data.type;
+                    desc.innerText = data.desc;
+                    theology.innerText = data.theology;
+                    icon.innerHTML = `<i class="fa-solid ${data.icon}"></i>`;
+                    
+                    card.classList.add('active');
+                }
+            });
+        });
+
+        closeBtn.addEventListener('click', () => {
+            card.classList.remove('active');
+        });
+
+        document.body.addEventListener('click', (e) => {
+             // Close if clicking outside detail card when open
+             if(card.classList.contains('active') && !card.contains(e.target)) {
+                 card.classList.remove('active');
+             }
+        });
+
+    </script>
+</body>
+</html>
