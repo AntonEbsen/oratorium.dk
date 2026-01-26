@@ -1,0 +1,148 @@
+
+---
+import '@styles/styles.css';
+---
+
+<!DOCTYPE html>
+<html lang="da">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kirkekortet | Oratorium</title>
+    <meta name="robots" content="index, follow">
+    <link rel="icon" type="image/svg+xml" href="/assets/favicon-cross.svg">
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700&family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    
+    <!-- Leaflet CSS -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin=""/>
+
+    <style>
+        body { font-family: 'Cinzel', serif; background: #020205; color: #e5e7eb; }
+        .sans { font-family: 'Inter', sans-serif; }
+        
+        #map { height: 80vh; width: 100%; z-index: 10; border-top: 1px solid rgba(255, 215, 0, 0.2); border-bottom: 1px solid rgba(255, 215, 0, 0.2); }
+        
+        /* Custom Popup Styling */
+        .leaflet-popup-content-wrapper {
+            background: rgba(10, 10, 15, 0.95);
+            color: #d1d5db;
+            border: 1px solid rgba(255, 215, 0, 0.3);
+            border-radius: 4px;
+            font-family: 'Inter', sans-serif;
+        }
+        .leaflet-popup-tip {
+            background: rgba(10, 10, 15, 0.95);
+        }
+        .leaflet-popup-close-button {
+            color: #d1d5db !important;
+        }
+        
+        /* Marker Icon */
+        .custom-icon {
+            text-align: center;
+            line-height: 1;
+        }
+    </style>
+</head>
+<body class="selection:bg-gold-500/30 min-h-screen flex flex-col pt-32">
+
+    <!-- Nav -->
+    <nav class="fixed top-8 left-8 z-50">
+        <a href="/" class="text-gold-500/60 hover:text-gold-400 transition-colors text-xl flex items-center gap-2 sans bg-black/50 p-2 rounded backdrop-blur">
+            <i class="fa-solid fa-arrow-left"></i>
+            <span class="text-xs uppercase tracking-widest hidden md:inline">Tilbage</span>
+        </a>
+    </nav>
+
+    <!-- Header -->
+    <header class="text-center mb-8 px-4">
+        <h1 class="text-3xl md:text-5xl text-gold-500 mb-2 font-serif drop-shadow-lg">Kirkekortet</h1>
+        <p class="text-xs text-gray-500 uppercase tracking-[0.3em] sans">Find en Messe nær dig</p>
+    </header>
+
+    <!-- Map Container -->
+    <div id="map"></div>
+    
+    <div class="text-center py-8 text-xs text-gray-600 uppercase tracking-widest">
+        Viser katolske kirker i Danmark
+    </div>
+
+    <!-- Leaflet JS -->
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
+
+    <script type="module">
+        import { createClient } from 'https://esm.sh/@supabase/supabase-js@2';
+
+        const SUPABASE_URL = 'https://sdfwawnviylwwlbnwpnj.supabase.co'; 
+        const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InNkZndhd252aXlsd3dsYm53cG5qIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjkyNzY4MjEsImV4cCI6MjA4NDg1MjgyMX0.oIR0N05DQY6ePfDXVNC0UI9DrLrM-LevsK64ANEJGag';
+        const client = createClient(SUPABASE_URL, SUPABASE_KEY);
+
+        // Initialize Map (Centered on Denmark)
+        const map = L.map('map').setView([56.2639, 9.5018], 7);
+
+        // Dark Matter Tiles
+        L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png', {
+            attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors &copy; <a href="https://carto.com/attributions">CARTO</a>',
+            subdomains: 'abcd',
+            maxZoom: 19
+        }).addTo(map);
+
+        // Fetch Churches
+        async function loadChurches() {
+            const { data: churches, error } = await client
+                .from('churches')
+                .select('*');
+
+            if(error) {
+                console.error("Error loading churches:", error);
+                return;
+            }
+
+            if(churches) {
+                churches.forEach(c => {
+                    const lat = c.latitude;
+                    const lng = c.longitude;
+                    
+                    // Create Custom Icon
+                    const icon = L.divIcon({
+                        className: 'custom-icon',
+                        html: `<i class="fa-solid fa-cross text-gold-500 text-3xl drop-shadow-[0_0_10px_rgba(255,215,0,0.8)]"></i>`,
+                        iconSize: [30, 30],
+                        iconAnchor: [15, 30], // Center bottom
+                        popupAnchor: [0, -30]
+                    });
+
+                    // Format Popup Content
+                    let massHtml = '';
+                    if(c.mass_times) {
+                         // JSONB parsing
+                         // Assuming simplistic structure for now
+                         const times = typeof c.mass_times === 'string' ? JSON.parse(c.mass_times) : c.mass_times;
+                         
+                         massHtml += `<div class="mt-3 border-t border-gray-700 pt-2 text-xs">`;
+                         if(times.sunday) massHtml += `<div class="flex justify-between"><span class="text-gold-500">Søndag:</span> <span>${times.sunday}</span></div>`;
+                         if(times.weekdays) massHtml += `<div class="flex justify-between"><span class="text-gray-400">Hverdage:</span> <span>${times.weekdays}</span></div>`;
+                         massHtml += `</div>`;
+                    }
+
+                    const popupContent = `
+                        <h3 class="font-serif text-gold-200 text-lg mb-1 border-b border-gold-500/30 pb-1">${c.name}</h3>
+                        <p class="text-xs text-gray-400 italic mb-2">${c.address}</p>
+                        ${c.description ? `<p class="text-gray-300 text-xs leading-relaxed mb-2">${c.description}</p>` : ''}
+                        ${massHtml}
+                        ${c.website ? `<a href="${c.website}" target="_blank" class="block mt-3 text-gold-500 text-xs uppercase hover:text-white transition-colors">Besøg Hjemmeside &rarr;</a>` : ''}
+                    `;
+
+                    L.marker([lat, lng], { icon: icon })
+                     .addTo(map)
+                     .bindPopup(popupContent);
+                });
+            }
+        }
+
+        loadChurches();
+
+    </script>
+</body>
+</html>
