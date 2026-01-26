@@ -42,6 +42,16 @@ import { scenarios } from '../data/apologetics';
             100% { box-shadow: 0 0 0 0 rgba(255, 215, 0, 0); }
         }
         .pulse-gold { animation: pulse-gold 1s infinite; }
+
+        /* Accordion Styles */
+        .accordion-content {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.3s ease-out;
+        }
+        .accordion-content.open {
+            max-height: 500px; /* arbitrary large value */
+        }
     </style>
 </head>
 <body class="text-white h-screen w-screen flex flex-col overflow-hidden relative selection:bg-gold-500/30">
@@ -54,14 +64,26 @@ import { scenarios } from '../data/apologetics';
         </a>
     </nav>
 
-    <!-- Header -->
-    <div class="fixed top-8 right-8 z-50 text-right">
-        <h1 class="text-2xl font-bold text-gold-500 tracking-wider">Scutum Fidei</h1>
-        <p class="text-[10px] uppercase tracking-[0.3em] text-gray-500">Apologetisk Træning</p>
+    <!-- Header & Toggle -->
+    <div class="fixed top-8 right-8 z-50 flex flex-col items-end gap-4">
+        <div class="text-right">
+            <h1 class="text-2xl font-bold text-gold-500 tracking-wider">Scutum Fidei</h1>
+            <p class="text-[10px] uppercase tracking-[0.3em] text-gray-500">Apologetisk Træning</p>
+        </div>
+
+        <!-- Mode Switcher -->
+        <div class="bg-white/5 border border-white/10 rounded-full p-1 flex gap-1 backdrop-blur-sm">
+            <button onclick="switchMode('training')" id="btn-training" class="px-4 py-1.5 rounded-full text-[10px] uppercase tracking-widest bg-gold-600 text-black font-bold transition-all">
+                Træning
+            </button>
+            <button onclick="switchMode('archive')" id="btn-archive" class="px-4 py-1.5 rounded-full text-[10px] uppercase tracking-widest text-gray-400 hover:text-white transition-all">
+                Arkiv
+            </button>
+        </div>
     </div>
 
-    <!-- MAIN ARENA -->
-    <div class="relative z-10 max-w-4xl mx-auto w-full h-full flex flex-col items-center justify-center p-6">
+    <!-- MAIN ARENA (Training Mode) -->
+    <div id="mode-training" class="relative z-10 max-w-4xl mx-auto w-full h-full flex flex-col items-center justify-center p-6">
         
         <!-- ENEMY (The Objection) -->
         <div id="enemy-section" class="w-full text-center mb-12 animate-fade-in-up">
@@ -102,7 +124,70 @@ import { scenarios } from '../data/apologetics';
 
     </div>
 
+    <!-- ARCHIVE MODE (Library) -->
+    <div id="mode-archive" class="hidden relative z-10 max-w-4xl mx-auto w-full h-full p-6 pt-32 overflow-y-auto pb-20 scroll-smooth">
+        <h2 class="text-xl text-gold-500 mb-8 border-b border-white/10 pb-4 font-serif">Apologetisk Arkiv</h2>
+        
+        <div class="space-y-4">
+            {scenarios.map((s, i) => (
+                <div class="bg-white/5 border border-white/10 rounded overflow-hidden">
+                    <button class="w-full text-left p-6 flex items-center justify-between hover:bg-white/5 transition-colors group" onclick={`toggleAccordion('${s.id}')`}>
+                        <div>
+                            <span class="text-[10px] text-gray-500 uppercase tracking-widest mb-1 block">{s.category} · {s.objectionSource}</span>
+                            <h3 class="text-gray-200 group-hover:text-white font-serif leading-tight pr-4">"{s.objection}"</h3>
+                        </div>
+                        <i id={`icon-${s.id}`} class="fa-solid fa-chevron-down text-gold-500/50 transition-transform duration-300"></i>
+                    </button>
+                    
+                    <div id={`content-${s.id}`} class="accordion-content bg-black/50 border-t border-white/5">
+                        <div class="p-6">
+                            <div class="flex items-start gap-4 mb-4">
+                                <i class="fa-solid fa-shield-halved text-gold-500 mt-1"></i>
+                                <div>
+                                    <h4 class="text-gold-500 text-xs uppercase tracking-widest mb-2 font-bold">Det Katolske Svar</h4>
+                                    <p class="text-gray-300 sans text-sm leading-relaxed">
+                                        {s.explanation}
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            ))}
+        </div>
+    </div>
+
     <script define:vars={{ scenarios }}>
+        // --- MODE SWITCHING ---
+        const modeTraining = document.getElementById('mode-training');
+        const modeArchive = document.getElementById('mode-archive');
+        const btnTraining = document.getElementById('btn-training');
+        const btnArchive = document.getElementById('btn-archive');
+
+        window.switchMode = (mode) => {
+            if(mode === 'training') {
+                modeTraining.classList.remove('hidden');
+                modeArchive.classList.add('hidden');
+                
+                btnTraining.classList.add('bg-gold-600', 'text-black');
+                btnTraining.classList.remove('text-gray-400', 'hover:text-white');
+                
+                btnArchive.classList.remove('bg-gold-600', 'text-black');
+                btnArchive.classList.add('text-gray-400', 'hover:text-white');
+            } else {
+                modeTraining.classList.add('hidden');
+                modeArchive.classList.remove('hidden');
+                
+                btnArchive.classList.add('bg-gold-600', 'text-black');
+                btnArchive.classList.remove('text-gray-400', 'hover:text-white');
+                
+                btnTraining.classList.remove('bg-gold-600', 'text-black');
+                btnTraining.classList.add('text-gray-400', 'hover:text-white');
+            }
+        };
+
+
+        // --- TRAINING LOGIC ---
         let currentScenarioIndex = 0;
         let currentScenario = null;
 
@@ -132,7 +217,7 @@ import { scenarios } from '../data/apologetics';
             responseGrid.innerHTML = '';
             responses.forEach(resp => {
                 const btn = document.createElement('button');
-                btn.className = "p-6 bg-[#1a1a20] border border-gray-800 rounded text-left group hover:border-gold-500/50 transition-all card-hover relative overflow-hidden";
+                btn.className = "p-6 bg-[#1a1a20] border border-gray-800 rounded text-left group hover:border-gold-500/50 transition-all card-hover relative overflow-hidden h-full";
                 btn.onclick = () => checkAnswer(resp.id);
                 
                 btn.innerHTML = `
@@ -160,10 +245,6 @@ import { scenarios } from '../data/apologetics';
             } else {
                 // LOSE
                 shieldIcon.className = "text-8xl text-red-800 shake duration-100";
-                
-                // Visual feedback on the button?
-                // Ideally we just shake the shield and maybe disable that button
-                // But simplified for now.
             }
         }
 
@@ -171,6 +252,24 @@ import { scenarios } from '../data/apologetics';
         window.nextRound = function() {
             currentScenarioIndex++;
             loadScenario(currentScenarioIndex);
+        };
+
+        window.checkAnswer = checkAnswer;
+
+
+        // --- ARCHIVE LOGIC ---
+        window.toggleAccordion = (id) => {
+            const content = document.getElementById(`content-${id}`);
+            const icon = document.getElementById(`icon-${id}`);
+            
+            if (content.classList.contains('open')) {
+                content.classList.remove('open');
+                icon.style.transform = 'rotate(0deg)';
+            } else {
+                // Close others if desired, keeping simple for now
+                content.classList.add('open');
+                icon.style.transform = 'rotate(180deg)';
+            }
         };
 
         // Init

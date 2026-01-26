@@ -1,7 +1,7 @@
 
 export interface Scenario {
     id: string;
-    category: 'Gud' | 'Jesus' | 'Moral' | 'Videnskab';
+    category: 'Gud' | 'Jesus' | 'Moral' | 'Videnskab' | 'Kirken';
     objection: string;
     objectionSource?: string;
     correctResponseId: string;
@@ -88,6 +88,80 @@ export const scenarios: Scenario[] = [
                 id: 'natural_law',
                 text: "Objektive moralske pligter findes (Naturloven). En objektiv Moralsk Lov kræver en transcendent Moralsk Lovgiver.",
                 type: 'Thomistisk'
+            }
+    },
+    {
+        id: 'crusades_inquisition',
+        category: 'Moral',
+        objection: "Religion er årsag til al krig. Se bare på Korstogene og Inkvisitionen. Kirken har blod på hænderne.",
+        objectionSource: "Historisk Kritik",
+        correctResponseId: 'historical_context',
+        explanation: "Korstogene var en defensiv reaktion på 400 års aggressive erobringer af kristne lande. Mens vold aldrig er evangelisk, skal historien dømmes i kontekst. Ateistiske regimer (kommunisme/nazisme) i det 20. århundrede dræbte langt flere end alle religionskrige tilsammen. Troens misbrug ugyldiggør ikke troens sandhed.",
+        responses: [
+            {
+                id: 'deny_violence',
+                text: "Det var aldrig Kirken, kun dårlige mennesker. Kirken har aldrig gjort noget forkert.",
+                type: 'Fejlslutning'
+            },
+            {
+                id: 'historical_context',
+                text: "Mennesker i Kirken har fejlet, men Korstogene var (oprindeligt) defensive. Sekulære ideologier har dog vist sig langt mere blodige.",
+                type: 'Thomistisk'
+            },
+            {
+                id: 'religion_bad',
+                text: "Ja, vi burde afskaffe al religion for at få fred.",
+                type: 'Moderne'
+            }
+        ]
+    },
+    {
+        id: 'male_priesthood',
+        category: 'Kirken',
+        objection: "Kirken er sexistisk, fordi den ikke tillader kvindelige præster. Det er diskrimination i 2026.",
+        objectionSource: "Moderne Feminisme",
+        correctResponseId: 'sacramental_sign',
+        explanation: "Præsten agerer 'in persona Christi' (i Kristi person) ved alteret. Da Jesus var en mand, og da Han valgte 12 mænd som Apostle trods mange stærke kvinder omkring sig (inklusiv Jomfru Maria), følger Kirken Hans eksempel. Det handler ikke om værdighed (Maria er højere end alle præster), men om sakramental symbolik. Mand og kvinde er lige, men ikke ens.",
+        responses: [
+            {
+                id: 'sexist_tradition',
+                text: "Det er bare en gammel patriarkalsk tradition, som paven burde ændre snart.",
+                type: 'Moderne'
+            },
+            {
+                id: 'sacramental_sign',
+                text: "Kirken har ikke autoritet til at ændre sakramenterne. Præsten repræsenterer Kristus (Brudgommen), og Kirken er Bruden. Det er teologi, ikke magt.",
+                type: 'Thomistisk'
+            },
+            {
+                id: 'women_better',
+                text: "Kvinder ville være bedre præster, så vi burde skifte.",
+                type: 'Fejlslutning'
+            }
+        ]
+    },
+    {
+        id: 'eucharist_symbol',
+        category: 'Jesus',
+        objection: "Eukaristien er bare et symbol. Jesus sagde 'dette er mit legeme' metaforisk, ligesom 'jeg er døren'.",
+        objectionSource: "Protestantisme",
+        correctResponseId: 'real_presence',
+        explanation: "I Johannes kap. 6 siger Jesus gentagne gange: 'Min kød er sand mad'. Da disciplene forlod ham i chok over dette, kaldte han dem ikke tilbage for at sige 'det var bare en metafor'. Han mente det bogstaveligt. De tidlige kristne troede enstemmigt på Realpræsensen.",
+        responses: [
+            {
+                id: 'just_bread',
+                text: "Det er bare brød, der minder os om ham. Intet andet.",
+                type: 'Moderne'
+            },
+            {
+                id: 'real_presence',
+                text: "Jesus talte bogstaveligt i Joh 6. Kirken har i 2000 år lært, at brødet og vinen substantielt forvandles til Hans Legeme og Blod.",
+                type: 'Thomistisk'
+            },
+            {
+                id: 'spiritual_presence',
+                text: "Han er der kun åndeligt hvis du tror på det.",
+                type: 'Fejlslutning'
             }
         ]
     }
