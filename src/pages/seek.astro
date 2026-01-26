@@ -1,0 +1,166 @@
+
+---
+import '@styles/styles.css';
+---
+
+<!DOCTYPE html>
+<html lang="da">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Vejen Hjem | Oratorium</title>
+    <meta name="robots" content="index, follow">
+    <link rel="icon" type="image/svg+xml" href="/assets/favicon-cross.svg">
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700&family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    
+    <style>
+        body { font-family: 'Cinzel', serif; background: #020205; color: #e5e7eb; }
+        .sans { font-family: 'Inter', sans-serif; }
+        
+        /* Timeline Line */
+        .timeline-line::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            bottom: 0;
+            left: 50%;
+            width: 1px;
+            background: linear-gradient(to bottom, transparent, #ffd700, transparent);
+            transform: translateX(-50%);
+            z-index: 0;
+        }
+    </style>
+</head>
+<body class="selection:bg-gold-500/30 min-h-screen flex flex-col pt-32">
+
+    <!-- Nav -->
+    <nav class="fixed top-8 left-8 z-50">
+        <a href="/" class="text-gold-500/60 hover:text-gold-400 transition-colors text-xl flex items-center gap-2 sans">
+            <i class="fa-solid fa-arrow-left"></i>
+            <span class="text-xs uppercase tracking-widest hidden md:inline">Tilbage til Helligdommen</span>
+        </a>
+    </nav>
+
+    <!-- Hero -->
+    <header class="text-center mb-24 px-4 relative">
+        <div class="absolute top-0 left-1/2 -translate-x-1/2 w-64 h-64 bg-gold-500/10 rounded-full blur-[100px] pointer-events-none"></div>
+        <h1 class="text-5xl md:text-7xl text-gold-500 mb-6 font-serif drop-shadow-[0_0_15px_rgba(255,215,0,0.3)]">Vejen Hjem</h1>
+        <p class="text-lg text-gray-400 italic font-serif mb-8">"Kom og se." — Johannes 1,39</p>
+        <p class="text-xs text-gray-500 uppercase tracking-[0.3em] sans max-w-lg mx-auto leading-loose">
+            For dig, der søger sandheden, skønheden og det evige. Velkommen til porten mod den Katolske Kirke.
+        </p>
+    </header>
+
+    <!-- Introduction / Call to Action -->
+    <div class="max-w-4xl mx-auto px-6 text-center mb-32">
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-12 text-left">
+            <div class="bg-white/5 border border-white/10 p-8 rounded hover:border-gold-500/30 transition-colors group">
+                <i class="fa-solid fa-question text-gold-500 text-3xl mb-4 group-hover:scale-110 transition-transform block"></i>
+                <h3 class="text-xl text-gold-200 mb-4 font-serif">Har du spørgsmål?</h3>
+                <p class="text-gray-400 sans text-sm leading-relaxed mb-6">
+                    Er du nysgerrig på paven, Jomfru Maria eller Sakramenterne? Tal med Thomas Aquinas, vores teologiske guide.
+                </p>
+                <a href="/aquinas" class="text-gold-500 text-xs uppercase tracking-widest hover:text-white border-b border-gold-500/30 pb-1">Spørg Aquinas <i class="fa-solid fa-arrow-right ml-2"></i></a>
+            </div>
+
+             <div class="bg-white/5 border border-white/10 p-8 rounded hover:border-gold-500/30 transition-colors group">
+                <i class="fa-solid fa-users text-gold-500 text-3xl mb-4 group-hover:scale-110 transition-transform block"></i>
+                <h3 class="text-xl text-gold-200 mb-4 font-serif">Mød Konvertitter</h3>
+                <p class="text-gray-400 sans text-sm leading-relaxed mb-6">
+                    Læs vidnesbyrd fra andre danskere, der har fundet deres vej hjem til Kirken. Du er ikke alene på rejsen.
+                </p>
+                <a href="/testimony" class="text-gold-500 text-xs uppercase tracking-widest hover:text-white border-b border-gold-500/30 pb-1">Læs Historier <i class="fa-solid fa-arrow-right ml-2"></i></a>
+            </div>
+        </div>
+    </div>
+
+    <!-- The Roadmap (Timeline) -->
+    <div class="max-w-3xl mx-auto px-6 relative timeline-line mb-32">
+        <h2 class="text-3xl text-center text-gold-500 mb-16 font-serif bg-[#020205] relative z-10 px-4 inline-block mx-auto left-1/2 -translate-x-1/2">
+            Rejsen mod Troen
+        </h2>
+
+        <!-- Step 1 -->
+        <div class="relative z-10 mb-24 grid grid-cols-1 md:grid-cols-2 gap-8 items-center">
+            <div class="text-right md:text-right order-2 md:order-1">
+                <h3 class="text-xl text-gold-200 font-serif">1. Undersøgelsesfasen</h3>
+                <p class="text-xs text-gold-500 uppercase tracking-widest mb-2">Prækatekumentatet</p>
+                <p class="text-gray-400 sans text-sm leading-relaxed">
+                    Dette er tiden til at stille spørgsmål. Ingen forpligtelser. Du udforsker troen, går til messe og taler med en præst.
+                </p>
+            </div>
+            <div class="flex justify-center md:justify-start order-1 md:order-2">
+                <div class="w-16 h-16 bg-[#020205] border border-gold-500 rounded-full flex items-center justify-center text-gold-500 text-2xl shadow-[0_0_15px_rgba(255,215,0,0.2)]">
+                    <i class="fa-solid fa-magnifying-glass"></i>
+                </div>
+            </div>
+        </div>
+
+        <!-- Step 2 -->
+        <div class="relative z-10 mb-24 grid grid-cols-1 md:grid-cols-2 gap-8 items-center">
+             <div class="flex justify-center md:justify-end order-1">
+                <div class="w-16 h-16 bg-[#020205] border border-gold-500 rounded-full flex items-center justify-center text-gold-500 text-2xl shadow-[0_0_15px_rgba(255,215,0,0.2)]">
+                    <i class="fa-solid fa-book-bible"></i>
+                </div>
+            </div>
+            <div class="text-left order-2">
+                <h3 class="text-xl text-gold-200 font-serif">2. Katekumenatet</h3>
+                <p class="text-xs text-gold-500 uppercase tracking-widest mb-2">Læretiden</p>
+                <p class="text-gray-400 sans text-sm leading-relaxed">
+                    Du beslutter dig for at lære mere struktureret. Du bliver officielt "katekumen" og begynder at lære om dogmerne, bønnen og livet som kristen.
+                </p>
+            </div>
+        </div>
+
+        <!-- Step 3 -->
+        <div class="relative z-10 mb-24 grid grid-cols-1 md:grid-cols-2 gap-8 items-center">
+            <div class="text-right md:text-right order-2 md:order-1">
+                <h3 class="text-xl text-gold-200 font-serif">3. Renselse og Oplysning</h3>
+                <p class="text-xs text-gold-500 uppercase tracking-widest mb-2">Fastetiden</p>
+                <p class="text-gray-400 sans text-sm leading-relaxed">
+                    I ugerne op til Påske forbereder du dig åndeligt gennem bøn og bod. Du bliver skrevet ind i "De Udvalgtes Bog".
+                </p>
+            </div>
+            <div class="flex justify-center md:justify-start order-1 md:order-2">
+                <div class="w-16 h-16 bg-[#020205] border border-gold-500 rounded-full flex items-center justify-center text-gold-500 text-2xl shadow-[0_0_15px_rgba(255,215,0,0.2)]">
+                    <i class="fa-solid fa-hands-praying"></i>
+                </div>
+            </div>
+        </div>
+
+        <!-- Step 4 -->
+        <div class="relative z-10 mb-24 grid grid-cols-1 md:grid-cols-2 gap-8 items-center">
+             <div class="flex justify-center md:justify-end order-1">
+                <div class="w-16 h-16 bg-[#020205] border border-gold-500 rounded-full flex items-center justify-center text-gold-500 text-2xl shadow-[0_0_25px_rgba(255,215,0,0.5)] bg-gold-500/10">
+                    <i class="fa-solid fa-church"></i>
+                </div>
+            </div>
+            <div class="text-left order-2">
+                <h3 class="text-xl text-white font-serif">4. Initiering</h3>
+                <p class="text-xs text-gold-500 uppercase tracking-widest mb-2">Påskenat</p>
+                <p class="text-gray-300 sans text-sm leading-relaxed">
+                    Højdepunktet. Du modtager Dåb (hvis ikke døbt), Firmelse og din første Kommunion. Du er nu fuldgyldigt medlem af Kirken.
+                </p>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- Conversion Box -->
+    <div class="max-w-2xl mx-auto px-6 pb-32 text-center">
+        <h2 class="text-2xl text-gold-500 mb-8 font-serif">Er du klar til at tage første skridt?</h2>
+        <div class="bg-gradient-to-b from-gray-900 to-black p-8 rounded border border-gold-500/30">
+            <p class="text-gray-300 font-serif italic mb-6">
+                "Sent har jeg elsket dig, du skønhed så gammel og så ny, sent har jeg elsket dig!"
+                <br><span class="text-gold-500/50 text-xs not-italic uppercase tracking-widest mt-2 block">– Skt. Augustin</span>
+            </p>
+            <a href="https://www.katolsk.dk/kort" target="_blank" class="inline-block px-8 py-3 bg-gold-600 text-black font-bold uppercase tracking-widest text-xs rounded hover:bg-gold-500 transition-colors">
+                Find en Kirke nær dig
+            </a>
+            <p class="text-[10px] text-gray-600 mt-4 uppercase tracking-widest">Link til Katolsk.dk</p>
+        </div>
+    </div>
+
+</body>
+</html>
