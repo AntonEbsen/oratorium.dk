@@ -1,3 +1,4 @@
+
 ---
 import '@styles/styles.css';
 ---
@@ -7,115 +8,214 @@ import '@styles/styles.css';
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Testamentet | Ad Majorem Dei Gloriam</title>
+    <title>Vidnesbyrd | Vox Populi</title>
     <meta name="robots" content="noindex, nofollow">
-    
-    <!-- Fonts -->
     <link rel="icon" type="image/svg+xml" href="/assets/favicon-cross.svg">
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400&family=Cinzel:wght@400;700&family=Playfair+Display:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700&family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     
     <style>
-        body { font-family: 'Playfair Display', serif; }
-        .head { font-family: 'Cinzel', serif; }
+        body { font-family: 'Cinzel', serif; background: #020205; color: #e5e7eb; }
         .sans { font-family: 'Inter', sans-serif; }
+        
+        .testimony-card {
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            transition: all 0.3s ease;
+        }
+        .testimony-card:hover {
+            border-color: rgba(255, 215, 0, 0.3);
+            background: rgba(255, 215, 0, 0.05);
+            transform: translateY(-2px);
+        }
     </style>
 </head>
-<body class="bg-[#050508] text-gray-300 overflow-x-hidden min-h-screen m-0 p-0 selection:bg-gold-500/30 selection:text-black">
+<body class="selection:bg-gold-500/30 min-h-screen flex flex-col">
 
-    <!-- Fixed Background -->
-    <div class="fixed inset-0 z-0 pointer-events-none bg-gradient-to-b from-black via-[#0a0a1a] to-black">
-         <div class="absolute inset-0 opacity-10" style="background-image: url('https://www.transparenttextures.com/patterns/stardust.png');"></div>
-         <!-- Subtle Smoke -->
-         <div class="absolute bottom-0 left-0 w-full h-[50vh] bg-gradient-to-t from-gray-900/10 to-transparent opacity-50 mix-blend-overlay"></div>
+    <!-- Nav -->
+    <nav class="fixed top-8 left-8 z-50">
+        <a href="/" class="text-white/40 hover:text-white transition-colors text-xl flex items-center gap-2">
+            <i class="fa-solid fa-arrow-left"></i>
+            <span class="text-xs uppercase tracking-widest hidden md:inline">Tilbage</span>
+        </a>
+    </nav>
+    
+    <!-- Header -->
+    <div class="fixed top-8 right-8 z-50 text-right pointer-events-none">
+        <h1 class="text-white/80 text-lg tracking-widest uppercase">Vidnesbyrd</h1>
+        <p class="text-[10px] text-white/40 uppercase tracking-[0.3em]">Vox Populi Dei</p>
     </div>
 
-    <!-- Navigation -->
-    <nav class="fixed top-8 left-8 right-8 z-50 flex justify-between items-center mix-blend-difference">
-        <a href="/" class="text-gold-500/60 hover:text-gold-400 transition-colors text-xl flex items-center gap-2 sans">
-            <i class="fa-solid fa-arrow-left"></i>
-            <span class="text-xs uppercase tracking-widest hidden md:inline">Sanctuary</span>
-        </a>
-        <div class="text-xs sans text-gray-500 tracking-[0.2em] uppercase opacity-50">
-            Ad Majorem Dei Gloriam
-        </div>
-    </nav>
-
-    <!-- Content Container -->
-    <main class="relative z-10 max-w-2xl mx-auto px-6 py-32 md:py-48 flex flex-col items-center">
+    <!-- MAIN CONTENT -->
+    <main class="flex-grow pt-32 px-6 pb-20 max-w-5xl mx-auto w-full">
         
-        <!-- Opening -->
-        <header class="text-center mb-24 animate-fade-in-up">
-            <div class="w-px h-24 bg-gradient-to-b from-transparent via-gold-500/50 to-transparent mx-auto mb-8"></div>
-            <h1 class="text-4xl md:text-5xl font-bold text-transparent bg-clip-text bg-gradient-to-b from-gold-200 to-gold-700 mb-6 head leading-tight">
-                My Testimony
-            </h1>
-            <p class="text-sm sans uppercase tracking-[0.3em] text-gray-500">
-                A Witness to the Truth
+        <div class="text-center mb-16">
+            <h2 class="text-3xl md:text-5xl text-gold-500 drop-shadow-[0_0_15px_rgba(255,215,0,0.2)] mb-4">Fortællinger fra Kirken</h2>
+            <p class="text-gray-400 sans max-w-xl mx-auto text-sm leading-relaxed">
+                Her deler vi vidnesbyrd om tro, omvendelse og Guds nåde i hverdagen.<br>
+                Din historie kan være lyset i en andens mørke.
             </p>
-        </header>
-
-        <!-- The Narrative -->
-        <article class="prose prose-invert prose-lg md:prose-xl prose-p:text-gray-300 prose-headings:font-serif prose-headings:text-gold-100 prose-blockquote:border-gold-500/30 prose-blockquote:text-gold-200/80 leading-relaxed font-light">
             
-            <p class="drop-cap">
-                This is a space reserved for my story. 
-                Before I begin, I want to emphasize that my faith is not just a cultural inheritance, but a personal encounter.
-            </p>
+            <button onclick="toggleForm()" class="mt-8 px-8 py-3 bg-gold-600/10 border border-gold-500/50 text-gold-500 hover:bg-gold-500 hover:text-black transition-all uppercase tracking-widest text-xs rounded">
+                <i class="fa-solid fa-pen-nib mr-2"></i> Del Dit Vidnesbyrd
+            </button>
+        </div>
+        
+        <!-- SUBMISSION FORM (Hidden by default) -->
+        <div id="submit-form" class="hidden mb-20 max-w-2xl mx-auto bg-[#0a0a0c] border border-gold-900/50 p-8 rounded-lg relative overflow-hidden">
+            <div class="absolute top-0 left-0 w-full h-1 bg-gold-500/50"></div>
+            
+            <h3 class="text-xl text-white mb-6">Skriv din historie</h3>
+            
+            <form id="story-form" class="space-y-6 sans text-sm">
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div>
+                        <label class="block text-gray-500 mb-2 uppercase tracking-widest text-[10px]">Navn (eller Anonym)</label>
+                        <input type="text" id="inp-name" required class="w-full bg-black/50 border border-gray-700 rounded p-3 text-white focus:border-gold-500 outline-none transition-colors" placeholder="F.eks. Maria Hansen">
+                    </div>
+                    <div>
+                        <label class="block text-gray-500 mb-2 uppercase tracking-widest text-[10px]">By / Sted</label>
+                        <input type="text" id="inp-loc" class="w-full bg-black/50 border border-gray-700 rounded p-3 text-white focus:border-gold-500 outline-none transition-colors" placeholder="F.eks. København">
+                    </div>
+                </div>
+                
+                <div>
+                     <label class="block text-gray-500 mb-2 uppercase tracking-widest text-[10px]">Dit Vidnesbyrd</label>
+                     <textarea id="inp-content" required rows="6" class="w-full bg-black/50 border border-gray-700 rounded p-3 text-white focus:border-gold-500 outline-none transition-colors" placeholder="Fortæl frit..."></textarea>
+                </div>
+                
+                <div class="flex justify-end gap-4">
+                    <button type="button" onclick="toggleForm()" class="text-gray-500 hover:text-white px-4">Annuller</button>
+                    <button type="submit" class="px-6 py-2 bg-gold-600 hover:bg-gold-500 text-black font-bold rounded transition-colors">
+                        Send til Godkendelse
+                    </button>
+                </div>
+                <p class="text-[10px] text-gray-600 italic text-center mt-4">* Alle indlæg godkendes manuelt før de vises.</p>
+            </form>
+            
+            <!-- Success Message -->
+            <div id="success-msg" class="hidden absolute inset-0 bg-[#0a0a0c] flex flex-col items-center justify-center text-center z-10">
+                 <i class="fa-solid fa-check-circle text-4xl text-green-500 mb-4"></i>
+                 <h3 class="text-xl text-white mb-2">Tak for din historie.</h3>
+                 <p class="text-gray-400">Den er nu sendt til godkendelse.</p>
+                 <button onclick="toggleForm()" class="mt-6 text-gold-500 hover:text-white text-xs uppercase tracking-widest">Luk</button>
+            </div>
+        </div>
 
-            <h3 class="head text-center my-12 text-2xl text-gold-400/80">The Search</h3>
-            <p>
-                [Placeholder: Describe your journey here. Start with the doubts, the questions, or the moment that changed everything.]
-            </p>
-
-            <blockquote class="italic text-center my-16 not-italic relative border-l-0 pl-0">
-                <span class="absolute -top-8 left-1/2 -translate-x-1/2 text-6xl text-gold-500/10 font-serif">“</span>
-                You have made us for yourself, O Lord, and our heart is restless until it rests in you.
-                <cite class="block text-xs sans uppercase tracking-widest mt-4 text-gray-600 not-italic">— St. Augustine</cite>
-            </blockquote>
-
-            <h3 class="head text-center my-12 text-2xl text-gold-400/80">The Encounter</h3>
-            <p>
-                [Placeholder: Describe the pivotal moment. Was it a Mass, a conversation, a book, or a quiet realization?]
-            </p>
-
-             <div class="w-full h-px bg-gradient-to-r from-transparent via-gray-800 to-transparent my-16"></div>
-
-             <p class="text-center sans text-sm text-gray-500">
-                This page is currently being written.
-             </p>
-
-        </article>
-
-        <!-- Footer Seal -->
-        <div class="mt-32 opacity-50 hover:opacity-100 transition-opacity cursor-default">
-            <i class="fa-solid fa-cross text-gold-900 text-3xl"></i>
+        <!-- FEED -->
+        <div id="feed" class="columns-1 md:columns-2 lg:columns-3 gap-6 space-y-6">
+            <!-- Loading Skeletons -->
+            <div class="testimony-card p-6 rounded-lg h-40 animate-pulse bg-white/5"></div>
+            <div class="testimony-card p-6 rounded-lg h-60 animate-pulse bg-white/5"></div>
+            <div class="testimony-card p-6 rounded-lg h-32 animate-pulse bg-white/5"></div>
         </div>
 
     </main>
 
-    <style>
-        .drop-cap::first-letter {
-            float: left;
-            font-size: 4.5rem;
-            line-height: 0.85;
-            padding-right: 0.5rem;
-            padding-top: 0.2rem;
-            font-family: 'Cinzel', serif;
-            color: #d4af37; /* Gold */
-        }
+    <script>
+        // CLIENT CONFIG
+        const SUPABASE_URL = 'https://sdfwawnviylwwlbnwpnj.supabase.co'; 
+        const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InNkZndhd252aXlsd3dsYm53cG5qIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjkyNzY4MjEsImV4cCI6MjA4NDg1MjgyMX0.oIR0N05DQY6ePfDXVNC0UI9DrLrM-LevsK64ANEJGag';
         
-        @keyframes fadeInUp {
-            from { opacity: 0; transform: translateY(30px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
+        // @ts-ignore
+        const supabase = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
         
-        .animate-fade-in-up {
-            animation: fadeInUp 1.5s cubic-bezier(0.2, 0.8, 0.2, 1) forwards;
-        }
-    </style>
+        const feed = document.getElementById('feed');
+        const formDiv = document.getElementById('submit-form');
+        const storyForm = document.getElementById('story-form');
+        const successMsg = document.getElementById('success-msg');
 
+        // Toggle
+        window.toggleForm = () => {
+            formDiv.classList.toggle('hidden');
+            successMsg.classList.add('hidden'); // reset success state
+            storyForm.reset();
+        }
+
+        // Fetch
+        async function fetchStories() {
+            const { data, error } = await supabase
+                .from('testimonies')
+                .select('*')
+                .eq('approved', true)
+                .order('created_at', { ascending: false });
+
+            if(error) {
+                console.error(error);
+                feed.innerHTML = `<p class="text-center col-span-full text-red-500">Kunne ikke hente historier.</p>`;
+                return;
+            }
+            
+            renderStories(data);
+        }
+
+        function renderStories(stories) {
+            feed.innerHTML = '';
+            
+            if(stories.length === 0) {
+                 feed.innerHTML = `
+                    <div class="col-span-full text-center py-20 opacity-50">
+                        <i class="fa-solid fa-feather text-4xl mb-4 text-gray-600"></i>
+                        <p>Ingen vidnesbyrd endnu.<br>Vær den første til at dele.</p>
+                    </div>
+                 `;
+                 return;
+            }
+
+            stories.forEach(story => {
+                const date = new Date(story.created_at).toLocaleDateString('da-DK', { day: 'numeric', month: 'long', year: 'numeric' });
+                
+                const el = document.createElement('div');
+                el.className = "testimony-card p-6 rounded-lg break-inside-avoid mb-6";
+                el.innerHTML = `
+                    <div class="mb-4 text-gold-500/30 text-2xl"><i class="fa-solid fa-quote-left"></i></div>
+                    <p class="text-gray-300 sans text-sm leading-relaxed mb-6 whitespace-pre-wrap">${escapeHtml(story.content)}</p>
+                    <div class="border-t border-white/10 pt-4 flex justify-between items-center">
+                        <div>
+                            <p class="text-gold-500 text-xs font-bold uppercase tracking-wider">${escapeHtml(story.name)}</p>
+                            ${story.location ? `<p class="text-gray-600 text-[10px] uppercase tracking-widest mt-1">${escapeHtml(story.location)}</p>` : ''}
+                        </div>
+                        <div class="text-[10px] text-gray-700">${date}</div>
+                    </div>
+                `;
+                feed.appendChild(el);
+            });
+        }
+
+        // Submit
+        storyForm.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            
+            const name = document.getElementById('inp-name').value;
+            const location = document.getElementById('inp-loc').value;
+            const content = document.getElementById('inp-content').value;
+            
+            const { error } = await supabase
+                .from('testimonies')
+                .insert([{ name, location, content }]);
+
+            if(error) {
+                alert("Fejl ved indsendelse: " + error.message);
+            } else {
+                // Show Success
+                successMsg.classList.remove('hidden');
+            }
+        });
+
+        // Utils
+        function escapeHtml(text) {
+            return text
+                .replace(/&/g, "&amp;")
+                .replace(/</g, "&lt;")
+                .replace(/>/g, "&gt;")
+                .replace(/"/g, "&quot;")
+                .replace(/'/g, "&#039;");
+        }
+
+        // Init
+        fetchStories();
+
+    </script>
 </body>
 </html>
