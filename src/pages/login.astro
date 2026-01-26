@@ -123,24 +123,33 @@ import '@styles/styles.css';
              }
              
              errorMsg.classList.add('hidden');
+             btnSignup.innerText = "Opretter...";
+             btnSignup.disabled = true;
 
              const { data, error } = await supabase.auth.signUp({
                 email, password
             });
+            
+            btnSignup.innerText = "Opret";
+            btnSignup.disabled = false;
 
             if (error) {
-                errorMsg.innerText = "Fejl: " + error.message;
+                console.error("Signup Error:", error);
+                errorMsg.innerText = "Fejl: " + (error.message || error.error_description || "Kunne ikke oprette bruger.");
                 errorMsg.classList.remove('hidden');
             } else {
-                // Check if user is created but not signed in (email confirm pending)
-                // If user disabled email confirm, they should be signed in.
+                console.log("Signup Success:", data);
                 if(data.session) {
+                    // Success + Logged In
+                    successMsg.innerText = "Konto oprettet! Logger ind...";
                     successMsg.classList.remove('hidden');
                     setTimeout(() => window.location.href = '/profile', 1000);
-                } else {
-                     // If session is null, it means email confirm is ON.
-                     errorMsg.innerText = "Tjek din email for at bekræfte (hvis nødvendigt).";
+                } else if(data.user && !data.session) {
+                     // Success BUT Email Confirmation Required
+                     errorMsg.innerText = "Konto oprettet, MEN du skal bekræfte din email først. (Tjek din indbakke eller slå 'Confirm Email' fra i Supabase).";
                      errorMsg.classList.remove('hidden');
+                     errorMsg.classList.replace('text-red-400', 'text-yellow-400');
+                     errorMsg.classList.replace('bg-red-900/20', 'bg-yellow-900/20');
                 }
             }
         });
