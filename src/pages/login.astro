@@ -81,7 +81,7 @@ import '@styles/styles.css';
         const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InNkZndhd252aXlsd3dsYm53cG5qIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjkyNzY4MjEsImV4cCI6MjA4NDg1MjgyMX0.oIR0N05DQY6ePfDXVNC0UI9DrLrM-LevsK64ANEJGag';
         
         // @ts-ignore
-        const supabase = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+        const client = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 
         const form = document.getElementById('auth-form');
         const emailInput = document.getElementById('email');
@@ -99,7 +99,7 @@ import '@styles/styles.css';
             
             errorMsg.classList.add('hidden');
 
-            const { data, error } = await supabase.auth.signInWithPassword({
+            const { data, error } = await client.auth.signInWithPassword({
                 email, password
             });
 
@@ -129,7 +129,7 @@ import '@styles/styles.css';
              btnSignup.disabled = true;
 
              try {
-                 const { data, error } = await supabase.auth.signUp({
+                 const { data, error } = await client.auth.signUp({
                     email, password
                 });
 
@@ -158,7 +158,7 @@ import '@styles/styles.css';
         // Auto Redirect if logged in
         async function checkUser() {
             try {
-                const { data: { session } } = await supabase.auth.getSession();
+                const { data: { session } } = await client.auth.getSession();
                 if (session) {
                     console.log("User already logged in");
                      window.location.href = '/profile';
