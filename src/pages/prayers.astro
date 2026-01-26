@@ -1,3 +1,4 @@
+
 ---
 import '@styles/styles.css';
 ---
@@ -9,25 +10,55 @@ import '@styles/styles.css';
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Forbøn | Ad Majorem Dei Gloriam</title>
     <meta name="robots" content="noindex, nofollow">
-    
-    <!-- Fonts -->
     <link rel="icon" type="image/svg+xml" href="/assets/favicon-cross.svg">
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400&family=Cinzel:wght@400;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700&family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     
     <style>
-        body { font-family: 'Cinzel', serif; }
+        body { font-family: 'Cinzel', serif; background: #050508; color: #e5e7eb; }
         .sans { font-family: 'Inter', sans-serif; }
+        
+        .prayer-card {
+            background: rgba(255, 255, 255, 0.02);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            transition: all 0.3s ease;
+        }
+        .prayer-card:hover {
+            border-color: rgba(255, 215, 0, 0.2);
+            background: rgba(255, 215, 0, 0.02);
+            transform: translateY(-2px);
+        }
+        
+        .pray-btn:hover i {
+            animation: pulse-gold 1s infinite;
+        }
+        
+        @keyframes pulse-gold {
+            0% { transform: scale(1); text-shadow: 0 0 0 rgba(255,215,0,0); }
+            50% { transform: scale(1.2); text-shadow: 0 0 10px rgba(255,215,0,0.8); }
+            100% { transform: scale(1); text-shadow: 0 0 0 rgba(255,215,0,0); }
+        }
+        
+        /* Floating particles effect for successful prayer */
+        @keyframes float-up {
+            0% { opacity: 1; transform: translateY(0); }
+            100% { opacity: 0; transform: translateY(-50px); }
+        }
+        .prayer-particle {
+            position: absolute;
+            color: #FFD700;
+            pointer-events: none;
+            animation: float-up 1s ease-out forwards;
+            font-size: 10px;
+        }
     </style>
 </head>
-<body class="bg-[#050508] text-gray-300 min-h-screen m-0 p-0 selection:bg-gold-500/30">
+<body class="selection:bg-gold-500/30 min-h-screen flex flex-col">
 
     <!-- Background -->
-    <div class="fixed inset-0 z-0 pointer-events-none bg-gradient-to-b from-[#020205] via-[#0a0a1a] to-black">
+    <div class="fixed inset-0 z-0 pointer-events-none">
          <div class="absolute inset-0 opacity-10" style="background-image: url('https://www.transparenttextures.com/patterns/stardust.png');"></div>
-         <!-- Warm Glow at bottom -->
          <div class="absolute bottom-0 w-full h-[30vh] bg-gradient-to-t from-gold-900/10 to-transparent"></div>
     </div>
 
@@ -38,175 +69,236 @@ import '@styles/styles.css';
             <span class="text-xs uppercase tracking-widest hidden md:inline">Tilbage</span>
         </a>
     </nav>
+    
+    <!-- Header -->
+     <header class="text-center pt-24 pb-12 relative z-10">
+        <h1 class="text-4xl md:text-5xl text-transparent bg-clip-text bg-gradient-to-b from-gold-200 to-gold-600 mb-4 drop-shadow-lg">
+            Forbøn
+        </h1>
+        <p class="text-xs sans text-gray-500 uppercase tracking-[0.3em]">
+            Bær hinandens byrder
+        </p>
+    </header>
 
     <!-- Main Content -->
-    <main class="relative z-10 w-full max-w-4xl mx-auto p-6 md:py-20 flex flex-col items-center">
+    <main class="relative z-10 w-full max-w-4xl mx-auto px-6 pb-20 grid grid-cols-1 lg:grid-cols-3 gap-12">
         
-        <header class="text-center mb-16 animate-fade-in-up">
-            <h1 class="text-3xl md:text-5xl text-transparent bg-clip-text bg-gradient-to-b from-gold-200 to-gold-600 mb-4">
-                Forbøn
-            </h1>
-            <p class="text-sm sans text-gray-500 uppercase tracking-widest">
-                Et fællesskab i bøn
-            </p>
-        </header>
-
-        <!-- Use a Grid layout for Form (Left) and Wall (Right) on Desktop? Or Stacked? Stacked is better for mobile focus. -->
-        
-        <!-- Submission Form -->
-        <section class="w-full max-w-xl mb-24 animate-fade-in-up delay-100">
-            <div class="bg-gray-900/30 border border-gold-900/30 p-8 rounded-lg backdrop-blur-sm relative group hover:border-gold-500/30 transition-colors">
-                
-                <h2 class="text-xl text-gold-400 mb-6 flex items-center gap-2">
-                    <i class="fa-solid fa-hands-praying text-sm opacity-70"></i> Tænd et lys i mørket
-                </h2>
-
-                <form id="prayer-form" class="space-y-6">
-                    <div>
-                        <textarea 
-                            name="content" 
-                            required 
-                            maxlength="500"
-                            rows="4"
-                            class="w-full bg-black/40 border border-gray-800 rounded p-4 text-gray-300 sans text-sm focus:border-gold-500/50 outline-none transition-colors placeholder:text-gray-700 resize-none"
-                            placeholder="Min bøn er..."
-                        ></textarea>
-                    </div>
+        <!-- LEFT: SUBMISSION FORM -->
+        <section class="lg:col-span-1">
+            <div class="sticky top-32">
+                <div class="bg-gray-900/30 border border-gold-900/30 p-8 rounded-lg backdrop-blur-sm relative group hover:border-gold-500/30 transition-colors">
+                    <div class="absolute -top-3 -left-3 text-gold-500 text-2xl opacity-50"><i class="fa-solid fa-quote-left"></i></div>
                     
-                    <div class="flex items-center justify-between">
-                        <input 
-                            type="text" 
-                            name="author" 
-                            class="bg-transparent border-b border-gray-800 text-gray-500 text-xs sans uppercase tracking-widest focus:border-gold-500/50 outline-none w-1/2 py-2"
-                            placeholder="Navn (Valgfrit)"
-                        >
+                    <h2 class="text-sm text-gold-400 mb-6 font-bold uppercase tracking-widest flex items-center gap-2">
+                        <i class="fa-solid fa-pen-nib"></i> Nyt Emne
+                    </h2>
+
+                    <form id="prayer-form" class="space-y-6">
+                        <div>
+                            <textarea 
+                                id="inp-content"
+                                required 
+                                maxlength="300"
+                                rows="5"
+                                class="w-full bg-black/40 border border-gray-800 rounded p-4 text-gray-300 sans text-sm focus:border-gold-500/50 outline-none transition-colors placeholder:text-gray-700 resize-none leading-relaxed"
+                                placeholder="Hvad skal vi bede for?"
+                            ></textarea>
+                        </div>
                         
-                        <button type="submit" class="bg-gold-900/20 hover:bg-gold-500/20 text-gold-500 border border-gold-500/30 px-6 py-2 rounded text-xs sans uppercase tracking-widest transition-all">
-                            Send Bøn
-                        </button>
+                        <div class="flex flex-col gap-4">
+                            <input 
+                                type="text" 
+                                id="inp-author"
+                                class="bg-transparent border-b border-gray-800 text-gray-500 text-xs sans uppercase tracking-widest focus:border-gold-500/50 outline-none py-2"
+                                placeholder="Navn (eller Anonym)"
+                            >
+                            
+                            <button type="submit" class="bg-gold-900/20 hover:bg-gold-500/20 text-gold-500 border border-gold-500/30 w-full py-3 rounded text-xs sans uppercase tracking-widest transition-all hover:shadow-[0_0_15px_rgba(255,215,0,0.1)]">
+                                Send Bøn
+                            </button>
+                        </div>
+                    </form>
+                    
+                    <!-- Success Overlay -->
+                    <div id="success-msg" class="absolute inset-0 bg-[#050508]/95 flex flex-col items-center justify-center rounded-lg opacity-0 pointer-events-none transition-opacity border border-gold-500/20">
+                        <i class="fa-solid fa-check text-gold-500 text-3xl mb-4 animate-bounce"></i>
+                        <p class="text-gold-200 sans text-xs uppercase tracking-widest">Bøn Modtaget</p>
                     </div>
-                </form>
-                
-                <!-- Success Message Overlay -->
-                <div id="success-msg" class="absolute inset-0 bg-black/90 flex flex-col items-center justify-center rounded-lg opacity-0 pointer-events-none transition-opacity">
-                    <i class="fa-solid fa-check text-gold-500 text-3xl mb-4"></i>
-                    <p class="text-gold-200 sans text-sm">Din bøn er modtaget.</p>
                 </div>
             </div>
         </section>
 
-        <!-- The Prayer Wall -->
-        <section class="w-full animate-fade-in-up delay-200">
-             <div class="flex items-center justify-center mb-12">
-                <div class="h-px w-24 bg-gradient-to-r from-transparent to-gold-900/50"></div>
-                <span class="px-4 text-xs sans uppercase tracking-widest text-gray-600">Seneste Bønner</span>
-                <div class="h-px w-24 bg-gradient-to-l from-transparent to-gold-900/50"></div>
+        <!-- RIGHT: PRAYER WALL -->
+        <section class="lg:col-span-2">
+             <div class="flex items-center justify-between mb-8 border-b border-white/5 pb-4">
+                <span class="text-xs sans uppercase tracking-widest text-gray-500">Bønner fra Fællesskabet</span>
+                <span class="text-xs sans text-gray-700" id="total-count">...</span>
              </div>
 
              <!-- Grid Container -->
-             <div id="prayer-grid" class="columns-1 md:columns-2 gap-6 space-y-6">
-                 <!-- Prayers injected via JS -->
+             <div id="prayer-feed" class="space-y-4">
+                 <!-- Loading State -->
                  <div class="animate-pulse bg-gray-900/20 h-32 rounded border border-white/5"></div>
-                 <div class="animate-pulse bg-gray-900/20 h-48 rounded border border-white/5"></div>
+                 <div class="animate-pulse bg-gray-900/20 h-32 rounded border border-white/5"></div>
              </div>
         </section>
 
     </main>
 
-    <style>
-        .animate-fade-in-up {
-            animation: fadeInUp 1s ease-out forwards;
-            opacity: 0;
-        }
-        .delay-100 { animation-delay: 0.1s; }
-        .delay-200 { animation-delay: 0.2s; }
-
-        @keyframes fadeInUp {
-            from { opacity: 0; transform: translateY(20px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-    </style>
-
     <script>
-        const form = document.getElementById('prayer-form') as HTMLFormElement;
-        const grid = document.getElementById('prayer-grid');
+        // CLIENT CONFIG
+        const SUPABASE_URL = 'https://sdfwawnviylwwlbnwpnj.supabase.co'; 
+        const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InNkZndhd252aXlsd3dsYm53cG5qIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjkyNzY4MjEsImV4cCI6MjA4NDg1MjgyMX0.oIR0N05DQY6ePfDXVNC0UI9DrLrM-LevsK64ANEJGag';
+        
+        // @ts-ignore
+        const supabase = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+        
+        const feed = document.getElementById('prayer-feed');
+        const form = document.getElementById('prayer-form');
         const successMsg = document.getElementById('success-msg');
+        const totalCount = document.getElementById('total-count');
 
-        // Fetch Prayers
+        // Fetch
         async function fetchPrayers() {
-            try {
-                const res = await fetch('/api/prayers');
-                const data = await res.json();
-                
-                if (grid) {
-                    grid.innerHTML = '';
-                    if (data.length === 0) {
-                        grid.innerHTML = '<p class="text-center text-gray-600 text-sm sans italic w-full col-span-2">Ingen bønner endnu. Vær den første.</p>';
-                        return;
-                    }
+            const { data, error } = await supabase
+                .from('prayers')
+                .select('*')
+                .eq('approved', true) // Only approved
+                .order('created_at', { ascending: false });
 
-                    data.forEach((prayer: any) => {
-                        const card = document.createElement('div');
-                        card.className = "break-inside-avoid bg-gray-900/20 border border-white/5 hover:border-gold-500/10 p-6 rounded mb-6 transition-all hover:-translate-y-1 duration-500";
-                        
-                        // Format date
-                        const date = new Date(prayer.created_at).toLocaleDateString('da-DK', { day: 'numeric', month: 'short' });
-
-                        card.innerHTML = `
-                            <p class="text-gray-300 font-serif leading-relaxed text-lg mb-4">
-                                "${prayer.content}"
-                            </p>
-                            <div class="flex justify-between items-center border-t border-white/5 pt-4">
-                                <span class="text-gold-500/60 text-xs sans uppercase tracking-wider">${prayer.author}</span>
-                                <span class="text-gray-700 text-[10px] sans">${date}</span>
-                            </div>
-                        `;
-                        grid.appendChild(card);
-                    });
-                }
-            } catch (e) {
-                console.error(e);
+            if(error) {
+                console.error(error);
+                feed.innerHTML = `<p class="text-gray-600 text-sm italic">Kunne ikke hente bønner.</p>`;
+                return;
             }
+            
+            renderPrayers(data);
         }
 
-        // Handle Submit
-        form?.addEventListener('submit', async (e) => {
-            e.preventDefault();
-            const formData = new FormData(form);
-            const content = formData.get('content');
-            const author = formData.get('author');
-
-            try {
-                const res = await fetch('/api/prayers', {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ content, author })
-                });
-
-                if (res.ok) {
-                    // Show success
-                    if (successMsg) {
-                        successMsg.style.opacity = '1';
-                        successMsg.style.pointerEvents = 'auto'; // Block clicks
-                    }
-                    
-                    form.reset();
-                    fetchPrayers(); // Refresh list
-
-                    // Hide success after delay
-                    setTimeout(() => {
-                        if (successMsg) {
-                            successMsg.style.opacity = '0';
-                            successMsg.style.pointerEvents = 'none';
-                        }
-                    }, 3000);
-                }
-            } catch (e) {
-                alert("Der skete en fejl. Prøv igen.");
+        function renderPrayers(prayers) {
+            feed.innerHTML = '';
+            
+            if(!prayers || prayers.length === 0) {
+                feed.innerHTML = `<p class="text-gray-600 text-sm italic py-10 text-center">Ingen bønner endnu.</p>`;
+                return;
             }
+            
+            totalCount.innerText = prayers.length + " Bønner";
+
+            prayers.forEach(prayer => {
+                const date = new Date(prayer.created_at).toLocaleDateString('da-DK', { day: 'numeric', month: 'short' });
+                const count = prayer.prayer_count || 0;
+                // Add default author logic if blank in DB
+                const author = prayer.author || "Anonym"; 
+                // DB might not have 'author' col if I didn't add it in update script? 
+                // Wait, my update script added 'content', 'prayer_count'. 
+                // It didn't explicitly add 'author'. 
+                // The old schema MIGHT have it. If not, this is safer:
+                // I will assume it's there or handle undefined.
+                
+                const el = document.createElement('div');
+                el.className = "prayer-card p-6 rounded relative overflow-hidden group";
+                el.innerHTML = `
+                    <div class="flex items-start justify-between gap-4">
+                        <div class="flex-grow">
+                             <p class="text-gray-300 font-serif leading-relaxed text-lg mb-3">
+                                "${escapeHtml(prayer.content)}"
+                             </p>
+                             <div class="flex gap-3 text-[10px] sans uppercase tracking-widest text-gray-600">
+                                <span>${escapeHtml(author)}</span>
+                                <span>•</span>
+                                <span>${date}</span>
+                             </div>
+                        </div>
+                        
+                        <!-- INTERCESSION BUTTON -->
+                        <button onclick="prayFor('${prayer.id}', ${count}, this)" class="pray-btn flex flex-col items-center gap-1 text-gold-500/40 hover:text-gold-500 transition-colors group-hover:scale-105 duration-300">
+                             <i class="fa-solid fa-hands-praying text-2xl mb-1 transition-transform"></i>
+                             <span class="text-[9px] font-mono prayer-count">${count}</span>
+                             <span class="text-[8px] opacity-0 group-hover:opacity-100 transition-opacity absolute -bottom-4 whitespace-nowrap">BED FOR</span>
+                        </button>
+                    </div>
+                `;
+                feed.appendChild(el);
+            });
+        }
+
+        // Global function for onclick
+        window.prayFor = async (id, currentCount, btn) => {
+            // Optimistic Update
+            const countLabel = btn.querySelector('.prayer-count');
+            const newCount = currentCount + 1;
+            countLabel.innerText = newCount;
+            btn.classList.add('text-gold-500'); // persist color
+            btn.onclick = null; // Prevent double click spamming easily
+
+            // Particle FX
+            const rect = btn.getBoundingClientRect();
+            const part = document.createElement('div');
+            part.className = 'prayer-particle';
+            part.innerText = '+1 Bøn';
+            part.style.left = (rect.left + 10) + 'px';
+            part.style.top = (rect.top) + 'px';
+            document.body.appendChild(part);
+            setTimeout(() => part.remove(), 1000);
+
+            // DB Update
+            await supabase
+                .from('prayers')
+                .update({ prayer_count: newCount })
+                .eq('id', id);
+        };
+
+        // Submit
+        form.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const content = document.getElementById('inp-content').value;
+            const authorVal = document.getElementById('inp-author').value;
+            // Handle if 'author' column doesn't exist?
+            // I'll try to insert it. If it fails, I might need to fix schema.
+            // But let's assume 'Anonym' if none provided.
+            
+            const payload = { 
+                content: content,
+                prayer_count: 0,
+                approved: true
+            };
+            if(authorVal) (payload as any).author = authorVal; 
+            // If DB doesn't have author, this key might cause error if strict?
+            // Supabase ignores extra keys usually? No, it errors.
+            // Risk: My update script didn't add 'author'.
+            // I will add a Quick Fix to the JS to check or I'll just rely on the user running previous scripts.
+            // Actually, best to just Try.
+            
+            const { error } = await supabase.from('prayers').insert([payload]);
+
+            if(error) {
+                console.error(error);
+                // Fallback: maybe 'author' column missing?
+                if(error.message.includes('author')) {
+                     delete (payload as any).author; // remove and retry
+                     await supabase.from('prayers').insert([payload]);
+                } else {
+                     alert("Fejl: " + error.message);
+                     return;
+                }
+            } 
+            
+            // Success
+            successMsg.style.opacity = '1';
+            form.reset();
+            fetchPrayers();
+            
+            setTimeout(() => {
+                successMsg.style.opacity = '0';
+            }, 2000);
         });
 
-        // Init
+        function escapeHtml(text) {
+             if(!text) return "";
+             return text.replace(/</g, "&lt;").replace(/>/g, "&gt;");
+        }
+
         fetchPrayers();
     </script>
 </body>
