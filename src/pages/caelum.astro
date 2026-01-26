@@ -1,0 +1,454 @@
+
+---
+import '@styles/styles.css';
+---
+
+<!DOCTYPE html>
+<html lang="da">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Caelum | Observatoriet</title>
+    <meta name="robots" content="noindex, nofollow">
+    
+    <link rel="icon" type="image/svg+xml" href="/assets/favicon-cross.svg">
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    
+    <style>
+        body { font-family: 'Cinzel', serif; overflow: hidden; background: #020205; }
+        canvas { display: block; }
+        
+        .fade-in { animation: fadeIn 2s ease-in forwards; }
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+    </style>
+</head>
+<body class="text-white h-screen w-screen relative">
+
+    <!-- Nav -->
+    <nav class="fixed top-8 left-8 z-50 pointer-events-none">
+        <a href="/" class="pointer-events-auto text-white/40 hover:text-white transition-colors text-xl flex items-center gap-2">
+            <i class="fa-solid fa-arrow-left"></i>
+            <span class="text-xs uppercase tracking-widest hidden md:inline">Ned til Jorden</span>
+        </a>
+    </nav>
+    
+    <!-- HUD -->
+    <div class="fixed top-8 right-8 z-50 text-right pointer-events-none">
+        <h1 class="text-white/80 text-lg tracking-widest uppercase">Caelum</h1>
+        <p class="text-[10px] text-white/40 uppercase tracking-[0.3em]">Himlene fortæller</p>
+        <div id="hint-text" class="mt-4 text-xs text-gold-500/80 italic animate-pulse">
+            Forbind stjernerne...
+        </div>
+    </div>
+    
+    <!-- Discovery Overlay -->
+    <div id="discovery-modal" class="fixed inset-0 z-40 flex items-center justify-center pointer-events-none opacity-0 transition-opacity duration-1000 bg-black/40 backdrop-blur-sm">
+        <div class="text-center transform scale-90 transition-transform duration-1000" id="discovery-content">
+            <div class="text-6xl text-gold-500 mb-4 drop-shadow-[0_0_30px_rgba(255,215,0,0.8)]">
+                <i id="discovery-icon" class="fa-solid fa-cross"></i>
+            </div>
+            <h2 id="discovery-title" class="text-3xl font-bold text-white tracking-widest mb-2">Crux</h2>
+            <p id="discovery-desc" class="text-sm text-gray-300 italic serif max-w-md mx-auto"></p>
+        </div>
+    </div>
+
+    <canvas id="sky-canvas" class="absolute inset-0 z-0 cursor-crosshair"></canvas>
+
+    <audio id="ambient-audio" src="/assets/audio/wind.mp3" loop></audio>
+    <audio id="sparkle-audio" src="/assets/audio/bell.mp3"></audio>
+
+    <script>
+        /**
+         * CAELUM LOGIC
+         * - Generate random stars.
+         * - Embed "Constellation Stars" at fixed relative positions.
+         * - Handle dragging between stars to draw lines.
+         * - Check for completed shapes.
+         */
+
+        const canvas = document.getElementById('sky-canvas') as HTMLCanvasElement;
+        const ctx = canvas.getContext('2d');
+        const hintText = document.getElementById('hint-text');
+        const modal = document.getElementById('discovery-modal');
+        const dIcon = document.getElementById('discovery-icon');
+        const dTitle = document.getElementById('discovery-title');
+        const dDesc = document.getElementById('discovery-desc');
+        const dContent = document.getElementById('discovery-content');
+        
+        // Audio
+        const ambient = document.getElementById('ambient-audio') as HTMLAudioElement;
+        const sparkle = document.getElementById('sparkle-audio') as HTMLAudioElement;
+
+        // State
+        let width = window.innerWidth;
+        let height = window.innerHeight;
+        let stars: Star[] = [];
+        let connections: Connection[] = [];
+        let activeStar: Star | null = null;
+        let mouse = { x: 0, y: 0 };
+        let isDragging = false;
+        
+        // Constellation Definitions (Normalized Coordinates 0-1)
+        // We will scale these to screen size and center them.
+        type Constellation = {
+            id: string;
+            name: string;
+            desc: string;
+            icon: string;
+            points: { x: number, y: number }[]; // Relative to a center
+            edges: number[][]; // Indices of points that must be connected
+            offset: { x: number, y: number }; // Where on screen (0-1)
+            discovered: boolean;
+        };
+
+        const CONSTELLATIONS: Constellation[] = [
+            {
+                id: 'cross',
+                name: 'Signum Crucis',
+                desc: 'Frelsens tegn. Ved dette skal du sejre.',
+                icon: 'fa-cross',
+                // A simple cross shape
+                points: [
+                    { x: 0, y: -0.15 }, // Top
+                    { x: 0, y: 0.15 },  // Bottom
+                    { x: -0.1, y: -0.05 }, // Left
+                    { x: 0.1, y: -0.05 }   // Right
+                ],
+                // Connections required: Top-Bottom, Left-Right? 
+                // Actually usually drawn as Top->Center->Bottom + Left->Center->Right?
+                // Let's do simple perimeter or straight lines.
+                // Let's do: Top -> Bottom (long), Left -> Right (short).
+                // But user needs stars to connect. 
+                // Let's add a "Center" star for easier connection?
+                // Or just 4 stars. 
+                // Let's do: Top->Bottom is ONE edge? No, usually drawn point to point.
+                // Let's do Top->Center, Center->Bottom, Left->Center, Center->Right.
+                // So 5 stars.
+                offset: { x: 0.5, y: 0.5 },
+                edges: [[0,1], [1,2], [3,1], [1,4]], // Indices in the points array below
+                discovered: false
+            },
+             {
+                id: 'fish',
+                name: 'Ichthys',
+                desc: 'Jesus Kristus, Guds Søn, Frelseren.',
+                icon: 'fa-fish',
+                points: [
+                   { x: -0.1, y: 0 }, // Tail Top
+                   { x: -0.1, y: 0.1 }, // Tail Bottom
+                   { x: 0, y: 0.05 }, // Cross intersection
+                   { x: 0.15, y: 0.05 } // Nose
+                   // Simplified fish: TailTop -> Cross, TailBottom -> Cross, Cross -> Nose?
+                   // Let's do a loop.
+                ],
+                offset: { x: 0.2, y: 0.3 },
+                edges: [], // Defined dynamically below
+                discovered: false
+            }
+        ];
+        
+        // Re-defining Cross with 5 stars for easier "drawing"
+        const CROSS_DEF = {
+             points: [
+                { id: 0, x: 0, y: -100 }, // Top
+                { id: 1, x: 0, y: 0 },    // Center
+                { id: 2, x: 0, y: 100 },  // Bottom
+                { id: 3, x: -60, y: 0 },  // Left
+                { id: 4, x: 60, y: 0 }    // Right
+            ],
+            edges: [[0,1], [1,2], [3,1], [1,4]],
+            name: "Crucis",
+            desc: "Korset",
+            icon: "fa-cross"
+        };
+        
+        const FISH_DEF = {
+             points: [
+                { id: 0, x: -80, y: -40 }, // Top Tail
+                { id: 1, x: -80, y: 40 },  // Bottom Tail
+                { id: 2, x: -20, y: 0 },   // Cross
+                { id: 3, x: 80, y: 0 },  // Nose
+            ],
+            edges: [[0,2], [1,2], [2,3], [0,1]], // Closed loop-ish
+            name: "Ichthys",
+            desc: "Fisken",
+            icon: "fa-fish"
+        };
+        
+         const DOVE_DEF = {
+             points: [
+                { id: 0, x: 0, y: 0 }, // Body
+                { id: 1, x: -60, y: -40 }, // Left Wing
+                { id: 2, x: 60, y: -40 },  // Right Wing
+                { id: 3, x: 0, y: 60 },  // Tail
+                { id: 4, x: 0, y: -50 }, // Head
+            ],
+            edges: [[0,1], [0,2], [0,3], [0,4]],
+            name: "Columba",
+            desc: "Helligånden",
+            icon: "fa-dove"
+        };
+
+        const PATTERNS = [
+            { ...CROSS_DEF, offsetX: 0.5, offsetY: 0.5, completed: false },
+            { ...FISH_DEF, offsetX: 0.8, offsetY: 0.3, completed: false },
+            { ...DOVE_DEF, offsetX: 0.2, offsetY: 0.6, completed: false }
+        ];
+
+        interface Star {
+            x: number;
+            y: number;
+            size: number;
+            brightness: number;
+            isPattern: boolean;
+            patternId?: number; // Index in PATTERNS
+            pointId?: number; // Index in points array
+            connectedTo: Star[];
+        }
+
+        interface Connection {
+             a: Star;
+             b: Star;
+             life: number; // For animation
+        }
+
+        function init() {
+            resize();
+            createStars();
+            
+            window.addEventListener('resize', resize);
+            window.addEventListener('mousedown', onDown);
+            window.addEventListener('mousemove', onMove);
+            window.addEventListener('mouseup', onUp);
+            window.addEventListener('touchstart', (e) => onDown(e.touches[0]));
+            window.addEventListener('touchmove', (e) => onMove(e.touches[0]));
+            window.addEventListener('touchend', onUp);
+            
+            // Start loop
+            requestAnimationFrame(loop);
+            
+            // Audio init
+            document.body.addEventListener('click', () => {
+                if(ambient.paused) {
+                    ambient.volume = 0.2;
+                    ambient.play();
+                }
+            }, { once: true });
+        }
+        
+        function resize() {
+            width = window.innerWidth;
+            height = window.innerHeight;
+            canvas.width = width;
+            canvas.height = height;
+            stars = []; // Clear and recreate on resize to keep positions relative? 
+            // Ideally strictly relative, but lazy reset is fine.
+            createStars();
+        }
+
+        function createStars() {
+            // 1. Background Dust
+            for(let i=0; i<300; i++) {
+                stars.push({
+                    x: Math.random() * width,
+                    y: Math.random() * height,
+                    size: Math.random() * 1.5,
+                    brightness: Math.random() * 0.5 + 0.1,
+                    isPattern: false,
+                    connectedTo: []
+                });
+            }
+
+            // 2. Patterns
+            PATTERNS.forEach((pat, index) => {
+                const centerX = width * pat.offsetX;
+                const centerY = height * pat.offsetY;
+                
+                pat.points.forEach(pt => {
+                    stars.push({
+                        x: centerX + pt.x,
+                        y: centerY + pt.y,
+                        size: 3, // Pattern stars are bigger
+                        brightness: 0.8,
+                        isPattern: true,
+                        patternId: index,
+                        pointId: pt.id,
+                        connectedTo: []
+                    });
+                });
+            });
+        }
+
+        function onDown(e: { clientX: number, clientY: number }) {
+            mouse.x = e.clientX;
+            mouse.y = e.clientY;
+            isDragging = true;
+            
+            // Find star near mouse
+            activeStar = stars.find(s => Math.hypot(s.x - mouse.x, s.y - mouse.y) < 20) || null;
+            if(activeStar) {
+                // Play small ping
+                playSound();
+            }
+        }
+
+        function onMove(e: { clientX: number, clientY: number }) {
+            mouse.x = e.clientX;
+            mouse.y = e.clientY;
+            
+            // If dragging from a star, check if we hit another
+            if(isDragging && activeStar) {
+                const target = stars.find(s => Math.hypot(s.x - mouse.x, s.y - mouse.y) < 20);
+                if(target && target !== activeStar) {
+                    // Connect!
+                    connect(activeStar, target);
+                    activeStar = target; // Chain it
+                    playSound();
+                }
+            }
+        }
+
+        function onUp() {
+            isDragging = false;
+            activeStar = null;
+        }
+        
+        function connect(a: Star, b: Star) {
+            // Avoid duplicates
+            if(a.connectedTo.includes(b)) return;
+            
+            a.connectedTo.push(b);
+            b.connectedTo.push(a); // Undirected
+            connections.push({ a, b, life: 0 });
+            
+            checkPatterns();
+        }
+
+        function checkPatterns() {
+            PATTERNS.forEach(pat => {
+                if(pat.completed) return;
+                
+                // Get all stars belonging to this pattern
+                const patStars = stars.filter(s => s.patternId === PATTERNS.indexOf(pat));
+                
+                // Check if all required edges exist
+                const allEdgesConnected = pat.edges.every(edge => {
+                    const s1 = patStars.find(s => s.pointId === edge[0]);
+                    const s2 = patStars.find(s => s.pointId === edge[1]);
+                    if(!s1 || !s2) return false;
+                    return s1.connectedTo.includes(s2);
+                });
+
+                if(allEdgesConnected) {
+                    pat.completed = true;
+                    triggerDiscovery(pat);
+                }
+            });
+        }
+
+        function triggerDiscovery(pat: any) {
+            // Visual Flare
+            
+            // Modal
+            dIcon!.className = `fa-solid ${pat.icon}`;
+            dTitle!.innerText = pat.name;
+            dDesc!.innerText = pat.desc;
+            
+            modal!.classList.remove('pointer-events-none', 'opacity-0');
+            modal!.classList.add('opacity-100');
+            dContent!.classList.remove('scale-90');
+            dContent!.classList.add('scale-100');
+            
+            // Auto hide
+            setTimeout(() => {
+                modal!.classList.add('opacity-0', 'pointer-events-none');
+                modal!.classList.remove('opacity-100');
+                dContent!.classList.add('scale-90');
+                dContent!.classList.remove('scale-100');
+            }, 4000);
+        }
+
+        function playSound() {
+            const clone = sparkle.cloneNode() as HTMLAudioElement;
+            clone.volume = 0.2;
+            clone.playbackRate = 0.8 + Math.random() * 0.4;
+            clone.play();
+        }
+
+        function loop() {
+            // Draw
+            ctx.clearRect(0,0,width,height);
+            
+            // Draw Stars
+            stars.forEach(s => {
+                // Twinkle
+                const alpha = s.brightness + Math.sin(Date.now() * 0.003 + s.x) * 0.1;
+                
+                ctx.beginPath();
+                ctx.fillStyle = `rgba(255, 255, 255, ${alpha})`;
+                
+                if(s.isPattern && s === activeStar) {
+                     ctx.shadowBlur = 15;
+                     ctx.shadowColor = "#FFD700";
+                     ctx.fillStyle = "#FFD700";
+                } else if (s.isPattern) {
+                    // Pattern stars are slightly gold if you look closely
+                    ctx.fillStyle = `rgba(255, 240, 200, ${alpha})`;
+                } else {
+                    ctx.shadowBlur = 0;
+                }
+                
+                ctx.arc(s.x, s.y, s.size, 0, Math.PI*2);
+                ctx.fill();
+            });
+
+            // Draw Connections
+            ctx.strokeStyle = "rgba(255, 215, 0, 0.4)";
+            ctx.lineWidth = 1;
+            
+            connections.forEach(c => {
+                ctx.beginPath();
+                ctx.moveTo(c.a.x, c.a.y);
+                ctx.lineTo(c.b.x, c.b.y);
+                ctx.stroke();
+            });
+
+            // Draw Drag Line
+            if(isDragging && activeStar) {
+                ctx.beginPath();
+                ctx.strokeStyle = "rgba(255, 255, 255, 0.2)";
+                ctx.moveTo(activeStar.x, activeStar.y);
+                ctx.lineTo(mouse.x, mouse.y);
+                ctx.stroke();
+            }
+
+            // Draw Completed Patterns (Overlay)
+            PATTERNS.filter(p => p.completed).forEach(pat => {
+                 const patStars = stars.filter(s => s.patternId === PATTERNS.indexOf(pat));
+                 
+                 ctx.beginPath();
+                 ctx.strokeStyle = "rgba(255, 215, 0, 0.8)";
+                 ctx.lineWidth = 2;
+                 ctx.shadowColor = "#FFD700";
+                 ctx.shadowBlur = 10;
+                 
+                 pat.edges.forEach(edge => {
+                    const s1 = patStars.find(s => s.pointId === edge[0]);
+                    const s2 = patStars.find(s => s.pointId === edge[1]);
+                    if(s1 && s2) {
+                        ctx.moveTo(s1.x, s1.y);
+                        ctx.lineTo(s2.x, s2.y);
+                    }
+                 });
+                 ctx.stroke();
+                 ctx.shadowBlur = 0;
+            });
+
+            requestAnimationFrame(loop);
+        }
+
+        init();
+    </script>
+</body>
+</html>
