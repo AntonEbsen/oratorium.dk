@@ -89,6 +89,7 @@ export const scenarios: Scenario[] = [
                 text: "Objektive moralske pligter findes (Naturloven). En objektiv Moralsk Lov kræver en transcendent Moralsk Lovgiver.",
                 type: 'Thomistisk'
             }
+        ]
     },
     {
         id: 'crusades_inquisition',
