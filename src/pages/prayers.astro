@@ -254,21 +254,18 @@ import '@styles/styles.css';
             e.preventDefault();
             const content = document.getElementById('inp-content').value;
             const authorVal = document.getElementById('inp-author').value;
-            // Handle if 'author' column doesn't exist?
-            // I'll try to insert it. If it fails, I might need to fix schema.
-            // But let's assume 'Anonym' if none provided.
             
+            // Get Current User
+            const { data: { session } } = await supabase.auth.getSession();
+            const userId = session?.user?.id || null;
+
             const payload = { 
                 content: content,
                 prayer_count: 0,
-                approved: true
+                approved: true,
+                user_id: userId // Link to profile
             };
             if(authorVal) (payload as any).author = authorVal; 
-            // If DB doesn't have author, this key might cause error if strict?
-            // Supabase ignores extra keys usually? No, it errors.
-            // Risk: My update script didn't add 'author'.
-            // I will add a Quick Fix to the JS to check or I'll just rely on the user running previous scripts.
-            // Actually, best to just Try.
             
             const { error } = await supabase.from('prayers').insert([payload]);
 
