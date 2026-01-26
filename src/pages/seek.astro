@@ -282,36 +282,54 @@ import '@styles/styles.css';
         </div>
     </div>
 
+    <!-- LITURGY & PRACTICE (Mass & Confession) -->
+    <div class="max-w-7xl mx-auto px-6 pb-24 border-t border-white/5 pt-24">
+        <div class="text-center mb-12">
+            <h2 class="text-3xl text-white font-serif mb-4">Liturgi & Praksis</h2>
+            <p class="text-xs text-gray-500 uppercase tracking-widest sans">Forstå Kirkens Hellige Handlinger</p>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+            <!-- Mass Guide -->
+            <a href="/mass" class="group relative block bg-[#0a0a0c] border border-white/10 rounded-lg overflow-hidden h-64">
+                <div class="absolute inset-0 bg-[url('https://www.transparenttextures.com/patterns/black-linen.png')] opacity-20"></div>
+                 <div class="absolute inset-0 bg-cover bg-center opacity-30 group-hover:opacity-50 transition-opacity duration-700 transform group-hover:scale-105" style="background-image: url('/assets/mass-bg.jpg'); background-color: #222;"></div> 
+                 
+                <div class="absolute inset-0 flex flex-col items-center justify-center z-10 p-6 text-center">
+                    <i class="fa-solid fa-church text-4xl text-gold-500 mb-4 drop-shadow-md"></i>
+                    <h3 class="text-2xl text-white font-serif mb-2 group-hover:text-gold-200 transition-colors">Messen Forklart</h3>
+                    <p class="text-gray-400 sans text-xs uppercase tracking-widest group-hover:text-white transition-colors">Guide til Liturgien</p>
+                </div>
+            </a>
+
+            <!-- Confession Guide -->
+            <a href="/confession" class="group relative block bg-[#0a0a0c] border border-white/10 rounded-lg overflow-hidden h-64">
+                 <div class="absolute inset-0 bg-[url('https://www.transparenttextures.com/patterns/wood-pattern.png')] opacity-20"></div>
+                 <div class="absolute inset-0 bg-purple-900/10 group-hover:bg-purple-900/20 transition-colors duration-700"></div> 
+                 
+                <div class="absolute inset-0 flex flex-col items-center justify-center z-10 p-6 text-center">
+                    <i class="fa-solid fa-hands-praying text-4xl text-purple-500 mb-4 drop-shadow-md"></i>
+                    <h3 class="text-2xl text-white font-serif mb-2 group-hover:text-purple-200 transition-colors">Skriftemål</h3>
+                    <p class="text-gray-400 sans text-xs uppercase tracking-widest group-hover:text-white transition-colors">Samvittighedens Spejl</p>
+                </div>
+            </a>
         </div>
     </div>
 
-    <!-- Conversion Box -->
-    <div class="max-w-2xl mx-auto px-6 pb-32 text-center">
-        <h2 class="text-2xl text-gold-500 mb-8 font-serif">Er du klar til at tage første skridt?</h2>
-        <div class="bg-gradient-to-b from-gray-900 to-black p-8 rounded border border-gold-500/30">
-            <p class="text-gray-300 font-serif italic mb-6">
-                "Sent har jeg elsket dig, du skønhed så gammel og så ny, sent har jeg elsket dig!"
-                <br><span class="text-gold-500/50 text-xs not-italic uppercase tracking-widest mt-2 block">– Skt. Augustin</span>
+    <!-- CTA: CONVERSION -->
+    <div class="bg-gradient-to-b from-black to-[#0a0500] py-32 border-t border-gold-900/30">
+        <div class="max-w-4xl mx-auto px-6 text-center">
+            <h2 class="text-4xl md:text-6xl text-gold-500 font-serif mb-8 drop-shadow-[0_0_25px_rgba(212,175,55,0.3)]">
+                Er du klar til at tage skridtet?
+            </h2>
+            <p class="text-gray-400 sans text-lg leading-relaxed mb-12 max-w-2xl mx-auto">
+                Du har læst, bedt og søgt. Måske er det tid til at banke på døren.
+                Læs om, hvordan man bliver optaget i Den Katolske Kirke.
             </p>
-            <div class="flex flex-col md:flex-row gap-4 justify-center">
-                <a href="https://www.katolsk.dk/kort" target="_blank" class="inline-block px-8 py-3 bg-white text-black font-bold uppercase tracking-widest text-xs rounded hover:bg-gray-200 transition-colors border border-gray-300 shadow-sm">
-                    Officiel Liste (Katolsk.dk)
-                </a>
-                <a href="/locations" class="inline-block px-8 py-3 bg-[#D4AF37] text-black font-bold uppercase tracking-widest text-xs rounded hover:bg-[#C5A028] transition-colors shadow-[0_0_20px_rgba(212,175,55,0.4)]">
-                    <i class="fa-solid fa-map-location-dot mr-2"></i> Åbn Kirkekortet
-                </a>
-            </div>
-            <p class="text-[10px] text-gray-500 mt-4 uppercase tracking-widest mb-12">Find en messe nær dig</p>
             
-            <!-- Mass Guide CTA -->
-            <div class="border-t border-white/10 pt-8">
-                <i class="fa-solid fa-book-open text-gold-500 mb-4 text-2xl"></i>
-                <h3 class="text-gold-200 font-serif text-lg mb-2">Forstår du ikke messen?</h3>
-                <p class="text-gray-400 text-xs mb-6 sans">Er det første gang? Forstå forskellen på "Novus Ordo" og "TLM".</p>
-                <a href="/mass" class="text-gold-500 text-xs uppercase tracking-widest hover:text-white border-b border-gold-500/30 pb-1">
-                    Messen Forklart <i class="fa-solid fa-arrow-right ml-2"></i>
-                </a>
-            </div>
+            <a href="/convert" class="inline-block px-12 py-5 bg-transparent border border-gold-500 text-gold-500 hover:bg-gold-500 hover:text-black font-bold uppercase tracking-[0.2em] text-sm transition-all duration-300 transform hover:scale-105 shadow-[0_0_20px_rgba(212,175,55,0.1)] hover:shadow-[0_0_40px_rgba(212,175,55,0.4)] rounded-sm">
+                Vejen ind i Kirken
+            </a>
         </div>
     </div>
 

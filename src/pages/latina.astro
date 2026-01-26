@@ -1,0 +1,408 @@
+
+---
+import '@styles/styles.css';
+
+// Data: Latin Prayers broken down word-by-word
+const prayers = [
+    {
+        id: 'pater',
+        title: 'Pater Noster',
+        subtitle: 'Fadervor',
+        lines: [
+            [
+                { l: 'Pater', d: 'Fader', g: 'Substantiv' },
+                { l: 'noster,', d: 'vor,', g: 'Possessivt pronomen' },
+                { l: 'qui', d: 'som', g: 'Relativt pronomen' },
+                { l: 'es', d: 'er', g: 'Verbum (være)' },
+                { l: 'in', d: 'i', g: 'Præposition' },
+                { l: 'caelis,', d: 'himlene,', g: 'Substantiv (Ablativ)' }
+            ],
+            [
+                { l: 'sanctificetur', d: 'helliget vorde', g: 'Verbum (Konjunktiv)' },
+                { l: 'nomen', d: 'navn', g: 'Substantiv' },
+                { l: 'tuum.', d: 'dit.', g: 'Possessivt pronomen' }
+            ],
+            [
+                { l: 'Adveniat', d: 'komme', g: 'Verbum (Konjunktiv)' },
+                { l: 'regnum', d: 'rige', g: 'Substantiv' },
+                { l: 'tuum.', d: 'dit.', g: 'Possessivt pronomen' }
+            ],
+            [
+                { l: 'Fiat', d: 'ske', g: 'Verbum (Konjunktiv)' },
+                { l: 'voluntas', d: 'vilje', g: 'Substantiv' },
+                { l: 'tua,', d: 'din,', g: 'Possessivt pronomen' }
+            ],
+            [
+                { l: 'sicut', d: 'som', g: 'Adverbium' },
+                { l: 'in', d: 'i', g: 'Præposition' },
+                { l: 'caelo', d: 'himlen', g: 'Substantiv' },
+                { l: 'et', d: 'således også', g: 'Konjunktion' },
+                { l: 'in', d: 'på', g: 'Præposition' },
+                { l: 'terra.', d: 'jorden.', g: 'Substantiv' }
+            ],
+             [
+                { l: 'Panem', d: 'Brød', g: 'Substantiv (Akkusativ)' },
+                { l: 'nostrum', d: 'vort', g: 'Possessivt pronomen' },
+                { l: 'quotidianum', d: 'daglige', g: 'Adjektiv' },
+                { l: 'da', d: 'giv', g: 'Verbum (Imperativ)' },
+                { l: 'nobis', d: 'os', g: 'Pronomen (Dativ)' },
+                { l: 'hodie,', d: 'i dag,', g: 'Adverbium' }
+            ],
+            [
+                { l: 'et', d: 'og', g: 'Konjunktion' },
+                { l: 'dimitte', d: 'forlad', g: 'Verbum (Imperativ)' },
+                { l: 'nobis', d: 'os', g: 'Pronomen (Dativ)' },
+                { l: 'debita', d: 'skyld', g: 'Substantiv (Akkusativ)' },
+                { l: 'nostra,', d: 'vor,', g: 'Possessivt pronomen' }
+            ],
+            [
+                { l: 'sicut', d: 'som', g: 'Adverbium' },
+                { l: 'et', d: 'også', g: 'Konjunktion' },
+                { l: 'nos', d: 'vi', g: 'Pronomen (Nominativ)' },
+                { l: 'dimittimus', d: 'forlader', g: 'Verbum' },
+                { l: 'debitoribus', d: 'skyldnere', g: 'Substantiv (Dativ)' },
+                { l: 'nostris.', d: 'vores.', g: 'Possessivt pronomen' }
+            ],
+             [
+                { l: 'Et', d: 'Og', g: 'Konjunktion' },
+                { l: 'ne', d: 'ikke', g: 'Adverbium' },
+                { l: 'nos', d: 'os', g: 'Pronomen' },
+                { l: 'inducas', d: 'led', g: 'Verbum (Konjunktiv)' },
+                { l: 'in', d: 'i', g: 'Præposition' },
+                { l: 'tentationem,', d: 'fristelse,', g: 'Substantiv' }
+            ],
+            [
+                { l: 'sed', d: 'men', g: 'Konjunktion' },
+                { l: 'libera', d: 'fri', g: 'Verbum (Imperativ)' },
+                { l: 'nos', d: 'os', g: 'Pronomen' },
+                { l: 'a', d: 'fra', g: 'Præposition' },
+                { l: 'malo.', d: 'det onde.', g: 'Substantiv (Ablativ)' }
+            ],
+             [
+                { l: 'Amen.', d: 'Amen.', g: 'Hebraisk: "Må det ske"' }
+            ]
+        ]
+    },
+    {
+        id: 'ave',
+        title: 'Ave Maria',
+        subtitle: 'Hil dig, Maria',
+        lines: [
+            [
+                { l: 'Ave', d: 'Hil (dig)', g: 'Verbum (Imperativ)' },
+                { l: 'Maria,', d: 'Maria,', g: 'Navn' },
+                { l: 'gratia', d: 'af nåde', g: 'Substantiv (Ablativ)' },
+                { l: 'plena,', d: 'fuld,', g: 'Adjektiv' }
+            ],
+            [
+                { l: 'Dominus', d: 'Herren', g: 'Substantiv (Nominativ)' },
+                { l: 'tecum.', d: 'er med dig.', g: 'Pronomen + Præposition' }
+            ],
+            [
+                { l: 'Benedicta', d: 'Velsignet er', g: 'Participium' },
+                { l: 'tu', d: 'du', g: 'Pronomen' },
+                { l: 'in', d: 'blandt', g: 'Præposition' },
+                { l: 'mulieribus,', d: 'kvinder,', g: 'Substantiv (Ablativ)' }
+            ],
+            [
+                { l: 'et', d: 'og', g: 'Konjunktion' },
+                { l: 'benedictus', d: 'velsignet er', g: 'Participium' },
+                { l: 'fructus', d: 'frugten', g: 'Substantiv' },
+                { l: 'ventris', d: 'af (dit) liv', g: 'Substantiv (Genitiv)' },
+                { l: 'tui,', d: 'dit,', g: 'Possessivt pronomen' },
+                { l: 'Iesus.', d: 'Jesus.', g: 'Navn' }
+            ],
+            [
+                { l: 'Sancta', d: 'Hellige', g: 'Adjektiv' },
+                { l: 'Maria,', d: 'Maria,', g: 'Navn' },
+                { l: 'Mater', d: 'Moder', g: 'Substantiv' },
+                { l: 'Dei,', d: 'Guds,', g: 'Substantiv (Genitiv)' }
+            ],
+            [
+                { l: 'ora', d: 'bed', g: 'Verbum (Imperativ)' },
+                { l: 'pro', d: 'for', g: 'Præposition' },
+                { l: 'nobis', d: 'os', g: 'Pronomen (Ablativ)' },
+                { l: 'peccatoribus,', d: 'syndere,', g: 'Substantiv (Ablativ)' }
+            ],
+            [
+                { l: 'nunc,', d: 'nu,', g: 'Adverbium' },
+                { l: 'et', d: 'og', g: 'Konjunktion' },
+                { l: 'in', d: 'i', g: 'Præposition' },
+                { l: 'hora', d: 'timen', g: 'Substantiv (Ablativ)' },
+                { l: 'mortis', d: 'for (vores) død', g: 'Substantiv (Genitiv)' },
+                { l: 'nostrae.', d: 'vores.', g: 'Possessivt pronomen' }
+            ],
+            [
+                { l: 'Amen.', d: 'Amen.', g: '' }
+            ]
+        ]
+    },
+     {
+        id: 'gloria',
+        title: 'Gloria Patri',
+        subtitle: 'Ære være Faderen',
+        lines: [
+            [
+                { l: 'Gloria', d: 'Ære', g: 'Substantiv' },
+                { l: 'Patri,', d: 'være Faderen,', g: 'Substantiv (Dativ)' },
+                { l: 'et', d: 'og', g: 'Konjunktion' },
+                { l: 'Filio,', d: 'Sønnen,', g: 'Substantiv (Dativ)' }
+            ],
+            [
+                { l: 'et', d: 'og', g: 'Konjunktion' },
+                { l: 'Spiritui', d: 'Ånden', g: 'Substantiv (Dativ)' },
+                { l: 'Sancto.', d: 'Hellig,', g: 'Adjektiv (Dativ)' }
+            ],
+            [
+                { l: 'Sicut', d: 'Som', g: 'Adverbium' },
+                { l: 'erat', d: 'det var', g: 'Verbum (Imperfektum)' },
+                { l: 'in', d: 'i', g: 'Præposition' },
+                { l: 'principio,', d: 'begyndelsen,', g: 'Substantiv (Ablativ)' }
+            ],
+            [
+                { l: 'et', d: 'og', g: 'Konjunktion' },
+                { l: 'nunc,', d: 'nu,', g: 'Adverbium' },
+                { l: 'et', d: 'og', g: 'Konjunktion' },
+                { l: 'semper,', d: 'altid,', g: 'Adverbium' }
+            ],
+            [
+                { l: 'et', d: 'og', g: 'Konjunktion' },
+                { l: 'in', d: 'i', g: 'Præposition' },
+                { l: 'saecula', d: 'evigheders', g: 'Substantiv (Akkusativ)' },
+                { l: 'saeculorum.', d: 'evighed.', g: 'Substantiv (Genitiv Pluralis)' }
+            ],
+             [
+                { l: 'Amen.', d: 'Amen.', g: '' }
+            ]
+        ]
+    }
+];
+---
+
+<!DOCTYPE html>
+<html lang="da">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Schola Latina | Lær Kirkens Sprog</title>
+    <meta name="robots" content="index, follow">
+    <link rel="icon" type="image/svg+xml" href="/assets/favicon-cross.svg">
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700&family=Inter:wght@300;400;600&family=Playfair+Display:ital@0;1&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    
+    <style>
+        body { font-family: 'Cinzel', serif; background: #050505; color: #e5e7eb; }
+        .sans { font-family: 'Inter', sans-serif; }
+        .serif-italic { font-family: 'Playfair Display', serif; font-style: italic; }
+        
+        /* Chalkboard / Parchment feel */
+        .latin-word {
+            position: relative;
+            cursor: pointer;
+            border-bottom: 1px dotted rgba(212,175,55,0.3);
+            transition: all 0.2s;
+        }
+        .latin-word:hover {
+            color: #D4AF37;
+            border-bottom: 1px solid #D4AF37;
+        }
+
+        /* Tooltip Logic */
+        .latin-word .tooltip {
+            visibility: hidden;
+            opacity: 0;
+            position: absolute;
+            bottom: 120%;
+            left: 50%;
+            transform: translateX(-50%) translateY(10px);
+            background: #1a1a1a;
+            border: 1px solid rgba(212,175,55,0.3);
+            padding: 8px 12px;
+            border-radius: 4px;
+            width: max-content;
+            max-width: 200px;
+            text-align: center;
+            z-index: 50;
+            transition: all 0.2s ease;
+            pointer-events: none;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.5);
+        }
+        
+        .latin-word:hover .tooltip {
+            visibility: visible;
+            opacity: 1;
+            transform: translateX(-50%) translateY(0);
+        }
+
+        .show-translations .latin-word::after {
+            content: attr(data-danish);
+            display: block;
+            font-size: 0.5em;
+            font-family: 'Inter', sans-serif;
+            color: #888;
+            margin-top: 2px;
+            font-style: italic;
+            position: absolute;
+            left: 0;
+            right: 0;
+            text-align: center;
+            top: 100%;
+        }
+    </style>
+</head>
+<body class="selection:bg-gold-500/30 min-h-screen flex flex-col pt-32 pb-24">
+
+    <!-- Nav -->
+    <nav class="fixed top-8 left-8 z-50">
+        <a href="/seek" class="text-white/40 hover:text-white transition-colors text-xl flex items-center gap-2">
+            <i class="fa-solid fa-arrow-left"></i>
+            <span class="text-xs uppercase tracking-widest hidden md:inline">Tilbage</span>
+        </a>
+    </nav>
+
+    <!-- Header -->
+    <header class="text-center mb-16 px-4">
+        <h1 class="text-3xl md:text-5xl text-gold-500 mb-4 font-serif">Schola Latina</h1>
+        <p class="text-xs text-gray-500 uppercase tracking-[0.3em] sans">Lær Kirkens Modersmål</p>
+    </header>
+
+    <main class="max-w-4xl mx-auto px-6 w-full">
+        
+        <!-- Controls -->
+        <div class="flex justify-center gap-4 mb-16">
+            <button onclick="switchPrayer('pater')" id="btn-pater" class="prayer-btn active px-6 py-2 border border-gold-500 bg-gold-500/10 text-gold-500 rounded uppercase tracking-widest text-xs transition-colors hover:bg-gold-500 hover:text-black">
+                Pater Noster
+            </button>
+            <button onclick="switchPrayer('ave')" id="btn-ave" class="prayer-btn px-6 py-2 border border-white/10 text-gray-500 rounded uppercase tracking-widest text-xs transition-colors hover:border-gold-500 hover:text-gold-500">
+                Ave Maria
+            </button>
+             <button onclick="switchPrayer('gloria')" id="btn-gloria" class="prayer-btn px-6 py-2 border border-white/10 text-gray-500 rounded uppercase tracking-widest text-xs transition-colors hover:border-gold-500 hover:text-gold-500">
+                Gloria Pari
+            </button>
+        </div>
+
+        <!-- Mode Toggle -->
+        <div class="flex justify-center mb-12">
+            <label class="flex items-center cursor-pointer gap-3 p-2 border border-white/10 rounded-full px-4 bg-white/5 hover:bg-white/10 transition-colors">
+                <span class="text-[10px] uppercase tracking-widest text-gray-400">Læse-tilstand</span>
+                <div class="relative">
+                    <input type="checkbox" id="translation-toggle" class="sr-only">
+                    <div class="block bg-gray-600 w-10 h-6 rounded-full transition-colors toggle-bg"></div>
+                    <div class="dot absolute left-1 top-1 bg-white w-4 h-4 rounded-full transition-transform transform"></div>
+                </div>
+                <span class="text-[10px] uppercase tracking-widest text-gold-500">Studie-tilstand</span>
+            </label>
+        </div>
+
+        <!-- Prayer Display -->
+        <div id="prayer-container" class="text-center space-y-6 md:space-y-8 bg-[#101012] border border-white/5 p-8 md:p-16 rounded-lg shadow-2xl relative min-h-[400px] flex flex-col justify-center">
+            
+            <div class="absolute top-4 left-0 w-full text-center pointer-events-none opacity-50">
+                <i class="fa-solid fa-cross text-gold-900 text-6xl"></i>
+            </div>
+            
+            <!-- Dynamic Content -->
+            <div id="prayer-content">
+                <!-- Injected via JS -->
+            </div>
+
+        </div>
+
+        <!-- Footer Info -->
+        <div class="text-center mt-16 text-gray-600 sans text-xs max-w-lg mx-auto leading-relaxed">
+            <p>
+                Tryk eller hold musen over et ord for at se betydningen.<br>
+                Latin er et "bøjningssprog" - ordenes endelser fortæller deres funktion i sætningen.
+            </p>
+        </div>
+
+    </main>
+
+    <script define:vars={{ prayers }}>
+        // State
+        let currentPrayerId = 'pater';
+        let showTranslations = false;
+
+        const container = document.getElementById('prayer-content');
+        const toggle = document.getElementById('translation-toggle');
+        const containerBox = document.getElementById('prayer-container');
+
+        // Init
+        renderPrayer(currentPrayerId);
+
+        // Toggle Logic
+        toggle.addEventListener('change', (e) => {
+            showTranslations = e.target.checked;
+            if(showTranslations) {
+                containerBox.classList.add('show-translations');
+                e.target.nextElementSibling.classList.replace('bg-gray-600', 'bg-gold-600');
+                e.target.nextElementSibling.nextElementSibling.classList.add('translate-x-4');
+            } else {
+                containerBox.classList.remove('show-translations');
+                e.target.nextElementSibling.classList.replace('bg-gold-600', 'bg-gray-600');
+                e.target.nextElementSibling.nextElementSibling.classList.remove('translate-x-4');
+            }
+        });
+
+        // Global switcher
+        window.switchPrayer = (id) => {
+            currentPrayerId = id;
+            
+            // Update buttons
+            document.querySelectorAll('.prayer-btn').forEach(btn => {
+                if(btn.id === `btn-${id}`) {
+                    btn.classList.add('border-gold-500', 'bg-gold-500/10', 'text-gold-500');
+                    btn.classList.remove('border-white/10', 'text-gray-500');
+                } else {
+                    btn.classList.remove('border-gold-500', 'bg-gold-500/10', 'text-gold-500');
+                    btn.classList.add('border-white/10', 'text-gray-500');
+                }
+            });
+
+            // Fade out
+            container.style.opacity = '0';
+            setTimeout(() => {
+                renderPrayer(id);
+                container.style.opacity = '1';
+            }, 200);
+        };
+
+        function renderPrayer(id) {
+            const prayer = prayers.find(p => p.id === id);
+            if(!prayer) return;
+
+            // Build HTML
+            let html = `
+                <h2 class="text-2xl md:text-3xl text-gold-100 font-serif mb-2">${prayer.title}</h2>
+                <h3 class="text-sm text-gray-500 sans uppercase tracking-widest mb-8">${prayer.subtitle}</h3>
+                <div class="space-y-4 md:space-y-6 text-xl md:text-3xl leading-relaxed text-gray-300">
+            `;
+
+            prayer.lines.forEach(line => {
+                html += `<div class="flex flex-wrap justify-center gap-x-3 gap-y-2">`;
+                line.forEach(word => {
+                    html += `
+                        <span class="latin-word" data-danish="${word.d}">
+                            ${word.l}
+                            <div class="tooltip">
+                                <span class="block text-gold-500 font-bold text-xs uppercase tracking-widest mb-1">${word.d}</span>
+                                ${word.g ? `<span class="block text-gray-400 text-[10px] sans italic">${word.g}</span>` : ''}
+                            </div>
+                        </span>
+                    `;
+                });
+                html += `</div>`;
+            });
+
+            html += `</div>`;
+            container.innerHTML = html;
+        }
+
+    </script>
+    
+    <style>
+        #prayer-content { transition: opacity 0.2s ease; }
+    </style>
+
+</body>
+</html>
