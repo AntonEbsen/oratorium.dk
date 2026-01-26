@@ -108,13 +108,19 @@ import '@styles/styles.css';
                 const streak = p.prayer_streak || 0;
                 const roses = p.rosary_count || 0;
 
+                // Avatar Logic
+                let avatarHtml = `<i class="fa-solid fa-cross text-lg"></i>`;
+                if(p.avatar_url) {
+                    avatarHtml = `<img src="${p.avatar_url}" class="w-full h-full object-cover">`;
+                }
+
                 const el = document.createElement('a');
                 el.href = `/pilgrim?id=${p.id}`;
                 el.className = "pilgrim-card block p-6 rounded flex items-center justify-between group decoration-transparent";
                 el.innerHTML = `
                     <div class="flex items-center gap-4">
-                        <div class="w-12 h-12 bg-white/5 border border-white/10 rounded-full flex items-center justify-center text-gold-500/50 group-hover:text-gold-500 group-hover:border-gold-500/50 transition-colors">
-                            <i class="fa-solid fa-user"></i>
+                        <div class="w-12 h-12 bg-white/5 border border-white/10 rounded-full flex items-center justify-center text-gold-500/50 group-hover:text-gold-500 group-hover:border-gold-500/50 transition-colors overflow-hidden">
+                            ${avatarHtml}
                         </div>
                         <div class="text-left">
                             <h3 class="text-gray-200 group-hover:text-white font-serif text-lg leading-tight transition-colors">${name}</h3>
