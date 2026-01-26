@@ -173,11 +173,21 @@ import '@styles/styles.css';
             .subscribe(async (status) => {
                 if(status === 'SUBSCRIBED') {
                     // I am online
-                    await channel.track({ 
+                    const payload = { 
                         online_at: new Date().toISOString(),
                         x: myPos.x,
                         y: myPos.y
-                    });
+                    };
+                    
+                    await channel.track(payload);
+                    
+                    // OPTIMISTIC RENDER: Ensure I see myself immediately
+                    // (Sometimes presence sync takes a moment to reflect 'me' back to me)
+                    const tempState = channel.presenceState();
+                    if(!tempState[myId]) {
+                        tempState[myId] = [payload];
+                        renderCandles(tempState);
+                    }
                     
                     countDisplay.classList.remove('opacity-0');
                     
@@ -195,7 +205,7 @@ import '@styles/styles.css';
                             x: myPos.x,
                             y: myPos.y
                         });
-                    }, 8000);
+                    }, 4000); // Faster drift updates
                 }
             });
 
