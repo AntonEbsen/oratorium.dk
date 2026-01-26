@@ -166,6 +166,13 @@ import '@styles/styles.css';
             stories.forEach(story => {
                 const date = new Date(story.created_at).toLocaleDateString('da-DK', { day: 'numeric', month: 'long', year: 'numeric' });
                 
+                const authorName = escapeHtml(story.name);
+                let authorHtml = `<p class="text-gold-500 text-xs font-bold uppercase tracking-wider">${authorName}</p>`;
+                
+                if(story.user_id) {
+                    authorHtml = `<a href="/pilgrim?id=${story.user_id}" class="text-gold-500 text-xs font-bold uppercase tracking-wider hover:underline">${authorName}</a>`;
+                }
+
                 const el = document.createElement('div');
                 el.className = "testimony-card p-6 rounded-lg break-inside-avoid mb-6";
                 el.innerHTML = `
@@ -173,7 +180,7 @@ import '@styles/styles.css';
                     <p class="text-gray-300 sans text-sm leading-relaxed mb-6 whitespace-pre-wrap">${escapeHtml(story.content)}</p>
                     <div class="border-t border-white/10 pt-4 flex justify-between items-center">
                         <div>
-                            <p class="text-gold-500 text-xs font-bold uppercase tracking-wider">${escapeHtml(story.name)}</p>
+                            ${authorHtml}
                             ${story.location ? `<p class="text-gray-600 text-[10px] uppercase tracking-widest mt-1">${escapeHtml(story.location)}</p>` : ''}
                         </div>
                         <div class="text-[10px] text-gray-700">${date}</div>

@@ -196,6 +196,13 @@ import '@styles/styles.css';
                 // The old schema MIGHT have it. If not, this is safer:
                 // I will assume it's there or handle undefined.
                 
+                const authorName = escapeHtml(author);
+                let authorHtml = `<span>${authorName}</span>`;
+                
+                if(prayer.user_id) {
+                    authorHtml = `<a href="/pilgrim?id=${prayer.user_id}" class="hover:text-gold-500 hover:underline transition-colors">${authorName}</a>`;
+                }
+
                 const el = document.createElement('div');
                 el.className = "prayer-card p-6 rounded relative overflow-hidden group";
                 el.innerHTML = `
@@ -205,7 +212,7 @@ import '@styles/styles.css';
                                 "${escapeHtml(prayer.content)}"
                              </p>
                              <div class="flex gap-3 text-[10px] sans uppercase tracking-widest text-gray-600">
-                                <span>${escapeHtml(author)}</span>
+                                ${authorHtml}
                                 <span>•</span>
                                 <span>${date}</span>
                              </div>
