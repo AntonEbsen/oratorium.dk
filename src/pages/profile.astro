@@ -1,0 +1,107 @@
+
+---
+import '@styles/styles.css';
+---
+
+<!DOCTYPE html>
+<html lang="da">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Min Profil | Pilgrimspas</title>
+    <meta name="robots" content="noindex, nofollow">
+    <link rel="icon" type="image/svg+xml" href="/assets/favicon-cross.svg">
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700&family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    
+    <style>
+        body { font-family: 'Cinzel', serif; background: #020205; color: #e5e7eb; }
+        .sans { font-family: 'Inter', sans-serif; }
+    </style>
+</head>
+<body class="selection:bg-gold-500/30 min-h-screen flex flex-col items-center pt-32">
+
+    <!-- Nav -->
+    <nav class="fixed top-8 left-8 z-50">
+        <a href="/" class="text-white/40 hover:text-white transition-colors text-xl flex items-center gap-2">
+            <i class="fa-solid fa-arrow-left"></i>
+            <span class="text-xs uppercase tracking-widest hidden md:inline">Tilbage</span>
+        </a>
+    </nav>
+
+    <div class="w-full max-w-2xl px-6 text-center">
+        
+        <!-- Headers -->
+        <h1 class="text-3xl md:text-5xl text-gold-500 mb-2">Pilgrimspas</h1>
+        <p id="user-email" class="text-xs text-gray-500 uppercase tracking-widest mb-16 sans">Indlæser...</p>
+
+        <!-- Stats Grid -->
+        <div class="grid grid-cols-2 gap-8 mb-16">
+            <div class="p-8 bg-white/5 border border-white/10 rounded">
+                <i class="fa-solid fa-fire text-gold-500 text-3xl mb-4"></i>
+                <h3 class="text-xl text-white">0 Dage</h3>
+                <p class="text-[10px] uppercase text-gray-500 sans tracking-widest mt-2">Bønne Streak</p>
+            </div>
+            <div class="p-8 bg-white/5 border border-white/10 rounded">
+                 <i class="fa-solid fa-calendar text-gold-500 text-3xl mb-4"></i>
+                 <h3 id="join-date" class="text-xl text-white">...</h3>
+                 <p class="text-[10px] uppercase text-gray-500 sans tracking-widest mt-2">Rejse Startet</p>
+            </div>
+        </div>
+
+        <button onclick="signOut()" class="text-gray-500 hover:text-red-400 text-xs uppercase tracking-widest border border-gray-800 px-6 py-3 rounded hover:border-red-500/50 transition-colors">
+            Log Ud
+        </button>
+
+    </div>
+
+    <script>
+        // CLIENT CONFIG
+        const SUPABASE_URL = 'https://sdfwawnviylwwlbnwpnj.supabase.co'; 
+        const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InNkZndhd252aXlsd3dsYm53cG5qIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjkyNzY4MjEsImV4cCI6MjA4NDg1MjgyMX0.oIR0N05DQY6ePfDXVNC0UI9DrLrM-LevsK64ANEJGag';
+        
+        // @ts-ignore
+        const supabase = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+        
+        const emailEl = document.getElementById('user-email');
+        const joinEl = document.getElementById('join-date');
+
+        async function init() {
+            const { data: { session } } = await supabase.auth.getSession();
+            
+            if (!session) {
+                window.location.href = '/login';
+                return;
+            }
+            
+            const user = session.user;
+            emailEl.innerText = user.email;
+            
+            // Get Join Date from DB
+            const { data: profile } = await supabase
+                .from('profiles')
+                .select('*')
+                .eq('id', user.id)
+                .single();
+                
+            if (profile) {
+                // Streak logic here later
+            }
+            
+            // Determine join date from user metadata or created_at
+            // If profile trigger ran, we have updated_at or created_at? 
+            // Auth user has created_at
+            const joined = new Date(user.created_at).toLocaleDateString('da-DK', { year: 'numeric', month: 'long' });
+            joinEl.innerText = joined;
+        }
+
+        window.signOut = async () => {
+            await supabase.auth.signOut();
+            window.location.href = '/login';
+        }
+        
+        init();
+    </script>
+</body>
+</html>
