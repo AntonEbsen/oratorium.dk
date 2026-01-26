@@ -113,12 +113,14 @@ import '@styles/styles.css';
 
         // Signup Handler
         btnSignup.addEventListener('click', async () => {
+             // DEBUG: PROVE BUTTON WORKS
+             console.log("Signup Clicked");
+
              const email = emailInput.value;
              const password = passInput.value;
              
              if(!email || !password) {
-                 errorMsg.innerText = "Udfyld venligst email og adgangskode.";
-                 errorMsg.classList.remove('hidden');
+                 alert("Udfyld venligst email og adgangskode.");
                  return;
              }
              
@@ -126,40 +128,42 @@ import '@styles/styles.css';
              btnSignup.innerText = "Opretter...";
              btnSignup.disabled = true;
 
-             const { data, error } = await supabase.auth.signUp({
-                email, password
-            });
-            
-            btnSignup.innerText = "Opret";
-            btnSignup.disabled = false;
+             try {
+                 const { data, error } = await supabase.auth.signUp({
+                    email, password
+                });
 
-            if (error) {
-                console.error("Signup Error:", error);
-                errorMsg.innerText = "Fejl: " + (error.message || error.error_description || "Kunne ikke oprette bruger.");
-                errorMsg.classList.remove('hidden');
-            } else {
-                console.log("Signup Success:", data);
-                if(data.session) {
-                    // Success + Logged In
-                    successMsg.innerText = "Konto oprettet! Logger ind...";
-                    successMsg.classList.remove('hidden');
-                    setTimeout(() => window.location.href = '/profile', 1000);
-                } else if(data.user && !data.session) {
-                     // Success BUT Email Confirmation Required
-                     errorMsg.innerText = "Konto oprettet, MEN du skal bekræfte din email først. (Tjek din indbakke eller slå 'Confirm Email' fra i Supabase).";
-                     errorMsg.classList.remove('hidden');
-                     errorMsg.classList.replace('text-red-400', 'text-yellow-400');
-                     errorMsg.classList.replace('bg-red-900/20', 'bg-yellow-900/20');
+                if (error) {
+                    alert("Supabase Fejl: " + error.message);
+                    errorMsg.innerText = "Fejl: " + error.message;
+                    errorMsg.classList.remove('hidden');
+                } else {
+                    if(data.session) {
+                        alert("Succes! Du er nu logget ind.");
+                        window.location.href = '/profile';
+                    } else if(data.user) {
+                         alert("Konto oprettet! Tjek om du skal bekræfte email.");
+                         errorMsg.innerText = "Konto oprettet. Tjek email.";
+                         errorMsg.classList.remove('hidden');
+                    }
                 }
-            }
+             } catch (err) {
+                 alert("Kritisk Fejl: " + err.message);
+             } finally {
+                 btnSignup.innerText = "Opret";
+                 btnSignup.disabled = false;
+             }
         });
         
         // Auto Redirect if logged in
         async function checkUser() {
-            const { data: { session } } = await supabase.auth.getSession();
-            if (session) {
-                window.location.href = '/profile';
-            }
+            try {
+                const { data: { session } } = await supabase.auth.getSession();
+                if (session) {
+                    console.log("User already logged in");
+                     window.location.href = '/profile';
+                }
+            } catch(e) { console.error("Session check failed", e); }
         }
         checkUser();
     </script>
