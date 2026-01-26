@@ -54,8 +54,8 @@ import '@styles/styles.css';
         </div>
     </div>
 
-    <script type="module">
-        import { createClient } from 'https://esm.sh/@supabase/supabase-js@2';
+    <script>
+        import { createClient } from '@supabase/supabase-js';
 
         const SUPABASE_URL = 'https://sdfwawnviylwwlbnwpnj.supabase.co'; 
         const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InNkZndhd252aXlsd3dsYm53cG5qIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjkyNzY4MjEsImV4cCI6MjA4NDg1MjgyMX0.oIR0N05DQY6ePfDXVNC0UI9DrLrM-LevsK64ANEJGag';
@@ -64,18 +64,23 @@ import '@styles/styles.css';
         const container = document.getElementById('grid-container');
 
         async function fetchPilgrims() {
-            const { data: profiles, error } = await client
-                .from('profiles')
-                .select('*')
-                .order('created_at', { ascending: false }); // Newest first
+            try {
+                const { data: profiles, error } = await client
+                    .from('profiles')
+                    .select('*')
+                    .order('created_at', { ascending: false }); // Newest first
 
-            if(error) {
-                console.error(error);
-                container.innerHTML = `<p class="col-span-full text-center text-red-500">Kunne ikke hente fællesskabet.</p>`;
-                return;
+                if(error) {
+                    console.error("Supabase Error:", error);
+                    container.innerHTML = `<p class="col-span-full text-center text-red-500">Fejl: ${error.message}</p>`;
+                    return;
+                }
+
+                renderPilgrims(profiles);
+            } catch (err) {
+                console.error("Fetch Error:", err);
+                container.innerHTML = `<p class="col-span-full text-center text-red-500">Netværksfejl. Prøv igen.</p>`;
             }
-
-            renderPilgrims(profiles);
         }
 
         function renderPilgrims(list) {
@@ -93,9 +98,11 @@ import '@styles/styles.css';
                 else if(p.username) name = p.username;
                 
                 // Joined Date
-                const joined = new Date(p.created_at).toLocaleDateString('da-DK', { month: 'short', year: 'numeric' });
-
-                const joined = new Date(p.created_at).toLocaleDateString('da-DK', { month: 'short', year: 'numeric' });
+                // Handle missing created_at gracefully
+                let joined = "Ukendt dato";
+                if(p.created_at) {
+                    joined = new Date(p.created_at).toLocaleDateString('da-DK', { month: 'short', year: 'numeric' });
+                }
 
                 // Stats
                 const streak = p.prayer_streak || 0;
