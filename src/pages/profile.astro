@@ -61,6 +61,40 @@ import '@styles/styles.css';
             <p class="text-gray-600 text-xs text-center w-full col-span-2">Indlæser forbønner...</p>
         </div>
 
+        <!-- Sacraments -->
+        <h2 class="text-2xl text-gold-500/80 mb-6 font-serif">Mine Sakramenter</h2>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-8 mb-16">
+            
+            <!-- Spiritual Bouquet -->
+            <div class="bg-white/5 border border-white/10 rounded p-6 flex items-center justify-between group hover:border-red-900/50 transition-colors">
+                <div>
+                     <h3 class="text-gold-200 font-serif text-lg mb-1">Åndelig Buket</h3>
+                     <p class="text-xs text-gray-500 uppercase tracking-widest">Fuldførte Rosenkranse</p>
+                </div>
+                <div class="text-right">
+                    <span id="rosary-count" class="text-3xl font-serif text-white">0</span>
+                    <i class="fa-solid fa-rose text-red-800 ml-2 text-2xl drop-shadow-[0_0_5px_rgba(200,0,0,0.5)]"></i>
+                </div>
+            </div>
+
+            <!-- Confession Tracker -->
+            <div class="bg-white/5 border border-white/10 rounded p-6 flex flex-col justify-between group hover:border-purple-900/50 transition-colors">
+                <div class="flex justify-between items-start mb-4">
+                     <div>
+                        <h3 class="text-gold-200 font-serif text-lg mb-1">Skriftemål</h3>
+                        <p id="days-since-confession" class="text-xs text-gray-500 uppercase tracking-widest">Indlæser...</p>
+                     </div>
+                     <i class="fa-solid fa-church text-purple-900/50 text-2xl"></i>
+                </div>
+                
+                <div class="relative">
+                    <label class="text-[10px] text-gray-600 uppercase tracking-widest block mb-1">Sidst skriftet:</label>
+                    <input type="date" id="confession-date" class="bg-black/50 border border-gray-700 rounded p-2 text-gray-300 text-xs w-full outline-none focus:border-gold-500 transition-colors">
+                </div>
+            </div>
+
+        </div>
+
         <!-- Scriptorium (Saved Books) -->
         <h2 class="text-2xl text-gold-500/80 mb-6 font-serif">Scriptorium <span class="text-xs text-gray-600 align-middle ml-2">(Gemte Tekster)</span></h2>
         <div id="my-bookmarks" class="grid grid-cols-2 md:grid-cols-4 gap-6 text-left pb-16">
@@ -150,8 +184,41 @@ import '@styles/styles.css';
             // Display Info
             const displayName = profile?.username || currentUser.email;
             emailEl.innerHTML = `${displayName} <button onclick="toggleEdit()" class="ml-2 text-gold-500/50 hover:text-gold-500"><i class="fa-solid fa-pen"></i></button>`;
-            
             if(profile?.username) editNameInp.value = profile.username;
+            
+            // Rosary Count
+            const rosaryCountEl = document.getElementById('rosary-count');
+            if(rosaryCountEl) rosaryCountEl.innerText = profile?.rosary_count || 0;
+
+            // Confession Logic
+            const confDateInp = document.getElementById('confession-date');
+            const confDaysEl = document.getElementById('days-since-confession');
+            
+            if(profile?.last_confession) {
+                (confDateInp as HTMLInputElement).value = profile.last_confession;
+                updateConfessionText(profile.last_confession);
+            } else {
+                confDaysEl.innerText = "Dato ikke sat";
+            }
+
+            // Update Listener
+            confDateInp.addEventListener('change', async (e) => {
+                const newDate = (e.target as HTMLInputElement).value;
+                if(newDate) {
+                    await client.from('profiles').update({ last_confession: newDate }).eq('id', currentUser.id);
+                    updateConfessionText(newDate);
+                }
+            });
+
+            function updateConfessionText(dateStr) {
+                const last = new Date(dateStr);
+                const today = new Date();
+                const diff = Math.floor((today.getTime() - last.getTime()) / (1000 * 60 * 60 * 24));
+                
+                if(diff < 0) confDaysEl.innerText = "I fremtiden?";
+                else if (diff === 0) confDaysEl.innerText = "I dag";
+                else confDaysEl.innerText = `${diff} dage siden`;
+            }
 
             // Date
             const dateStr = profile?.created_at || currentUser.created_at;

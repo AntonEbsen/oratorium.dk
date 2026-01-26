@@ -110,32 +110,49 @@ import '@styles/styles.css';
             // Simplified loop for demo
         ];
 
+        // Supabase
+        import { createClient } from '@supabase/supabase-js';
+        const SUPABASE_URL = 'https://sdfwawnviylwwlbnwpnj.supabase.co'; 
+        const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InNkZndhd252aXlsd3dsYm53cG5qIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjkyNzY4MjEsImV4cCI6MjA4NDg1MjgyMX0.oIR0N05DQY6ePfDXVNC0UI9DrLrM-LevsK64ANEJGag';
+        const client = createClient(SUPABASE_URL, SUPABASE_KEY);
+
         let currentIndex = 0;
+        let totalBeads = 53; 
+        // In full app, prayers array would vary. For demo we loop.
+        
         const titleEl = document.getElementById('prayer-title');
         const textEl = document.getElementById('prayer-text');
         const counterEl = document.getElementById('counter');
         const btn = document.getElementById('next-bead');
 
         btn?.addEventListener('click', () => {
-            currentIndex = (currentIndex + 1) % prayers.length;
+            currentIndex++;
+            if(currentIndex > totalBeads) currentIndex = 1; // Reset loop or stop?
+            
             updateDisplay();
+            
+            if(currentIndex === totalBeads) {
+                finishRosary();
+            }
         });
 
         function updateDisplay() {
             if(!titleEl || !textEl || !counterEl) return;
+            
+            const pIndex = currentIndex % prayers.length;
             
             // Fade out
             titleEl.style.opacity = '0';
             textEl.style.opacity = '0';
 
             setTimeout(() => {
-                titleEl.innerText = prayers[currentIndex].title;
-                textEl.innerText = prayers[currentIndex].text;
+                titleEl.innerText = prayers[pIndex].title;
+                textEl.innerText = prayers[pIndex].text;
                 counterEl.innerText = currentIndex.toString();
                 
                 // Fade in
                 titleEl.classList.remove('animate-fade-in');
-                void titleEl.offsetWidth; // trigger reflow
+                void titleEl.offsetWidth; 
                 titleEl.classList.add('animate-fade-in');
                 titleEl.style.opacity = '1';
 
@@ -144,6 +161,38 @@ import '@styles/styles.css';
                 textEl.classList.add('animate-fade-in');
                 textEl.style.opacity = '1';
             }, 300);
+        }
+
+        async function finishRosary() {
+            const { data: { session } } = await client.auth.getSession();
+            if(!session) {
+                alert("Rosenkrans fuldført! Log ind for at gemme den i din buket.");
+                return;
+            }
+
+            // Anim
+            const finishMsg = document.createElement('div');
+            finishMsg.className = "fixed inset-0 bg-black/90 z-50 flex flex-col items-center justify-center animate-fade-in";
+            finishMsg.innerHTML = `
+                <i class="fa-solid fa-rose text-6xl text-red-600 mb-6 drop-shadow-[0_0_30px_rgba(220,20,60,0.5)]"></i>
+                <h2 class="text-3xl text-gold-500 font-serif mb-4">Rosenkrans Fuldført</h2>
+                <div class="text-white text-sm">Gemmer din bøn...</div>
+            `;
+            document.body.appendChild(finishMsg);
+
+            // Save
+            // First get current count (or RPC increment)
+            const { data: profile } = await client.from('profiles').select('rosary_count').eq('id', session.user.id).single();
+            const newCount = (profile?.rosary_count || 0) + 1;
+            
+            await client.from('profiles').update({ rosary_count: newCount }).eq('id', session.user.id);
+            
+            setTimeout(() => {
+                finishMsg.innerHTML += `<div class="mt-8 text-green-400 uppercase tracking-widest text-xs">Gemt!</div>`;
+                setTimeout(() => {
+                    window.location.href = '/profile';
+                }, 1500);
+            }, 1000);
         }
     </script>
 </body>
