@@ -1,0 +1,150 @@
+
+---
+import '@styles/styles.css';
+---
+
+<!DOCTYPE html>
+<html lang="da">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Katekismen | Oratorium</title>
+    <meta name="robots" content="index, follow">
+    <link rel="icon" type="image/svg+xml" href="/assets/favicon-cross.svg">
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700&family=Inter:wght@300;400;600&family=Playfair+Display:ital@0;1&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    
+    <style>
+        body { font-family: 'Cinzel', serif; background: #08080a; color: #e5e7eb; }
+        .sans { font-family: 'Inter', sans-serif; }
+        .serif-italic { font-family: 'Playfair Display', serif; font-style: italic; }
+        
+        .pillar:hover {
+            transform: translateY(-10px);
+        }
+    </style>
+</head>
+<body class="selection:bg-blue-500/30 min-h-screen flex flex-col pt-32">
+
+    <!-- Nav -->
+    <nav class="fixed top-8 left-8 z-50">
+        <a href="/seek" class="text-blue-500/60 hover:text-blue-400 transition-colors text-xl flex items-center gap-2 sans bg-black/50 p-2 rounded backdrop-blur">
+            <i class="fa-solid fa-arrow-left"></i>
+            <span class="text-xs uppercase tracking-widest hidden md:inline">Tilbage</span>
+        </a>
+    </nav>
+    
+    <!-- Header -->
+    <header class="text-center mb-16 px-4">
+        <div class="w-16 h-16 mx-auto bg-blue-900/10 rounded-full flex items-center justify-center text-blue-500 text-2xl mb-6 border border-blue-500/20">
+            <i class="fa-solid fa-book-bible"></i>
+        </div>
+        <h1 class="text-3xl md:text-5xl text-blue-500 mb-6 font-serif drop-shadow-lg">Troens Fire Søjler</h1>
+        <p class="text-xs text-gray-500 uppercase tracking-[0.3em] sans max-w-lg mx-auto leading-loose">
+            En guide til Den Katolske Kirkes Katekismus (KKK).
+        </p>
+    </header>
+
+    <!-- Main Content -->
+    <main class="max-w-7xl mx-auto px-6 pb-32">
+        
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+            
+            <!-- Pillar 1: Credo -->
+            <article class="pillar bg-[#101015] border border-white/5 p-8 rounded-lg hover:border-blue-500/50 transition-all duration-500 group relative overflow-hidden">
+                <div class="absolute top-0 right-0 p-4 opacity-20 text-4xl text-blue-500 font-bold">I</div>
+                
+                <div class="mb-8 text-center">
+                    <i class="fa-solid fa-key text-blue-500 text-3xl mb-4"></i>
+                    <h2 class="text-2xl text-white font-serif mb-2">Trosbekendelsen</h2>
+                    <p class="text-[10px] text-gray-500 uppercase tracking-widest">Hvad vi tror</p>
+                </div>
+                
+                <p class="text-gray-400 sans text-sm leading-relaxed mb-6">
+                    Den første del handler om Gud: Faderen, Sønnen og Helligånden. Skabelsen, Frelsen og Kirken.
+                </p>
+                
+                <ul class="space-y-3 text-sm text-gray-500 sans border-t border-white/5 pt-6">
+                    <li class="flex items-center gap-3"><i class="fa-solid fa-check text-blue-500/50"></i> Jeg tror på Gud Fader...</li>
+                    <li class="flex items-center gap-3"><i class="fa-solid fa-check text-blue-500/50"></i> Inkarnationen (Jesus)</li>
+                    <li class="flex items-center gap-3"><i class="fa-solid fa-check text-blue-500/50"></i> De Helliges Samfund</li>
+                </ul>
+            </article>
+
+            <!-- Pillar 2: Sacraments -->
+            <article class="pillar bg-[#101015] border border-white/5 p-8 rounded-lg hover:border-gold-500/50 transition-all duration-500 group relative overflow-hidden">
+                <div class="absolute top-0 right-0 p-4 opacity-20 text-4xl text-gold-500 font-bold">II</div>
+                
+                <div class="mb-8 text-center">
+                    <i class="fa-solid fa-wine-glass text-gold-500 text-3xl mb-4"></i>
+                    <h2 class="text-2xl text-white font-serif mb-2">Sakramenterne</h2>
+                    <p class="text-[10px] text-gray-500 uppercase tracking-widest">Hvordan vi fejrer</p>
+                </div>
+                
+                <p class="text-gray-400 sans text-sm leading-relaxed mb-6">
+                    Frelsen er ikke bare en idé, men noget vi modtager fysisk gennem tegn. Liturgien er troen i handling.
+                </p>
+                
+                <ul class="space-y-3 text-sm text-gray-500 sans border-t border-white/5 pt-6">
+                    <li class="flex items-center gap-3"><i class="fa-solid fa-check text-gold-500/50"></i> Dåb & Firmelse</li>
+                    <li class="flex items-center gap-3"><i class="fa-solid fa-check text-gold-500/50"></i> Eukaristi (Messen)</li>
+                    <li class="flex items-center gap-3"><i class="fa-solid fa-check text-gold-500/50"></i> Skriftemål & Syges Salvelse</li>
+                </ul>
+            </article>
+
+            <!-- Pillar 3: Life in Christ -->
+            <article class="pillar bg-[#101015] border border-white/5 p-8 rounded-lg hover:border-red-500/50 transition-all duration-500 group relative overflow-hidden">
+                <div class="absolute top-0 right-0 p-4 opacity-20 text-4xl text-red-500 font-bold">III</div>
+                
+                <div class="mb-8 text-center">
+                    <i class="fa-solid fa-heart text-red-500 text-3xl mb-4"></i>
+                    <h2 class="text-2xl text-white font-serif mb-2">Livet i Kristus</h2>
+                    <p class="text-[10px] text-gray-500 uppercase tracking-widest">Hvordan vi lever</p>
+                </div>
+                
+                <p class="text-gray-400 sans text-sm leading-relaxed mb-6">
+                    Moralen. Vi er skabt i Guds billede og kaldet til salighed. De 10 Bud viser os vejen til frihed.
+                </p>
+                
+                <ul class="space-y-3 text-sm text-gray-500 sans border-t border-white/5 pt-6">
+                    <li class="flex items-center gap-3"><i class="fa-solid fa-check text-red-500/50"></i> De 10 Bud</li>
+                    <li class="flex items-center gap-3"><i class="fa-solid fa-check text-red-500/50"></i> Dyder & Synder</li>
+                    <li class="flex items-center gap-3"><i class="fa-solid fa-check text-red-500/50"></i> Social Lære</li>
+                </ul>
+            </article>
+
+            <!-- Pillar 4: Prayer -->
+            <article class="pillar bg-[#101015] border border-white/5 p-8 rounded-lg hover:border-purple-500/50 transition-all duration-500 group relative overflow-hidden">
+                <div class="absolute top-0 right-0 p-4 opacity-20 text-4xl text-purple-500 font-bold">IV</div>
+                
+                <div class="mb-8 text-center">
+                    <i class="fa-solid fa-hands-praying text-purple-500 text-3xl mb-4"></i>
+                    <h2 class="text-2xl text-white font-serif mb-2">Bønnen</h2>
+                    <p class="text-[10px] text-gray-500 uppercase tracking-widest">Hvordan vi taler</p>
+                </div>
+                
+                <p class="text-gray-400 sans text-sm leading-relaxed mb-6">
+                    Relationen til Gud. Fadervor er modellen for al bøn. Fra meditation til kontemplation.
+                </p>
+                
+                <ul class="space-y-3 text-sm text-gray-500 sans border-t border-white/5 pt-6">
+                    <li class="flex items-center gap-3"><i class="fa-solid fa-check text-purple-500/50"></i> Fadervor</li>
+                    <li class="flex items-center gap-3"><i class="fa-solid fa-check text-purple-500/50"></i> Bønnens former</li>
+                    <li class="flex items-center gap-3"><i class="fa-solid fa-check text-purple-500/50"></i> Bøn i kamp</li>
+                </ul>
+            </article>
+
+        </div>
+
+        <!-- CTA -->
+        <div class="mt-24 text-center">
+            <a href="https://www.vatican.va/archive/DAN-CATECHISM/index.html" target="_blank" class="inline-block px-8 py-4 bg-white/5 text-white font-bold uppercase tracking-widest text-xs rounded hover:bg-white/10 transition-colors border border-white/10">
+                Læs hele Katekismen (Vatikanet) <i class="fa-solid fa-arrow-up-right-from-square ml-2"></i>
+            </a>
+            <p class="text-[10px] text-gray-500 mt-4 uppercase tracking-widest">Det Officielle Værk</p>
+        </div>
+
+    </main>
+
+</body>
+</html>
