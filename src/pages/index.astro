@@ -2,6 +2,9 @@
 ---
 import '@styles/styles.css';
 import { getLiturgicalSeason } from '../utils/liturgy';
+import { getDailyManna } from '../data/manna';
+
+const dailyManna = getDailyManna();
 
 // Liturgical Atmosphere
 const season = getLiturgicalSeason(new Date());
@@ -112,6 +115,9 @@ const currentGradient = seasonGradients[season.color] || seasonGradients.green;
                  <a href="/latina" class="nav-link group">
                     <span class="group-hover:translate-x-[-5px] transition-transform block">Schola Latina <i class="fa-solid fa-language ml-2 text-gold-500/40 group-hover:text-gold-400"></i></span>
                  </a>
+                 <a href="/monasterium" class="nav-link group">
+                    <span class="group-hover:translate-x-[-5px] transition-transform block">Monasterium <i class="fa-solid fa-chess-rook ml-2 text-gold-500/40 group-hover:text-gold-400"></i></span>
+                 </a>
                  <a href="/scutum" class="nav-link group">
                     <span class="group-hover:translate-x-[-5px] transition-transform block">Scutum Fidei <i class="fa-solid fa-shield-halved ml-2 text-gold-500/40 group-hover:text-gold-400"></i></span>
                  </a>
@@ -133,6 +139,17 @@ const currentGradient = seasonGradients[season.color] || seasonGradients.green;
                         </svg>
                         <span class="text-xs uppercase tracking-[0.5em] text-gold-100 font-bold group-hover:text-white transition-colors">Adoratio</span>
                     </a>
+                </div>
+
+                <!-- DAILY MANNA WIDGET -->
+                <div class="relative group w-64 text-center mt-4 mb-4">
+                    <div class="absolute inset-0 bg-gold-900/10 blur-xl rounded-full opacity-0 group-hover:opacity-50 transition-opacity"></div>
+                    <p class="text-gold-200/80 font-serif italic text-sm leading-relaxed drop-shadow-md">
+                        "{dailyManna.text}"
+                    </p>
+                    <p class="text-[9px] text-gold-500 uppercase tracking-widest mt-2 opacity-60">
+                        — {dailyManna.source}
+                    </p>
                 </div>
 
                 <!-- Liturgical Tools (Row) -->

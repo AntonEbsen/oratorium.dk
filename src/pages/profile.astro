@@ -144,9 +144,17 @@ import '@styles/styles.css';
              </div>
         </div>
 
-        <button onclick="signOut()" class="text-gray-500 hover:text-red-400 text-xs uppercase tracking-widest border border-gray-800 px-6 py-3 rounded hover:border-red-500/50 transition-colors">
+         <button onclick="signOut()" class="text-gray-500 hover:text-red-400 text-xs uppercase tracking-widest border border-gray-800 px-6 py-3 rounded hover:border-red-500/50 transition-colors">
             Log Ud
         </button>
+
+        <!-- STAMPS / PASSPORT Section -->
+        <div class="border-t border-white/10 pt-16 mb-24 w-full">
+             <h2 class="text-2xl text-gold-500/80 mb-6 font-serif">Mine Stempler</h2>
+             <div id="stamps-container" class="grid grid-cols-2 md:grid-cols-4 gap-4">
+                 <p class="text-gray-600 text-xs italic col-span-full">Indlæser passet...</p>
+             </div>
+        </div>
 
     </div>
 
@@ -341,6 +349,15 @@ import '@styles/styles.css';
                 .eq('id', currentUser.id)
                 .single();
             
+            // Check for Novice Stamp
+            checkAndAwardStamp(client, currentUser.id, 'pilgrim_init').then(res => {
+                 if(res.awarded) {
+                     // Maybe show a toaster?
+                     console.log("Awarded Novice Stamp!");
+                     loadStamps(); // Refresh UI
+                 }
+            });
+
             // Display Info
             // Priority: (First + Last) > Username > Email
             let displayName = currentUser.email;
@@ -533,7 +550,49 @@ import '@styles/styles.css';
             
             // Inbox Logic
             loadInbox();
+
+            // Load Stamps
+            loadStamps();
         } // End of init
+
+        async function loadStamps() {
+            const container = document.getElementById('stamps-container');
+            
+            // 1. Fetch User Unlocks
+            const { data: unlocks } = await client
+                .from('user_stamps')
+                .select('stamp_id')
+                .eq('user_id', currentUser.id);
+            
+            const unlockedIds = unlocks ? unlocks.map(u => u.stamp_id) : [];
+
+            container.innerHTML = '';
+
+            STAMPS.forEach(stamp => {
+                const isUnlocked = unlockedIds.includes(stamp.id);
+                // Visual Logic
+                const opacity = isUnlocked ? 'opacity-100' : 'opacity-30 grayscale filter';
+                const border = isUnlocked ? `border-${stamp.color.split('-')[1]}-500/50` : 'border-white/10';
+                const bg = isUnlocked ? 'bg-white/5' : 'bg-transparent';
+                const iconColor = isUnlocked ? stamp.color : 'text-gray-500';
+
+                const div = document.createElement('div');
+                div.className = `p-4 rounded border ${border} ${bg} ${opacity} transition-all flex flex-col items-center text-center gap-2 group relative`;
+                div.innerHTML = `
+                    <div class="h-12 w-12 rounded-full border border-white/10 flex items-center justify-center bg-black/50 mb-2">
+                        <i class="fa-solid ${stamp.icon} ${iconColor} text-xl"></i>
+                    </div>
+                    <h4 class="text-white text-xs font-serif font-bold uppercase tracking-widest">${stamp.title}</h4>
+                    <p class="text-[10px] text-gray-500 sans leading-tight">${stamp.description}</p>
+                    ${isUnlocked ? `
+                        <div class="absolute top-2 right-2 text-gold-500 text-[10px]">
+                            <i class="fa-solid fa-check"></i>
+                        </div>
+                    ` : ''}
+                `;
+                container.appendChild(div);
+            });
+        }
 
         async function loadInbox() {
             const { data: messages } = await client
