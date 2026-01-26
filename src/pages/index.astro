@@ -26,163 +26,188 @@ const currentGradient = seasonGradients[season.color] || seasonGradients.green;
     <title>Ad Majorem Dei Gloriam ✝️</title>
     <meta name="robots" content="noindex, nofollow">
     
-    <!-- Fonts: Inter + Cinzel (Serif) -->
+    <!-- Fonts -->
     <link rel="icon" type="image/svg+xml" href="/assets/favicon-cross.svg">
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400&family=Cinzel:wght@400;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
     
     <style>
         body { font-family: 'Cinzel', serif; }
         .sans { font-family: 'Inter', sans-serif; }
+        
+        /* Smooth scrolling for the categorization */
+        html { scroll-behavior: smooth; }
     </style>
 </head>
 <body class="bg-[#020205] text-white overflow-hidden h-screen w-screen m-0 p-0 selection:bg-gold-500/30">
 
-    <!-- TOP BAR (Constrained) -->
-    <div class="absolute top-0 w-full max-w-7xl px-8 py-8 flex justify-between items-start z-50 pointer-events-none">
-        <!-- BACK BUTTON -->
-        <a href="/" class="pointer-events-auto text-gold-500/60 hover:text-gold-400 transition-colors text-xl flex items-center gap-2 sans">
-            <i class="fa-solid fa-arrow-left"></i>
-            <span class="text-xs uppercase tracking-widest hidden md:inline">Return</span>
-        </a>
-
-        <!-- SEASON INDICATOR (New) -->
-        <div class="hidden md:block text-center opacity-40 hover:opacity-100 transition-opacity pointer-events-auto cursor-help" title={season.description}>
-            <span class="text-[10px] uppercase tracking-[0.3em] block text-gold-500">{season.name}</span>
+    <!-- TOP BAR -->
+    <div class="absolute top-0 w-full px-8 py-6 flex justify-between items-center z-50 pointer-events-none">
+        
+        <!-- Season (Left) -->
+        <div class="pointer-events-auto opacity-50 hover:opacity-100 transition-opacity cursor-help text-left" title={season.description}>
+            <div class="text-[10px] uppercase tracking-[0.3em] text-gold-500">{season.name}</div>
         </div>
 
-        <!-- AUDIO CONTROL -->
-        <button id="mute-btn" class="pointer-events-auto text-gold-500/60 hover:text-gold-400 transition-colors text-xl flex items-center gap-2 group" aria-label="Mute/Play">
-            <i class="fa-solid fa-volume-high group-hover:block hidden"></i>
-            <i class="fa-solid fa-volume-xmark group-hover:hidden block"></i>
-            <i class="fa-solid fa-play hidden text-gold-500"></i>
-            <span class="text-[10px] uppercase tracking-widest opacity-0 group-hover:opacity-100 transition-opacity sans">Chant</span>
+        <!-- Audio Control (Right) -->
+        <button id="mute-btn" class="pointer-events-auto text-gold-500/60 hover:text-gold-400 transition-colors flex items-center gap-2 group" aria-label="Mute/Play">
+            <span class="text-[10px] uppercase tracking-widest opacity-0 group-hover:opacity-100 transition-opacity sans mr-2">Chant</span>
+            <i class="fa-solid fa-volume-high group-hover:block hidden text-lg"></i>
+            <i class="fa-solid fa-volume-xmark group-hover:hidden block text-lg"></i>
+            <i class="fa-solid fa-play hidden text-gold-500 text-lg"></i>
         </button>
     </div>
 
-    <!-- MAIN CONTAINER (Full Screen) -->
+    <!-- MAIN CONTAINER -->
     <div class={`relative w-full h-full flex flex-col items-center justify-center font-serif text-center select-none overflow-hidden bg-gradient-to-b ${currentGradient} transition-colors duration-1000`}>
 
-        <!-- Background Texture (Subtle Noise) -->
+        <!-- Background FX -->
         <div class="absolute inset-0 opacity-20 pointer-events-none" style="background-image: url('https://www.transparenttextures.com/patterns/stardust.png');"></div>
-
-        <!-- INCENSE SMOKE EFFECT 🌫️ (Boosted Opacity) -->
         <div class="absolute inset-0 z-0 pointer-events-none overflow-hidden opacity-60 mix-blend-screen">
-             <!-- Deep rolling fog -->
              <div class="absolute -bottom-20 left-1/4 w-[600px] h-[600px] bg-gray-600/20 rounded-full blur-[100px] animate-smoke-rise"></div>
              <div class="absolute -bottom-32 right-1/4 w-[700px] h-[700px] bg-gray-500/10 rounded-full blur-[120px] animate-smoke-rise-slow"></div>
-             <!-- Center Glow -->
              <div class="absolute bottom-0 left-1/2 -translate-x-1/2 w-96 h-96 bg-gold-600/10 rounded-full blur-[80px] animate-pulse-slow"></div>
         </div>
     
-        <!-- CATHEDRAL LAYOUT / DASHBOARD -->
-        <div class="relative w-full h-full flex flex-col items-center justify-center p-4 md:p-12 overflow-y-auto">
-            
-            <div class="grid grid-cols-2 md:grid-cols-5 gap-6 md:gap-8 max-w-[95vw] w-full relative z-10 py-10 items-start">
-                
-                <!-- COL 1: STUDIUM (The Mind) -->
-                <div class="col-span-1 flex flex-col gap-4">
-                     <div class="text-[9px] uppercase tracking-widest text-gray-600 mb-2 border-b border-gray-800 pb-1">Studium</div>
-                     <a href="/library" class="shrine-btn group"><i class="fa-solid fa-book text-gold-500/50 group-hover:text-gold-400 w-5"></i> Bibliotheca</a>
-                     <a href="/aquinas" class="shrine-btn group"><i class="fa-solid fa-feather text-gold-500/50 group-hover:text-gold-400 w-5"></i> Aquinas</a>
-                     <a href="/illuminator" class="shrine-btn group"><i class="fa-solid fa-paint-brush text-gold-500/50 group-hover:text-gold-400 w-5"></i> Illuminatio</a>
-                     <a href="/scriptorium" class="shrine-btn group"><i class="fa-solid fa-pen-nib text-gold-500/50 group-hover:text-gold-400 w-5"></i> Scriptorium</a>
-                     <a href="/lectio" class="shrine-btn group"><i class="fa-solid fa-comment-dots text-gold-500/50 group-hover:text-gold-400 w-5"></i> Lectio Divina</a>
-                     <a href="/testimony" class="shrine-btn group"><i class="fa-solid fa-quote-right text-gold-500/50 group-hover:text-gold-400 w-5"></i> Vidnesbyrd</a>
+        <!-- THE TRINITY LAYOUT (3 Columns) -->
+        <div class="relative z-10 w-full max-w-7xl h-full flex flex-col md:flex-row pb-20 pt-20 px-4 md:px-12 gap-8 md:gap-12 justify-center items-center">
+
+            <!-- COLUMN 1: THE CLOISTER (Mind & Study) -->
+            <div class="flex-1 flex flex-col gap-6 items-center md:items-end text-right order-2 md:order-1 opacity-90 hover:opacity-100 transition-opacity">
+                 <div class="text-[10px] uppercase tracking-[0.4em] text-gold-500/50 mb-2 border-b border-gold-900 pb-2 w-24 text-center md:text-right">Cloister</div>
+                 
+                 <a href="/library" class="nav-link group">
+                    <span class="group-hover:translate-x-[-5px] transition-transform block">Bibliotheca <i class="fa-solid fa-book ml-2 text-gold-500/40 group-hover:text-gold-400"></i></span>
+                 </a>
+                 <a href="/aquinas" class="nav-link group">
+                    <span class="group-hover:translate-x-[-5px] transition-transform block">Summa Th. <i class="fa-solid fa-feather ml-2 text-gold-500/40 group-hover:text-gold-400"></i></span>
+                 </a>
+                 <a href="/lectio" class="nav-link group">
+                    <span class="group-hover:translate-x-[-5px] transition-transform block">Lectio Divina <i class="fa-solid fa-comment-dots ml-2 text-gold-500/40 group-hover:text-gold-400"></i></span>
+                 </a>
+                 <a href="/scriptorium" class="nav-link group">
+                    <span class="group-hover:translate-x-[-5px] transition-transform block">Scriptorium <i class="fa-solid fa-pen-nib ml-2 text-gold-500/40 group-hover:text-gold-400"></i></span>
+                 </a>
+                 <a href="/speculum" class="nav-link group">
+                    <span class="group-hover:translate-x-[-5px] transition-transform block">Speculum <i class="fa-solid fa-mirror ml-2 text-gold-500/40 group-hover:text-gold-400"></i></span>
+                 </a>
+            </div>
+
+            <!-- COLUMN 2: THE NAVE (Adoration & Worship) -->
+            <div class="flex-initial w-full md:w-auto min-w-[300px] flex flex-col items-center gap-10 order-1 md:order-2 py-4">
+                 
+                 <!-- The Monstrance (Centerpiece) -->
+                 <div class="relative group cursor-pointer transform hover:scale-105 transition-transform duration-1000">
+                    <a href="/adoration" class="block relative z-10 flex flex-col items-center gap-6">
+                        <div class="absolute inset-0 bg-gold-500/20 blur-[80px] rounded-full animate-pulse-slow"></div>
+                         <svg width="100" height="140" viewBox="0 0 24 30" xmlns="http://www.w3.org/2000/svg" class="overflow-visible drop-shadow-[0_0_35px_rgba(255,215,0,0.6)]">
+                            <path d="M10 2 H14 V6 H22 V10 H14 V28 H10 V10 H2 V6 H10 V2 Z" fill="#FFD700" opacity="0.95" />
+                            <circle cx="12" cy="7.5" r="2" fill="#FFF" class="animate-pulse" />
+                        </svg>
+                        <span class="text-xs uppercase tracking-[0.5em] text-gold-100 font-bold group-hover:text-white transition-colors">Adoratio</span>
+                    </a>
                 </div>
 
-                <!-- COL 2: POENITENTIA (The Soul) -->
-                <div class="col-span-1 flex flex-col gap-4">
-                     <div class="text-[9px] uppercase tracking-widest text-gray-600 mb-2 border-b border-gray-800 pb-1">Poenitentia</div>
-                     <a href="/via-dolorosa" class="shrine-btn group"><i class="fa-solid fa-road text-gold-500/50 group-hover:text-gold-400 w-5"></i> Via Dolorosa</a>
-                     <a href="/confession" class="shrine-btn group"><i class="fa-solid fa-user-secret text-gold-500/50 group-hover:text-gold-400 w-5"></i> Skriftemål</a>
-                     <a href="/speculum" class="shrine-btn group"><i class="fa-solid fa-mirror text-gold-500/50 group-hover:text-gold-400 w-5"></i> Speculum</a>
-                     <a href="/catacombs" class="shrine-btn group"><i class="fa-solid fa-skull text-gold-500/50 group-hover:text-gold-400 w-5"></i> Katakomberne</a>
-                     <a href="/desert" class="shrine-btn group"><i class="fa-solid fa-wind text-gold-500/50 group-hover:text-gold-400 w-5"></i> Eremita</a>
-                </div>
+                <!-- Liturgical Tools (Row) -->
+                <div class="flex gap-8 justify-center items-center opacity-80">
+                     <!-- Calendar -->
+                     <a href="/calendar" class="flex flex-col items-center gap-2 group text-gold-500/60 hover:text-gold-400">
+                         <i class="fa-solid fa-calendar-day text-xl group-hover:-translate-y-1 transition-transform"></i>
+                         <!-- <span class="text-[9px] uppercase tracking-widest opacity-0 group-hover:opacity-100 transition-opacity absolute -bottom-4">Tid</span> -->
+                     </a>
+                     
+                     <!-- Prayers -->
+                     <a href="/prayers" class="flex flex-col items-center gap-2 group text-gold-500/60 hover:text-gold-400">
+                         <i class="fa-solid fa-hands-praying text-xl group-hover:-translate-y-1 transition-transform"></i>
+                     </a>
 
-                <!-- COL 3: SANCTUARIUM (Center / Liturgy) -->
-                <div class="col-span-2 md:col-span-1 flex flex-col items-center gap-8 pt-4 md:pt-8 order-first md:order-none">
-                     <!-- Altar -->
-                     <div class="relative group cursor-pointer transform hover:scale-105 transition-transform duration-1000">
-                        <a href="/adoration" class="block relative z-10">
-                            <div class="absolute inset-0 bg-gold-500/10 blur-[60px] rounded-full animate-pulse-slow"></div>
-                             <svg width="60" height="80" viewBox="0 0 24 30" xmlns="http://www.w3.org/2000/svg" class="mx-auto overflow-visible drop-shadow-[0_0_25px_rgba(255,215,0,0.4)]">
-                                <path d="M10 2 H14 V6 H22 V10 H14 V28 H10 V10 H2 V6 H10 V2 Z" fill="#FFD700" opacity="0.9" />
-                                <circle cx="12" cy="7.5" r="1.5" fill="#FFE55C" />
-                            </svg>
-                        </a>
-                    </div>
-                    
-                    <!-- Calendar & Stoup Row -->
-                    <div class="flex gap-6 justify-center">
-                         <a href="/calendar" class="text-xs uppercase tracking-widest text-gray-500 hover:text-gold-500 transition-colors flex flex-col items-center gap-1 group">
-                             <i class="fa-solid fa-calendar-day group-hover:scale-110 transition-transform"></i> <span class="text-[8px]">Kalender</span>
-                         </a>
-                         
-                         <!-- Bell -->
-                         <div id="bell-rope" class="text-xs uppercase tracking-widest text-gray-500 hover:text-gold-500 transition-colors flex flex-col items-center gap-1 group cursor-pointer">
-                             <div class="h-8 w-0.5 bg-gray-700 group-hover:h-10 transition-all origin-top relative" id="rope-line">
-                                 <div class="w-1.5 h-2 bg-gold-900 absolute bottom-0 -left-0.5 rounded-full" id="rope-knot"></div>
-                             </div>
-                             <span class="text-[8px]">Angelus</span>
-                         </div>
-                    </div>
-
-                    <!-- Water -->
-                     <div class="relative group cursor-pointer flex flex-col items-center opacity-60 hover:opacity-100 transition-opacity" id="stoup-trigger">
-                         <div class="w-12 h-6 border-b border-r border-l border-cyan-500/30 rounded-b-full flex items-center justify-center relative overflow-hidden bg-cyan-900/10 transition-shadow group-hover:shadow-[0_0_10px_rgba(0,255,255,0.2)]">
-                              <div id="ripple-container" class="absolute inset-0 flex items-center justify-center pointer-events-none text-cyan-200"></div>
-                         </div>
-                         <span class="text-[8px] uppercase tracking-widest text-gray-600 mt-1">Vievand</span>
-                          <!-- Floating Text -->
-                             <div id="blessing-text" class="absolute -top-6 left-1/2 -translate-x-1/2 text-gold-200 font-serif italic whitespace-nowrap opacity-0 pointer-events-none transition-all duration-1000 transform translate-y-2 text-xs">
-                                "In Nomine Patris..."
-                             </div>
-                     </div>
-                </div>
-
-                <!-- COL 4: ORATIO (Prayer) -->
-                <div class="col-span-1 flex flex-col gap-4">
-                     <div class="text-[9px] uppercase tracking-widest text-gray-600 mb-2 border-b border-gray-800 pb-1">Oratio</div>
-                     <a href="/prayers" class="shrine-btn group"><i class="fa-solid fa-hands-praying text-gold-500/50 group-hover:text-gold-400 w-5"></i> Forbøn</a>
-                     <a href="/candles" class="shrine-btn group"><i class="fa-solid fa-fire text-orange-500/50 group-hover:text-orange-400 w-5 text-[10px]"></i> Lyskapellet</a>
-                     <a href="/treasury" class="shrine-btn group"><i class="fa-solid fa-crown text-gold-500/50 group-hover:text-gold-400 w-5"></i> Skatkammeret</a>
-                     <a href="/rosary" class="shrine-btn group"><i class="fa-solid fa-dharmachakra text-gold-500/50 group-hover:text-gold-400 w-5"></i> Rosenkransen</a>
-                </div>
-                
-                <!-- COL 5: MYSTERIUM (Sensory) -->
-                <div class="col-span-1 flex flex-col gap-4">
-                     <div class="text-[9px] uppercase tracking-widest text-gray-600 mb-2 border-b border-gray-800 pb-1">Mysterium</div>
-                     <a href="/hortus-conclusus" class="shrine-btn group"><i class="fa-solid fa-seedling text-green-500/50 group-hover:text-green-400 w-5"></i> Jomfruens Have</a>
-                     <a href="/rose-window" class="shrine-btn group"><i class="fa-solid fa-fan text-pink-500/50 group-hover:text-pink-400 w-5"></i> Rosevinduet</a>
-                     <a href="/campanile" class="shrine-btn group"><i class="fa-solid fa-bell text-gold-500/50 group-hover:text-gold-400 w-5"></i> Campanile</a>
-                     <a href="/caelum" class="shrine-btn group"><i class="fa-solid fa-star text-gold-500/50 group-hover:text-gold-400 w-5"></i> Caelum</a>
-                     <a href="/organ-loft" class="shrine-btn group"><i class="fa-solid fa-music text-purple-500/50 group-hover:text-purple-400 w-5"></i> Orglet</a>
-                     <a href="/thurible" class="shrine-btn group"><i class="fa-solid fa-wind text-gray-500/50 group-hover:text-gray-400 w-5"></i> Røgelseskarret</a>
+                     <!-- Candles -->
+                     <a href="/candles" class="flex flex-col items-center gap-2 group text-orange-500/60 hover:text-orange-400">
+                         <i class="fa-solid fa-fire text-xl group-hover:-translate-y-1 transition-transform"></i>
+                     </a>
+                     
+                     <!-- Rosary -->
+                     <a href="/rosary" class="flex flex-col items-center gap-2 group text-gold-500/60 hover:text-gold-400">
+                         <i class="fa-solid fa-dharmachakra text-xl group-hover:-translate-y-1 transition-transform"></i>
+                     </a>
                 </div>
 
             </div>
 
-            <!-- Decorative Floor Lines -->
-             <div class="absolute inset-x-0 bottom-10 h-px bg-gradient-to-r from-transparent via-gray-900 to-transparent pointer-events-none"></div>
+            <!-- COLUMN 3: THE CRYPT (Penitence & Depths) -->
+            <div class="flex-1 flex flex-col gap-6 items-center md:items-start text-left order-3 opacity-90 hover:opacity-100 transition-opacity">
+                 <div class="text-[10px] uppercase tracking-[0.4em] text-gold-500/50 mb-2 border-b border-gold-900 pb-2 w-24 text-center md:text-left">Crypt</div>
+                 
+                 <a href="/confession" class="nav-link group">
+                    <span class="group-hover:translate-x-[5px] transition-transform block"><i class="fa-solid fa-user-secret mr-2 text-gold-500/40 group-hover:text-gold-400"></i> Confessio</span>
+                 </a>
+                 <a href="/desert" class="nav-link group">
+                    <span class="group-hover:translate-x-[5px] transition-transform block"><i class="fa-solid fa-wind mr-2 text-gold-500/40 group-hover:text-gold-400"></i> Eremita</span>
+                 </a>
+                 <a href="/via-dolorosa" class="nav-link group">
+                    <span class="group-hover:translate-x-[5px] transition-transform block"><i class="fa-solid fa-road mr-2 text-gold-500/40 group-hover:text-gold-400"></i> Via Dolorosa</span>
+                 </a>
+                 <a href="/catacombs" class="nav-link group">
+                    <span class="group-hover:translate-x-[5px] transition-transform block"><i class="fa-solid fa-skull mr-2 text-gold-500/40 group-hover:text-gold-400"></i> Memoria</span>
+                 </a>
+                 <a href="/testimony" class="nav-link group">
+                    <span class="group-hover:translate-x-[5px] transition-transform block"><i class="fa-solid fa-quote-right mr-2 text-gold-500/40 group-hover:text-gold-400"></i> Vidnesbyrd</span>
+                 </a>
+            </div>
+
+        </div>
+        
+        <!-- THE GALLERY (Bottom Row - Sensory Experiences) -->
+        <div class="absolute bottom-10 w-full flex justify-center z-20">
+            <div class="backdrop-blur-sm bg-black/20 border border-white/5 rounded-full px-8 py-3 flex gap-8 md:gap-12 items-center shadow-2xl">
+                
+                <a href="/campanile" class="gallery-item group tooltip-container">
+                    <i class="fa-solid fa-bell"></i>
+                    <span class="tooltip">Klokketårnet</span>
+                </a>
+
+                <a href="/caelum" class="gallery-item group tooltip-container">
+                    <i class="fa-solid fa-star"></i>
+                     <span class="tooltip">Observatoriet</span>
+                </a>
+
+                <a href="/rose-window" class="gallery-item group tooltip-container">
+                    <i class="fa-solid fa-fan"></i>
+                     <span class="tooltip">Rosevinduet</span>
+                </a>
+
+                <a href="/organ-loft" class="gallery-item group tooltip-container">
+                    <i class="fa-solid fa-music"></i>
+                     <span class="tooltip">Orglet</span>
+                </a>
+
+                 <a href="/illuminator" class="gallery-item group tooltip-container">
+                    <i class="fa-solid fa-paint-brush"></i>
+                     <span class="tooltip">Illuminator</span>
+                </a>
+
+                <a href="/thurible" class="gallery-item group tooltip-container">
+                    <i class="fa-solid fa-wind"></i>
+                     <span class="tooltip">Røgelse</span>
+                </a>
+                
+                <a href="/hortus-conclusus" class="gallery-item group tooltip-container">
+                    <i class="fa-solid fa-seedling"></i>
+                     <span class="tooltip">Haven</span>
+                </a>
+
+            </div>
         </div>
     
     </div>
 
-    <!-- Hidden Audio Player -->
+    <!-- AUDIO -->
     <audio id="shrine-audio" loop preload="auto">
         <source src="/assets/audio/chant.mp3" type="audio/mpeg">
-    </audio>
-    <audio id="bell-audio" preload="auto">
-        <source src="/assets/audio/bell.mp3" type="audio/mpeg">
     </audio>
 
 </body>
 </html>
-
 
 <script>
     // Audio Elements
@@ -235,120 +260,64 @@ const currentGradient = seasonGradients[season.color] || seasonGradients.green;
             }
         }
     });
-
-    // Holy Water Stoup
-    const stoupTrigger = document.getElementById('stoup-trigger');
-    const rippleContainer = document.getElementById('ripple-container');
-    const blessingText = document.getElementById('blessing-text');
-
-    stoupTrigger?.addEventListener('click', () => {
-        // Create Ripple
-        const ripple = document.createElement('div');
-        ripple.className = "ripple-effect";
-        rippleContainer?.appendChild(ripple);
-        
-        // Cleanup Ripple
-        setTimeout(() => ripple.remove(), 800);
-
-        // Show Text
-        if(blessingText) {
-            blessingText.classList.remove('opacity-0', 'translate-y-2');
-            blessingText.classList.add('opacity-100', 'translate-y-0');
-            
-            // Hide after 2s
-            setTimeout(() => {
-                blessingText.classList.remove('opacity-100', 'translate-y-0');
-                blessingText.classList.add('opacity-0', 'translate-y-2'); 
-            }, 2000);
-        }
-    });
-
-    // Bell Tower (Angelus)
-    const bellRope = document.getElementById('bell-rope');
-    const ropeLine = document.getElementById('rope-line');
-    const ropeKnot = document.getElementById('rope-knot');
-    const bellAudio = document.getElementById('bell-audio');
-
-    function ringBell() {
-        // visual pull
-        ropeLine?.classList.add('scale-y-[1.2]');
-        ropeKnot?.classList.add('translate-y-6');
-        setTimeout(() => {
-            ropeLine?.classList.remove('scale-y-[1.2]');
-            ropeKnot?.classList.remove('translate-y-6');
-        }, 300);
-
-        // sound
-        if(bellAudio) {
-            (bellAudio as HTMLAudioElement).currentTime = 0;
-            (bellAudio as HTMLAudioElement).play().catch(e => console.log("Audio ignored", e));
-        }
-    }
-
-    bellRope?.addEventListener('click', ringBell);
-
-    // Initial Angelus Check
-    const now = new Date();
-    const h = now.getHours();
-    const m = now.getMinutes();
-    // 12:00 or 18:00 (6 PM) window (let's say first 2 minutes)
-    if((h === 12 || h === 18) && m < 5) {
-        // Pulse animation to invite ringing (since we can't auto-play sound mostly)
-        bellRope?.classList.add('animate-bounce');
-    }
 </script>
 
 <style>
-    .shrine-card {
-        display: block;
-        padding: 1.5rem;
-        border: 1px solid transparent;
-        background: transparent;
-        transition: all 0.5s cubic-bezier(0.2, 0.8, 0.2, 1);
-        position: relative;
-    }
-    .shrine-card:hover {
-        border-color: rgba(255, 215, 0, 0.1);
-        background: rgba(255, 215, 0, 0.02);
-        transform: translateX(5px);
-    }
-    /* Reverse hover for Left side */
-    .items-end .shrine-card:hover {
-            transform: translateX(-5px);
-    }
-    
-    .shrine-btn {
-        display: flex;
-        align-items: center;
-        gap: 0.75rem;
-        padding: 0.5rem 0.5rem;
-        color: #888;
+    .nav-link {
+        color: rgba(255, 255, 255, 0.4);
         font-family: 'Cinzel', serif;
-        font-size: 0.85rem;
-        transition: all 0.3s ease;
-        border-radius: 4px;
+        font-size: 0.9rem;
         letter-spacing: 0.05em;
+        transition: all 0.3s ease;
     }
-    .shrine-btn:hover {
+    .nav-link:hover {
         color: #fff;
-        background: rgba(255, 255, 255, 0.05);
-        transform: translateX(5px);
         text-shadow: 0 0 10px rgba(255, 215, 0, 0.3);
     }
 
-    /* KEYFRAMES */
-    @keyframes fadeInUp {
-        from { opacity: 0; transform: translateY(30px); }
-        to { opacity: 1; transform: translateY(0); }
+    .gallery-item {
+        color: rgba(255, 215, 0, 0.3);
+        font-size: 1.2rem;
+        transition: all 0.3s ease;
+        position: relative;
     }
-    
-    .animate-fade-in-up {
-        animation: fadeInUp 1.5s cubic-bezier(0.2, 0.8, 0.2, 1) forwards;
-        opacity: 0;
+    .gallery-item:hover {
+        color: rgba(255, 215, 0, 1);
+        transform: scale(1.2);
+        text-shadow: 0 0 15px rgba(255, 215, 0, 0.6);
     }
 
+    .tooltip {
+        position: absolute;
+        bottom: 40px;
+        left: 50%;
+        transform: translateX(-50%) translateY(10px);
+        background: rgba(0,0,0,0.8);
+        color: #aaa;
+        padding: 4px 8px;
+        border-radius: 4px;
+        font-size: 0.6rem;
+        text-transform: uppercase;
+        letter-spacing: 0.1em;
+        white-space: nowrap;
+        opacity: 0;
+        pointer-events: none;
+        transition: all 0.3s ease;
+        border: 1px solid rgba(255,255,255,0.1);
+    }
+
+    .gallery-item:hover .tooltip {
+        opacity: 1;
+        transform: translateX(-50%) translateY(0);
+    }
+
+    /* Animation Keyframes */
+    @keyframes pulse {
+        0%, 100% { transform: scale(1); opacity: 1; }
+        50% { transform: scale(1.1); opacity: 0.8; }
+    }
     .animate-pulse-slow {
-        animation: pulse 8s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+        animation: pulse 4s cubic-bezier(0.4, 0, 0.6, 1) infinite;
     }
 
     @keyframes smokeRise {
@@ -356,37 +325,10 @@ const currentGradient = seasonGradients[season.color] || seasonGradients.green;
         50% { transform: translateY(-30px) scale(1.1); opacity: 0.2; }
         100% { transform: translateY(-60px) scale(1.2); opacity: 0; }
     }
-    
     .animate-smoke-rise {
         animation: smokeRise 15s infinite ease-in-out;
     }
-    
     .animate-smoke-rise-slow {
         animation: smokeRise 25s infinite ease-in-out reverse;
-    }
-
-    @keyframes flicker {
-        0%, 100% { transform: translateX(-50%) scale(1); opacity: 0.8; }
-        50% { transform: translateX(-50%) scale(1.1); opacity: 1; filter: brightness(1.2); }
-        25% { transform: translateX(-52%) scale(0.9); opacity: 0.7; }
-        75% { transform: translateX(-48%) scale(1.05); opacity: 0.9; }
-    }
-
-    .animate-flicker {
-        animation: flicker 0.1s infinite alternate;
-    }
-
-    /* RIPPLE */
-    @keyframes ripple {
-        0% { transform: scale(0); opacity: 0.5; }
-        100% { transform: scale(3); opacity: 0; }
-    }
-    .ripple-effect {
-        position: absolute;
-        width: 100%;
-        height: 100%; /* Fill container */
-        background: radial-gradient(circle, rgba(0,255,255,0.2) 0%, transparent 70%);
-        border-radius: 50%;
-        animation: ripple 0.8s ease-out forwards;
     }
 </style>
