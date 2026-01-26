@@ -137,7 +137,18 @@ import '@styles/styles.css';
         <div class="bg-gray-900 border border-gold-500/30 p-8 rounded max-w-sm w-full relative">
             <button onclick="toggleEdit()" class="absolute top-4 right-4 text-gray-500 hover:text-white"><i class="fa-solid fa-times"></i></button>
             <h3 class="text-gold-500 mb-6 font-serif text-xl">Rediger Profil</h3>
-            <input id="edit-name" type="text" placeholder="Dit Navn" class="w-full bg-black/50 border border-gray-700 rounded p-3 text-white mb-4 focus:border-gold-500 outline-none">
+            
+            <div class="space-y-4 mb-6">
+                <div>
+                     <label class="text-[10px] uppercase text-gray-500 tracking-widest block mb-1">Fornavn</label>
+                     <input id="edit-fname" type="text" class="w-full bg-black/50 border border-gray-700 rounded p-3 text-white focus:border-gold-500 outline-none">
+                </div>
+                <div>
+                     <label class="text-[10px] uppercase text-gray-500 tracking-widest block mb-1">Efternavn</label>
+                     <input id="edit-lname" type="text" class="w-full bg-black/50 border border-gray-700 rounded p-3 text-white focus:border-gold-500 outline-none">
+                </div>
+            </div>
+
             <button id="save-btn" class="w-full bg-gold-600/20 text-gold-500 border border-gold-500/50 py-2 rounded uppercase text-xs tracking-widest hover:bg-gold-500 hover:text-black transition-colors">Gem</button>
         </div>
     </div>
@@ -153,7 +164,8 @@ import '@styles/styles.css';
         const emailEl = document.getElementById('user-email');
         const joinEl = document.getElementById('join-date');
         const modal = document.getElementById('edit-modal');
-        const editNameInp = document.getElementById('edit-name');
+        const editFname = document.getElementById('edit-fname');
+        const editLname = document.getElementById('edit-lname');
         const saveBtn = document.getElementById('save-btn');
         
         // Examen Elements
@@ -182,9 +194,21 @@ import '@styles/styles.css';
                 .single();
             
             // Display Info
-            const displayName = profile?.username || currentUser.email;
+            // Priority: (First + Last) > Username > Email
+            let displayName = currentUser.email;
+            if (profile) {
+                if (profile.first_name || profile.last_name) {
+                    displayName = `${profile.first_name || ''} ${profile.last_name || ''}`.trim();
+                } else if (profile.username) {
+                    displayName = profile.username;
+                }
+                
+                // Populate Inputs
+                if(editFname) (editFname as HTMLInputElement).value = profile.first_name || '';
+                if(editLname) (editLname as HTMLInputElement).value = profile.last_name || '';
+            }
+
             emailEl.innerHTML = `${displayName} <button onclick="toggleEdit()" class="ml-2 text-gold-500/50 hover:text-gold-500"><i class="fa-solid fa-pen"></i></button>`;
-            if(profile?.username) editNameInp.value = profile.username;
             
             // Rosary Count
             const rosaryCountEl = document.getElementById('rosary-count');
@@ -213,8 +237,11 @@ import '@styles/styles.css';
             function updateConfessionText(dateStr) {
                 const last = new Date(dateStr);
                 const today = new Date();
-                const diff = Math.floor((today.getTime() - last.getTime()) / (1000 * 60 * 60 * 24));
+                const diff = Math.floor((constTime(today) - constTime(last)) / (1000 * 60 * 60 * 24));
                 
+                // Helper to fix TS error on arithmetic
+                function constTime(d) { return d.getTime(); }
+
                 if(diff < 0) confDaysEl.innerText = "I fremtiden?";
                 else if (diff === 0) confDaysEl.innerText = "I dag";
                 else confDaysEl.innerText = `${diff} dage siden`;
@@ -414,22 +441,24 @@ import '@styles/styles.css';
         }
 
         saveBtn.addEventListener('click', async () => {
-             const newName = editNameInp.value;
-             if(!newName) return;
+             const fname = (editFname as HTMLInputElement).value;
+             const lname = (editLname as HTMLInputElement).value;
              
              saveBtn.innerText = "Gemmer...";
              
              // Update Profile
+             const updates = { first_name: fname, last_name: lname };
+             
              const { error } = await client
                 .from('profiles')
-                .update({ username: newName }) // Ensure 'username' coll exists in profiles table
+                .update(updates)
                 .eq('id', currentUser.id);
 
              if(error) {
                  alert("Fejl: " + error.message);
                  if(error.message.includes('row')) {
                      // If row missing, insert it (self-healing for manual users)
-                     await client.from('profiles').insert([{ id: currentUser.id, username: newName }]);
+                     await client.from('profiles').insert([{ id: currentUser.id, ...updates }]);
                      window.location.reload();
                  }
                  saveBtn.innerText = "Gem";
