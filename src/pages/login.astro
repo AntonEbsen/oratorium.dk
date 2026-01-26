@@ -37,27 +37,41 @@ import '@styles/styles.css';
         </div>
         
         <h1 class="text-2xl text-white mb-2">Pilgrimspas</h1>
-        <p class="text-xs text-gray-500 uppercase tracking-widest mb-10 sans">Log ind for at gemme din rejse</p>
+        <p class="text-xs text-gray-500 uppercase tracking-widest mb-10 sans">Adgang til den indre borg</p>
 
-        <form id="magic-link-form" class="space-y-6">
+        <form id="auth-form" class="space-y-4">
             <div>
                  <input 
                     type="email" 
                     id="email" 
                     required 
                     class="w-full bg-white/5 border border-gray-700 rounded p-4 text-center text-white focus:border-gold-500 outline-none transition-colors sans placeholder:text-gray-600"
-                    placeholder="din@email.dk"
+                    placeholder="E-mail"
+                >
+            </div>
+            <div>
+                 <input 
+                    type="password" 
+                    id="password" 
+                    required 
+                    class="w-full bg-white/5 border border-gray-700 rounded p-4 text-center text-white focus:border-gold-500 outline-none transition-colors sans placeholder:text-gray-600"
+                    placeholder="Adgangskode"
+                    minlength="6"
                 >
             </div>
             
-            <button type="submit" class="w-full py-4 bg-gold-600/20 border border-gold-500/50 hover:bg-gold-500 hover:text-black text-gold-500 transition-all uppercase tracking-widest text-xs rounded">
-                Send Magisk Link
-            </button>
+            <div class="flex gap-4 pt-4">
+                <button type="submit" id="btn-login" class="flex-1 py-4 bg-gold-600/20 border border-gold-500/50 hover:bg-gold-500 hover:text-black text-gold-500 transition-all uppercase tracking-widest text-xs rounded">
+                    Log Ind
+                </button>
+                <button type="button" id="btn-signup" class="flex-1 py-4 bg-white/5 border border-white/10 hover:bg-white/10 text-gray-400 transition-all uppercase tracking-widest text-xs rounded">
+                    Opret
+                </button>
+            </div>
         </form>
 
-        <div id="message" class="hidden mt-8 p-4 bg-green-900/20 border border-green-500/30 rounded text-green-400 text-sm sans">
-            <i class="fa-solid fa-envelope mr-2"></i> Tjek din indbakke for login-linket.
-        </div>
+        <p id="error-msg" class="hidden mt-6 text-red-400 text-xs sans uppercase tracking-widest bg-red-900/20 p-2 rounded border border-red-500/20"></p>
+        <p id="success-msg" class="hidden mt-6 text-green-400 text-xs sans uppercase tracking-widest bg-green-900/20 p-2 rounded border border-green-500/20">Konto oprettet! Logger ind...</p>
 
     </div>
 
@@ -69,30 +83,69 @@ import '@styles/styles.css';
         // @ts-ignore
         const supabase = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 
-        const form = document.getElementById('magic-link-form');
-        const msg = document.getElementById('message');
+        const form = document.getElementById('auth-form');
+        const emailInput = document.getElementById('email');
+        const passInput = document.getElementById('password');
+        const btnLogin = document.getElementById('btn-login');
+        const btnSignup = document.getElementById('btn-signup');
+        const errorMsg = document.getElementById('error-msg');
+        const successMsg = document.getElementById('success-msg');
 
+        // Login Handler
         form.addEventListener('submit', async (e) => {
             e.preventDefault();
-            const email = document.getElementById('email').value;
+            const email = emailInput.value;
+            const password = passInput.value;
             
-            // Magic Link Login
-            const { error } = await supabase.auth.signInWithOtp({
-                email: email,
-                options: {
-                    emailRedirectTo: window.location.origin + '/profile'
-                }
+            errorMsg.classList.add('hidden');
+
+            const { data, error } = await supabase.auth.signInWithPassword({
+                email, password
             });
 
             if (error) {
-                alert("Fejl: " + error.message);
+                errorMsg.innerText = "Fejl: " + error.message;
+                errorMsg.classList.remove('hidden');
             } else {
-                form.classList.add('hidden');
-                msg.classList.remove('hidden');
+                window.location.href = '/profile';
+            }
+        });
+
+        // Signup Handler
+        btnSignup.addEventListener('click', async () => {
+             const email = emailInput.value;
+             const password = passInput.value;
+             
+             if(!email || !password) {
+                 errorMsg.innerText = "Udfyld venligst email og adgangskode.";
+                 errorMsg.classList.remove('hidden');
+                 return;
+             }
+             
+             errorMsg.classList.add('hidden');
+
+             const { data, error } = await supabase.auth.signUp({
+                email, password
+            });
+
+            if (error) {
+                errorMsg.innerText = "Fejl: " + error.message;
+                errorMsg.classList.remove('hidden');
+            } else {
+                // Check if user is created but not signed in (email confirm pending)
+                // If user disabled email confirm, they should be signed in.
+                if(data.session) {
+                    successMsg.classList.remove('hidden');
+                    setTimeout(() => window.location.href = '/profile', 1000);
+                } else {
+                     // If session is null, it means email confirm is ON.
+                     errorMsg.innerText = "Tjek din email for at bekræfte (hvis nødvendigt).";
+                     errorMsg.classList.remove('hidden');
+                }
             }
         });
         
-        // Check if already logged in
+        // Auto Redirect if logged in
         async function checkUser() {
             const { data: { session } } = await supabase.auth.getSession();
             if (session) {
