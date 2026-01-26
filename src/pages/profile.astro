@@ -31,6 +31,13 @@ import '@styles/styles.css';
 
     <div class="w-full max-w-2xl px-6 text-center">
         
+        <!-- Avatar -->
+        <div id="avatar-container" class="w-24 h-24 bg-gold-900/20 border border-gold-500/30 rounded-full mx-auto flex items-center justify-center text-gold-500 text-3xl mb-4 overflow-hidden relative group shadow-[0_0_15px_rgba(255,215,0,0.2)]">
+            <!-- Default Catholic Icon -->
+            <i id="default-icon" class="fa-solid fa-cross drop-shadow-[0_0_5px_rgba(255,215,0,0.8)]"></i>
+            <!-- Img will be injected here if exists -->
+        </div>
+
         <!-- Headers -->
         <h1 class="text-3xl md:text-5xl text-gold-500 mb-2">Pilgrimspas</h1>
         <p id="user-email" class="text-xs text-gray-500 uppercase tracking-widest mb-16 sans">Indlæser...</p>
@@ -152,7 +159,7 @@ import '@styles/styles.css';
                 <!-- Avatar Upload -->
                 <div class="flex items-center gap-4">
                     <div id="preview-avatar" class="w-16 h-16 rounded-full bg-white/5 border border-white/10 flex items-center justify-center overflow-hidden">
-                        <i class="fa-solid fa-user text-gray-500"></i>
+                        <i class="fa-solid fa-cross text-gray-500"></i>
                     </div>
                     <div>
                         <label class="text-[10px] uppercase text-gray-500 tracking-widest block mb-1">Profilbillede</label>
