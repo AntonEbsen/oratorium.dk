@@ -141,53 +141,79 @@ import '@styles/styles.css';
 
     </div>
 
-    <!-- Deepening Section (New) -->
-    <div class="max-w-6xl mx-auto px-6 mb-32 grid grid-cols-1 md:grid-cols-3 gap-8">
+    <!-- Deepening Section -->
+    <div class="max-w-7xl mx-auto px-6 mb-32">
+        <h2 class="text-2xl text-gold-500 mb-8 font-serif text-center">Fordybelse & Værktøjer</h2>
         
-        <!-- Apologetics Card -->
-        <a href="/scutum" class="bg-[#101015] border border-white/10 p-8 rounded hover:border-red-500/50 transition-all group relative overflow-hidden">
-            <div class="absolute inset-0 bg-red-900/5 group-hover:bg-red-900/10 transition-colors"></div>
-            <i class="fa-solid fa-shield-halved text-red-500 text-3xl mb-4 group-hover:scale-110 transition-transform block relative z-10"></i>
-            <h3 class="text-xl text-white font-serif mb-2 relative z-10">Troens Skjold</h3>
-            <p class="text-xs text-gray-500 uppercase tracking-widest mb-4 relative z-10">Apologetik & Svar</p>
-            <p class="text-gray-400 sans text-sm leading-relaxed relative z-10">
-                Tvivl? Hårde spørgsmål? Læs svarene på de sværeste indvendinger mod troen.
-            </p>
-        </a>
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            
+            <!-- 1. Apologetics -->
+            <a href="/scutum" class="bg-[#101015] border border-white/10 p-8 rounded hover:border-red-500/50 transition-all group relative overflow-hidden">
+                <div class="absolute inset-0 bg-red-900/5 group-hover:bg-red-900/10 transition-colors"></div>
+                <i class="fa-solid fa-shield-halved text-red-500 text-3xl mb-4 group-hover:scale-110 transition-transform block relative z-10"></i>
+                <h3 class="text-xl text-white font-serif mb-2 relative z-10">Troens Skjold</h3>
+                <p class="text-xs text-gray-500 uppercase tracking-widest mb-4 relative z-10">Apologetik</p>
+                <p class="text-gray-400 sans text-sm leading-relaxed relative z-10">
+                    Tvivl? Hårde spørgsmål? Læs svarene på de sværeste indvendinger (Videnskab, Historie, Moral).
+                </p>
+            </a>
 
-        <!-- Dictionary Card -->
-        <a href="/dictionary" class="bg-[#101015] border border-white/10 p-8 rounded hover:border-emerald-500/50 transition-all group relative overflow-hidden">
-            <div class="absolute inset-0 bg-emerald-900/5 group-hover:bg-emerald-900/10 transition-colors"></div>
-            <i class="fa-solid fa-spell-check text-emerald-500 text-3xl mb-4 group-hover:scale-110 transition-transform block relative z-10"></i>
-            <h3 class="text-xl text-white font-serif mb-2 relative z-10">Katolsk Ordbog</h3>
-            <p class="text-xs text-gray-500 uppercase tracking-widest mb-4 relative z-10">Forstå Sproget</p>
-            <p class="text-gray-400 sans text-sm leading-relaxed relative z-10">
-                Hvad er "Eukaristi"? "Transubstantiation"? Slå kirkens svære ord op her.
-            </p>
-        </a>
-        
-        <!-- Saint Gallery Card -->
-        <a href="/saints" class="bg-[#101015] border border-white/10 p-8 rounded hover:border-gold-500/50 transition-all group relative overflow-hidden">
-             <div class="absolute inset-0 bg-gold-900/5 group-hover:bg-gold-900/10 transition-colors"></div>
-            <i class="fa-solid fa-crown text-gold-500 text-3xl mb-4 group-hover:scale-110 transition-transform block relative z-10"></i>
-            <h3 class="text-xl text-white font-serif mb-2 relative z-10">Helgengalleriet</h3>
-            <p class="text-xs text-gray-500 uppercase tracking-widest mb-4 relative z-10">Find Din Helgen</p>
-            <p class="text-gray-400 sans text-sm leading-relaxed relative z-10">
-                Mød dine åndelige brødre og søstre. Tag quizzen og find din skytshelgen.
-            </p>
-        </a>
+            <!-- 2. Prayer School -->
+            <a href="/school" class="bg-[#101015] border border-white/10 p-8 rounded hover:border-blue-500/50 transition-all group relative overflow-hidden">
+                 <div class="absolute inset-0 bg-blue-900/5 group-hover:bg-blue-900/10 transition-colors"></div>
+                <i class="fa-solid fa-hands-praying text-blue-400 text-3xl mb-4 group-hover:scale-110 transition-transform block relative z-10"></i>
+                <h3 class="text-xl text-white font-serif mb-2 relative z-10">Bønneskolen</h3>
+                <p class="text-xs text-gray-500 uppercase tracking-widest mb-4 relative z-10">Lær at Bede</p>
+                <p class="text-gray-400 sans text-sm leading-relaxed relative z-10">
+                    Start her. Lær de grundlæggende bønner (Fadervor, Ave Maria) og find roen.
+                </p>
+            </a>
 
-        <!-- Sanctuary Card (New) -->
-        <a href="/sanctuary" class="bg-[#101015] border border-white/10 p-8 rounded hover:border-purple-500/50 transition-all group relative overflow-hidden md:col-span-3 lg:col-span-1">
-             <div class="absolute inset-0 bg-purple-900/5 group-hover:bg-purple-900/10 transition-colors"></div>
-            <i class="fa-solid fa-church text-purple-400 text-3xl mb-4 group-hover:scale-110 transition-transform block relative z-10"></i>
-            <h3 class="text-xl text-white font-serif mb-2 relative z-10">Kirkerummet</h3>
-            <p class="text-xs text-gray-500 uppercase tracking-widest mb-4 relative z-10">Det Hellige Rum</p>
-            <p class="text-gray-400 sans text-sm leading-relaxed relative z-10">
-                Hvad er den røde lampe? Hvorfor knæler vi? Forstå arkitekturen og det hellige.
-            </p>
-        </a>
+            <!-- 3. Sanctuary -->
+            <a href="/sanctuary" class="bg-[#101015] border border-white/10 p-8 rounded hover:border-purple-500/50 transition-all group relative overflow-hidden">
+                 <div class="absolute inset-0 bg-purple-900/5 group-hover:bg-purple-900/10 transition-colors"></div>
+                <i class="fa-solid fa-church text-purple-400 text-3xl mb-4 group-hover:scale-110 transition-transform block relative z-10"></i>
+                <h3 class="text-xl text-white font-serif mb-2 relative z-10">Kirkerummet</h3>
+                <p class="text-xs text-gray-500 uppercase tracking-widest mb-4 relative z-10">Det Hellige Rum</p>
+                <p class="text-gray-400 sans text-sm leading-relaxed relative z-10">
+                    Hvad er den røde lampe? Hvorfor knæler vi? Forstå arkitekturen og det hellige.
+                </p>
+            </a>
+            
+            <!-- 4. Saint Gallery -->
+            <a href="/saints" class="bg-[#101015] border border-white/10 p-8 rounded hover:border-gold-500/50 transition-all group relative overflow-hidden">
+                 <div class="absolute inset-0 bg-gold-900/5 group-hover:bg-gold-900/10 transition-colors"></div>
+                <i class="fa-solid fa-crown text-gold-500 text-3xl mb-4 group-hover:scale-110 transition-transform block relative z-10"></i>
+                <h3 class="text-xl text-white font-serif mb-2 relative z-10">Helgengalleriet</h3>
+                <p class="text-xs text-gray-500 uppercase tracking-widest mb-4 relative z-10">Find Din Helgen</p>
+                <p class="text-gray-400 sans text-sm leading-relaxed relative z-10">
+                    Mød dine åndelige brødre og søstre. Tag quizzen og find din skytshelgen.
+                </p>
+            </a>
 
+            <!-- 5. Dictionary -->
+            <a href="/dictionary" class="bg-[#101015] border border-white/10 p-8 rounded hover:border-emerald-500/50 transition-all group relative overflow-hidden">
+                <div class="absolute inset-0 bg-emerald-900/5 group-hover:bg-emerald-900/10 transition-colors"></div>
+                <i class="fa-solid fa-spell-check text-emerald-500 text-3xl mb-4 group-hover:scale-110 transition-transform block relative z-10"></i>
+                <h3 class="text-xl text-white font-serif mb-2 relative z-10">Katolsk Ordbog</h3>
+                <p class="text-xs text-gray-500 uppercase tracking-widest mb-4 relative z-10">Forstå Sproget</p>
+                <p class="text-gray-400 sans text-sm leading-relaxed relative z-10">
+                    Hvad er "Eukaristi"? "Transubstantiation"? Slå kirkens svære ord op her.
+                </p>
+            </a>
+            
+            <!-- 6. Aquinas (Search/Ask) - Moving the existing "Ask Aquinas" here for symmetry -->
+            <a href="/aquinas" class="bg-[#101015] border border-white/10 p-8 rounded hover:border-orange-500/50 transition-all group relative overflow-hidden">
+                <div class="absolute inset-0 bg-orange-900/5 group-hover:bg-orange-900/10 transition-colors"></div>
+                <i class="fa-solid fa-feather text-orange-500 text-3xl mb-4 group-hover:scale-110 transition-transform block relative z-10"></i>
+                <h3 class="text-xl text-white font-serif mb-2 relative z-10">Spørg Aquinas</h3>
+                <p class="text-xs text-gray-500 uppercase tracking-widest mb-4 relative z-10">AI Teolog</p>
+                <p class="text-gray-400 sans text-sm leading-relaxed relative z-10">
+                    Fandt du ikke svaret? Stil dit eget spørgsmål til vores AI-baserede kirkelærer.
+                </p>
+            </a>
+
+        </div>
     </div>
 
     <!-- Conversion Box -->
