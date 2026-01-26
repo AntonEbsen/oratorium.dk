@@ -85,6 +85,14 @@ import '@styles/styles.css';
             </div>
         </div>
 
+        <!-- My Testimony -->
+        <div class="border-t border-white/10 pt-16 mb-24">
+             <h2 class="text-2xl text-gold-500/80 mb-6 font-serif">Mit Vidnesbyrd</h2>
+             <div id="my-testimony" class="max-w-2xl mx-auto text-left">
+                  <p class="text-gray-600 text-xs text-center italic">Du har ikke delt dit vidnesbyrd endnu.</p>
+             </div>
+        </div>
+
         <button onclick="signOut()" class="text-gray-500 hover:text-red-400 text-xs uppercase tracking-widest border border-gray-800 px-6 py-3 rounded hover:border-red-500/50 transition-colors">
             Log Ud
         </button>
@@ -255,6 +263,35 @@ import '@styles/styles.css';
 
             // Examen Logic
             loadExamen();
+
+            // Testimony Logic
+            const { data: testies } = await client
+                .from('testimonies')
+                .select('*')
+                .eq('user_id', currentUser.id)
+                .order('created_at', { ascending: false });
+
+            const testContainer = document.getElementById('my-testimony');
+            if(testies && testies.length > 0) {
+                 const t = testies[0]; // Latest
+                 let statusHtml = '';
+                 if(t.approved) {
+                     statusHtml = '<span class="text-green-500 text-xs uppercase tracking-widest border border-green-500/30 px-2 py-1 rounded">Godkendt</span>';
+                 } else {
+                     statusHtml = '<span class="text-yellow-500 text-xs uppercase tracking-widest border border-yellow-500/30 px-2 py-1 rounded">Afventer Godkendelse</span>';
+                 }
+
+                 testContainer.innerHTML = `
+                    <div class="bg-white/5 p-6 rounded border border-white/10">
+                        <div class="flex justify-between items-start mb-4">
+                            <h4 class="text-gold-200 font-serif text-lg">"${t.name}"</h4>
+                            ${statusHtml}
+                        </div>
+                        <p class="text-gray-400 font-serif italic text-sm leading-relaxed mb-4 whitespace-pre-wrap">${t.content}</p>
+                        <p class="text-[10px] text-gray-600 uppercase tracking-widest">${new Date(t.created_at).toLocaleDateString()}</p>
+                    </div>
+                 `;
+            }
         }
 
         async function loadExamen() {

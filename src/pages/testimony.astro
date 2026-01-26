@@ -191,9 +191,13 @@ import '@styles/styles.css';
             const location = document.getElementById('inp-loc').value;
             const content = document.getElementById('inp-content').value;
             
+            // Get Current User
+            const { data: { session } } = await supabase.auth.getSession();
+            const userId = session?.user?.id || null;
+
             const { error } = await supabase
                 .from('testimonies')
-                .insert([{ name, location, content }]);
+                .insert([{ name, location, content, user_id: userId }]);
 
             if(error) {
                 alert("Fejl ved indsendelse: " + error.message);
