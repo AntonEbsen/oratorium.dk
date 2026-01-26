@@ -1,0 +1,194 @@
+
+---
+import '@styles/styles.css';
+---
+
+<!DOCTYPE html>
+<html lang="da">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Døgnets Rytme | Oratorium</title>
+    <meta name="robots" content="index, follow">
+    <link rel="icon" type="image/svg+xml" href="/assets/favicon-cross.svg">
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700&family=Inter:wght@300;400;600&family=Playfair+Display:ital@0;1&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    
+    <style>
+        body { font-family: 'Cinzel', serif; background: #020205; color: #e5e7eb; overflow-x: hidden; }
+        .sans { font-family: 'Inter', sans-serif; }
+        .serif-italic { font-family: 'Playfair Display', serif; font-style: italic; }
+        
+        /* Timeline */
+        .timeline-line {
+            position: absolute;
+            left: 50%;
+            top: 0;
+            bottom: 0;
+            width: 1px;
+            background: linear-gradient(to bottom, 
+                rgba(255,215,0,0) 0%, 
+                rgba(255,215,0,0.5) 20%, 
+                rgba(255,215,0,0.5) 80%, 
+                rgba(255,215,0,0) 100%
+            );
+            transform: translateX(-50%);
+            z-index: 0;
+        }
+
+        .time-point {
+            position: relative;
+            z-index: 10;
+            transition: all 0.5s ease;
+        }
+
+        .time-point:hover .point-glow {
+            transform: scale(1.5);
+            opacity: 1;
+            box-shadow: 0 0 30px #ffd700;
+        }
+        
+        .point-glow {
+            transition: all 0.5s ease;
+        }
+    </style>
+</head>
+<body class="selection:bg-gold-500/30 min-h-screen flex flex-col">
+
+    <!-- Nav -->
+    <nav class="fixed top-8 left-8 z-50">
+        <a href="/seek" class="text-gold-500/60 hover:text-gold-400 transition-colors text-xl flex items-center gap-2 sans bg-black/50 p-2 rounded backdrop-blur">
+            <i class="fa-solid fa-arrow-left"></i>
+            <span class="text-xs uppercase tracking-widest hidden md:inline">Tilbage</span>
+        </a>
+    </nav>
+
+    <!-- Header -->
+    <header class="text-center py-24 px-4 relative z-10">
+        <div class="inline-block p-4 border rounded-full border-gold-500/20 mb-6 animate-spin-slow" style="animation-duration: 60s;">
+            <i class="fa-solid fa-hourglass-half text-gold-500 text-3xl"></i>
+        </div>
+        <h1 class="text-4xl md:text-6xl text-gold-500 mb-6 font-serif drop-shadow-lg">Døgnets Rytme</h1>
+        <p class="text-xs text-gray-500 uppercase tracking-[0.3em] sans max-w-lg mx-auto leading-loose">
+            At hellige tiden. En guide til det katolske hverdagsliv.
+        </p>
+    </header>
+
+    <!-- TIMELINE CONTAINER -->
+    <main class="relative max-w-4xl mx-auto px-6 pb-48">
+        <div class="timeline-line"></div>
+
+        <!-- MORGEN (07:00) -->
+        <div class="relative grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-24 mb-32 items-center group">
+            <!-- Time -->
+            <div class="text-center md:text-right order-1">
+                <span class="text-4xl text-white/10 font-bold group-hover:text-gold-500/50 transition-colors">07:00</span>
+                <h3 class="text-2xl text-gold-200 font-serif">Morgen</h3>
+            </div>
+            
+            <!-- Point -->
+            <div class="absolute left-1/2 -translate-x-1/2 w-4 h-4 bg-[#020205] border border-gold-500 rounded-full z-20 flex items-center justify-center time-point order-2">
+                <div class="w-2 h-2 bg-gold-500 rounded-full point-glow opacity-50"></div>
+            </div>
+
+            <!-- Content -->
+            <div class="text-center md:text-left order-3 md:order-3 bg-white/5 border border-white/10 p-8 rounded hover:border-gold-500/30 transition-all">
+                <p class="text-[10px] text-gold-500 uppercase tracking-widest mb-2"><i class="fa-solid fa-sun mr-2"></i> Serviam</p>
+                <p class="text-gray-300 sans text-sm leading-relaxed mb-4">
+                    Vi starter dagen med at tilbyde den til Gud. Før du tjekker telefonen, gør du korsets tegn og siger:
+                </p>
+                <div class="border-l border-gold-500/30 pl-4 py-1 italic text-gray-400 font-serif text-sm">
+                    "Herre, jeg takker dig for denne dag. Jeg tilbyder dig alle mine tanker, ord og handlinger. Må alt ske til din ære."
+                </div>
+            </div>
+        </div>
+
+        <!-- MIDDAG (12:00) -->
+        <div class="relative grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-24 mb-32 items-center group">
+            <!-- Content (Left on desktop) -->
+             <div class="text-center md:text-right order-3 md:order-1 bg-white/5 border border-white/10 p-8 rounded hover:border-blue-500/30 transition-all">
+                <p class="text-[10px] text-blue-400 uppercase tracking-widest mb-2"><i class="fa-solid fa-bell mr-2"></i> Angelus</p>
+                <p class="text-gray-300 sans text-sm leading-relaxed mb-4">
+                    Klokken 12 stopper Kirken verden over. Vi mindes det øjeblik, Gud blev menneske (Inkarnationen).
+                </p>
+                <div class="border-r md:border-r border-l md:border-l-0 border-blue-500/30 pr-4 pl-0 py-1 italic text-gray-400 font-serif text-sm">
+                    "Herrens engel bragte Maria det glade budskab...<br>
+                    Hil dig, Maria..."
+                </div>
+            </div>
+
+            <!-- Point -->
+            <div class="absolute left-1/2 -translate-x-1/2 w-4 h-4 bg-[#020205] border border-blue-500 rounded-full z-20 flex items-center justify-center time-point order-2">
+                <div class="w-2 h-2 bg-blue-500 rounded-full point-glow opacity-50"></div>
+            </div>
+
+             <!-- Time -->
+            <div class="text-center md:text-left order-1 md:order-3">
+                <span class="text-4xl text-white/10 font-bold group-hover:text-blue-500/50 transition-colors">12:00</span>
+                <h3 class="text-2xl text-blue-200 font-serif">Middag</h3>
+            </div>
+        </div>
+
+        <!-- AFTEN (18:00) -->
+        <div class="relative grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-24 mb-32 items-center group">
+            <!-- Time -->
+            <div class="text-center md:text-right order-1">
+                <span class="text-4xl text-white/10 font-bold group-hover:text-orange-500/50 transition-colors">18:00</span>
+                <h3 class="text-2xl text-orange-200 font-serif">Aften</h3>
+            </div>
+            
+            <!-- Point -->
+            <div class="absolute left-1/2 -translate-x-1/2 w-4 h-4 bg-[#020205] border border-orange-500 rounded-full z-20 flex items-center justify-center time-point order-2">
+                <div class="w-2 h-2 bg-orange-500 rounded-full point-glow opacity-50"></div>
+            </div>
+
+            <!-- Content -->
+            <div class="text-center md:text-left order-3 md:order-3 bg-white/5 border border-white/10 p-8 rounded hover:border-orange-500/30 transition-all">
+                <p class="text-[10px] text-orange-500 uppercase tracking-widest mb-2"><i class="fa-solid fa-utensils mr-2"></i> Bordbøn</p>
+                <p class="text-gray-300 sans text-sm leading-relaxed mb-4">
+                    Før aftensmaden takker vi. Det er en simpel påmindelse om, at alt er en gave.
+                </p>
+                <div class="border-l border-orange-500/30 pl-4 py-1 italic text-gray-400 font-serif text-sm">
+                    "Velsign os, Herre, og disse gaver, som vi skal modtage af din mildhed."
+                </div>
+            </div>
+        </div>
+
+        <!-- NAT (22:00) -->
+        <div class="relative grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-24 mb-32 items-center group">
+            <!-- Content (Left on desktop) -->
+             <div class="text-center md:text-right order-3 md:order-1 bg-white/5 border border-white/10 p-8 rounded hover:border-purple-500/30 transition-all">
+                <p class="text-[10px] text-purple-400 uppercase tracking-widest mb-2"><i class="fa-solid fa-moon mr-2"></i> Examen</p>
+                <p class="text-gray-300 sans text-sm leading-relaxed mb-4">
+                    Før vi sover, ser vi tilbage på dagen ("Samvittighedsransagelse").
+                </p>
+                <ul class="text-gray-400 sans text-sm text-right space-y-2 list-none">
+                    <li>1. Hvad er jeg taknemmelig for?</li>
+                    <li>2. Hvor fejlede jeg i dag? (Sig undskyld)</li>
+                    <li>3. Overgiv morgendagen til Gud.</li>
+                </ul>
+            </div>
+
+            <!-- Point -->
+            <div class="absolute left-1/2 -translate-x-1/2 w-4 h-4 bg-[#020205] border border-purple-500 rounded-full z-20 flex items-center justify-center time-point order-2">
+                <div class="w-2 h-2 bg-purple-500 rounded-full point-glow opacity-50"></div>
+            </div>
+
+             <!-- Time -->
+            <div class="text-center md:text-left order-1 md:order-3">
+                <span class="text-4xl text-white/10 font-bold group-hover:text-purple-500/50 transition-colors">22:00</span>
+                <h3 class="text-2xl text-purple-200 font-serif">Nat</h3>
+            </div>
+        </div>
+
+    </main>
+
+    <!-- Footer Quote -->
+    <div class="text-center pb-24 px-6 md:px-0 opacity-50">
+        <p class="serif-italic text-gray-500 max-w-md mx-auto">
+            "Bed uophørligt." — 1. Thessalonikerbrev 5,17
+        </p>
+    </div>
+
+</body>
+</html>
