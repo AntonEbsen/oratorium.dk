@@ -1,0 +1,32 @@
+import { defineConfig } from 'astro/config';
+// Design System: Dark & Gold
+import react from '@astrojs/react';
+import sitemap from '@astrojs/sitemap';
+import tailwind from '@astrojs/tailwind';
+// import node from '@astrojs/node'; // Removed Node adapter
+import vercel from '@astrojs/vercel/serverless';
+
+// https://astro.build/config
+export default defineConfig({
+  output: 'static',
+  adapter: vercel({
+    webAnalytics: { enabled: true }
+  }),
+  site: 'https://oratorium.dk',
+
+  i18n: {
+    defaultLocale: "da",
+    locales: ["da", "en"],
+    routing: {
+      prefixDefaultLocale: false
+    }
+  },
+
+  integrations: [
+    react(),
+    sitemap(),
+    tailwind({
+      applyBaseStyles: false,
+    })
+  ],
+});

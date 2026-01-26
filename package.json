@@ -1,0 +1,33 @@
+{
+    "name": "oratorium",
+    "type": "module",
+    "version": "0.0.1",
+    "scripts": {
+        "dev": "astro dev",
+        "start": "astro dev",
+        "build": "node scripts/process-docs.mjs && astro build",
+        "preview": "astro preview",
+        "astro": "astro"
+    },
+    "dependencies": {
+        "@astrojs/check": "^0.9.6",
+        "@astrojs/node": "^9.5.2",
+        "@astrojs/react": "^4.0.0",
+        "@astrojs/rss": "^4.0.15",
+        "@astrojs/sitemap": "^3.7.0",
+        "@astrojs/tailwind": "^6.0.0",
+        "@astrojs/vercel": "^9.0.4",
+        "@google/generative-ai": "^0.24.1",
+        "@supabase/supabase-js": "^2.91.1",
+        "astro": "^5.0.0",
+        "chart.js": "^4.5.1",
+        "pdf-parse": "^2.4.5",
+        "react": "^18.3.1",
+        "react-dom": "^18.3.1",
+        "tailwindcss": "^3.4.17",
+        "typescript": "^5.7.2"
+    },
+    "engines": {
+        "node": ">=20.0.0 <23.0.0"
+    }
+}
