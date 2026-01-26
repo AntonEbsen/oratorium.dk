@@ -1,0 +1,106 @@
+
+---
+import '@styles/styles.css';
+---
+
+<!DOCTYPE html>
+<html lang="da">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Om Oratorium | Visionen</title>
+    <meta name="robots" content="noindex, nofollow">
+    <link rel="icon" type="image/svg+xml" href="/assets/favicon-cross.svg">
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700&family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    
+    <style>
+        body { font-family: 'Cinzel', serif; background: #020205; color: #e5e7eb; }
+        .sans { font-family: 'Inter', sans-serif; }
+        .text-justify { text-align: justify; }
+        
+        .drop-cap::first-letter {
+            font-size: 3.5rem;
+            float: left;
+            margin-right: 0.5rem;
+            line-height: 0.8;
+            color: #FFD700;
+            font-family: 'Cinzel', serif;
+        }
+    </style>
+</head>
+<body class="selection:bg-gold-500/30">
+
+    <!-- Nav -->
+    <nav class="fixed top-8 left-8 z-50">
+        <a href="/" class="text-white/40 hover:text-white transition-colors text-xl flex items-center gap-2">
+            <i class="fa-solid fa-arrow-left"></i>
+            <span class="text-xs uppercase tracking-widest hidden md:inline">Tilbage</span>
+        </a>
+    </nav>
+
+    <!-- CONTENT -->
+    <main class="max-w-3xl mx-auto px-8 py-24 md:py-32">
+        
+        <!-- Header -->
+        <header class="text-center mb-16 animate-fade-in-up">
+            <h1 class="text-4xl md:text-6xl text-gold-500 mb-4 drop-shadow-[0_0_15px_rgba(255,215,0,0.3)]">Oratorium</h1>
+            <div class="h-px w-24 bg-gradient-to-r from-transparent via-gold-500/50 to-transparent mx-auto mb-4"></div>
+            <p class="text-xs uppercase tracking-[0.4em] text-gray-500">Et Digitalt Kapel for Danmark</p>
+        </header>
+
+        <!-- Vision -->
+        <article class="space-y-12 sans font-light text-gray-300 leading-relaxed text-lg animate-fade-in-up" style="animation-delay: 0.2s;">
+            
+            <section>
+                <h2 class="font-serif text-2xl text-white mb-6 text-center italic">Visionen</h2>
+                <p class="drop-cap mb-4">
+                    Vi lever i en støjende verden. For den danske katolik kan hverdagen ofte føles ensom – et liv levet i diasporaen, langt fra kirkeklokkerne og det hellige fællesskab. 
+                </p>
+                <p>
+                    <strong>Oratorium</strong> er et forsøg på at bygge et digitalt helle. Det er ikke en hjemmeside med mødetider eller referater. Det er et rum designet til bøn, intellektuel fordybelse og en sanselig genopdagelse af Traditionen.
+                </p>
+            </section>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8 py-8 border-y border-white/5">
+                <div class="p-6 bg-white/5 rounded border border-white/5 hover:border-gold-500/30 transition-colors">
+                    <i class="fa-solid fa-hands-praying text-gold-500 text-2xl mb-4"></i>
+                    <h3 class="font-serif text-white text-lg mb-2">Ora (Bøn)</h3>
+                    <p class="text-sm text-gray-400">
+                        Gennem <em>Lacus</em> (Refleksionsbassinet) og <em>Campanile</em> (Klokketårnet) gør vi den usynlige kirke synlig. Vi beder sammen, selv når vi er hver for sig.
+                    </p>
+                </div>
+                <div class="p-6 bg-white/5 rounded border border-white/5 hover:border-gold-500/30 transition-colors">
+                    <i class="fa-solid fa-book-open text-gold-500 text-2xl mb-4"></i>
+                    <h3 class="font-serif text-white text-lg mb-2">Labora (Studie)</h3>
+                    <p class="text-sm text-gray-400">
+                        Gennem <em>Scutum Fidei</em> og <em>Aquinas</em> ruster vi intellektet. Troen er ikke en følelse, men en sandhed, der kan og skal forsvares.
+                    </p>
+                </div>
+            </div>
+
+            <section class="text-center">
+                <p class="italic text-gold-500/80 mb-6">
+                    "Skønheden vil frelse verden."
+                </p>
+                <p class="text-sm">
+                    Dette projekt er bygget <em>Ad Majorem Dei Gloriam</em> – til Guds større ære.<br>
+                    Det er en invitation til at træde ud af støjen og ind i stilheden.
+                </p>
+            </section>
+
+            <div class="flex justify-center mt-12">
+                 <a href="mailto:kontakt@oratorium.dk" class="px-8 py-3 bg-white/5 hover:bg-gold-500 hover:text-black border border-white/10 transition-all uppercase tracking-widest text-xs rounded">
+                    Kontakt
+                 </a>
+            </div>
+
+        </article>
+
+    </main>
+
+    <!-- Footer Decoration -->
+    <div class="fixed bottom-0 left-0 w-full h-1 bg-gradient-to-r from-transparent via-gold-900 to-transparent opacity-50"></div>
+
+</body>
+</html>
