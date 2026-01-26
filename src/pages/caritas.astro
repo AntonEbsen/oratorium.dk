@@ -1,0 +1,207 @@
+
+---
+import '@styles/styles.css';
+---
+
+<!DOCTYPE html>
+<html lang="da">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Caritas | Oratorium</title>
+    <meta name="robots" content="index, follow">
+    <link rel="icon" type="image/svg+xml" href="/assets/favicon-cross.svg">
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700&family=Inter:wght@300;400;600&family=Playfair+Display:ital@0;1&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    
+    <style>
+        body { font-family: 'Cinzel', serif; background: #050202; color: #e5e7eb; }
+        .sans { font-family: 'Inter', sans-serif; }
+        .serif-italic { font-family: 'Playfair Display', serif; font-style: italic; }
+        
+        .heart-beat {
+            animation: heartbeat 3s infinite;
+        }
+        @keyframes heartbeat {
+            0% { transform: scale(1); }
+            5% { transform: scale(1.1); }
+            10% { transform: scale(1); }
+            15% { transform: scale(1.1); }
+            20% { transform: scale(1); }
+            100% { transform: scale(1); }
+        }
+    </style>
+</head>
+<body class="selection:bg-red-500/30 min-h-screen flex flex-col pt-32">
+
+    <!-- Nav -->
+    <nav class="fixed top-8 left-8 z-50">
+        <a href="/seek" class="text-red-500/60 hover:text-red-400 transition-colors text-xl flex items-center gap-2 sans bg-black/50 p-2 rounded backdrop-blur">
+            <i class="fa-solid fa-arrow-left"></i>
+            <span class="text-xs uppercase tracking-widest hidden md:inline">Tilbage</span>
+        </a>
+    </nav>
+    
+    <!-- Header -->
+    <header class="text-center mb-16 px-4">
+        <div class="w-20 h-20 mx-auto bg-red-900/10 rounded-full flex items-center justify-center text-red-500 text-3xl mb-6 border border-red-500/20 heart-beat">
+            <i class="fa-solid fa-heart"></i>
+        </div>
+        <h1 class="text-3xl md:text-5xl text-red-500 mb-6 font-serif drop-shadow-lg">Barmhjertighed</h1>
+        <p class="text-xs text-gray-500 uppercase tracking-[0.3em] sans max-w-lg mx-auto leading-loose">
+            "Tro uden gerninger er død." — Jakobsbrevet 2,26
+        </p>
+    </header>
+
+    <!-- Content Container -->
+    <main class="max-w-6xl mx-auto px-6 pb-32 space-y-24">
+        
+        <!-- INTRO -->
+        <section class="max-w-2xl mx-auto text-center border-b border-white/5 pb-16">
+            <p class="text-gray-300 sans text-sm leading-relaxed mb-6">
+                Som kristne er vi kaldet til at være Kristi hænder og fødder på jorden. Det er ikke nok at vide det rigtige (Troslæren) eller bede det rigtige (Liturgien); vi må elske det rigtige (Caritas).
+            </p>
+            <p class="serif-italic text-red-400/80">
+                Kirken opdeler barmhjertighedens gerninger i to: De Legemlige og De Åndelige.
+            </p>
+        </section>
+
+        <!-- SECTION 1: CORPORAL WORKS -->
+        <section>
+            <div class="flex items-center gap-4 mb-12 justify-center md:justify-start">
+                <div class="h-px bg-red-500/30 flex-1 max-w-[50px]"></div>
+                <h2 class="text-2xl text-red-100 font-serif">De 7 Legemlige Gerninger</h2>
+                <div class="h-px bg-red-500/30 flex-1 max-w-[50px]"></div>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+                
+                <!-- 1. Feed Hungry -->
+                <div class="bg-[#100a0a] border border-white/5 p-6 rounded hover:border-red-500/30 transition-all group">
+                    <i class="fa-solid fa-bread-slice text-red-500/50 text-2xl mb-4 group-hover:scale-110 transition-transform block"></i>
+                    <h3 class="text-white font-serif mb-2">Giv mad til de sultne</h3>
+                    <p class="text-xs text-gray-500 sans">Støt varmestuer, madindsamlinger eller del dit måltid.</p>
+                </div>
+
+                <!-- 2. Give Drink -->
+                <div class="bg-[#100a0a] border border-white/5 p-6 rounded hover:border-red-500/30 transition-all group">
+                    <i class="fa-solid fa-glass-water text-red-500/50 text-2xl mb-4 group-hover:scale-110 transition-transform block"></i>
+                    <h3 class="text-white font-serif mb-2">Giv drikke til de tørstige</h3>
+                    <p class="text-xs text-gray-500 sans">Rent vand er en mangelvare mange steder. Værn om skaberværket.</p>
+                </div>
+
+                <!-- 3. Clothe Naked -->
+                <div class="bg-[#100a0a] border border-white/5 p-6 rounded hover:border-red-500/30 transition-all group">
+                    <i class="fa-solid fa-shirt text-red-500/50 text-2xl mb-4 group-hover:scale-110 transition-transform block"></i>
+                    <h3 class="text-white font-serif mb-2">Klæd de nøgne</h3>
+                    <p class="text-xs text-gray-500 sans">Donér tøj du ikke bruger. Køb ansvarligt.</p>
+                </div>
+
+                <!-- 4. Shelter Homeless -->
+                <div class="bg-[#100a0a] border border-white/5 p-6 rounded hover:border-red-500/30 transition-all group">
+                    <i class="fa-solid fa-house-chimney text-red-500/50 text-2xl mb-4 group-hover:scale-110 transition-transform block"></i>
+                    <h3 class="text-white font-serif mb-2">Giv husly til fremmede</h3>
+                    <p class="text-xs text-gray-500 sans">Gæstfrihed. Tag imod den, der står udenfor fællesskabet.</p>
+                </div>
+
+                <!-- 5. Visit Sick -->
+                <div class="bg-[#100a0a] border border-white/5 p-6 rounded hover:border-red-500/30 transition-all group">
+                    <i class="fa-solid fa-bed-pulse text-red-500/50 text-2xl mb-4 group-hover:scale-110 transition-transform block"></i>
+                    <h3 class="text-white font-serif mb-2">Besøg de syge</h3>
+                    <p class="text-xs text-gray-500 sans">Tid er den største gave. Besøg ensomme på plejehjem eller hospital.</p>
+                </div>
+
+                <!-- 6. Visit Imprisoned -->
+                <div class="bg-[#100a0a] border border-white/5 p-6 rounded hover:border-red-500/30 transition-all group">
+                    <i class="fa-solid fa-lock text-red-500/50 text-2xl mb-4 group-hover:scale-110 transition-transform block"></i>
+                    <h3 class="text-white font-serif mb-2">Besøg de fangne</h3>
+                    <p class="text-xs text-gray-500 sans">Også de, der er "fanget" af misbrug eller ensomhed.</p>
+                </div>
+
+                <!-- 7. Bury Dead -->
+                <div class="bg-[#100a0a] border border-white/5 p-6 rounded hover:border-red-500/30 transition-all group col-span-1 md:col-span-2 lg:col-span-2">
+                    <i class="fa-solid fa-cross text-red-500/50 text-2xl mb-4 group-hover:scale-110 transition-transform block"></i>
+                    <h3 class="text-white font-serif mb-2">Begrav de døde</h3>
+                    <p class="text-xs text-gray-500 sans">Vis respekt for legemet, Helligåndens tempel. Bed for de afdøde og trøst de efterladte.</p>
+                </div>
+
+            </div>
+        </section>
+
+
+        <!-- SECTION 2: SPIRITUAL WORKS -->
+        <section>
+            <div class="flex items-center gap-4 mb-12 justify-center md:justify-start">
+                <div class="h-px bg-gold-500/30 flex-1 max-w-[50px]"></div>
+                <h2 class="text-2xl text-gold-100 font-serif">De 7 Åndelige Gerninger</h2>
+                <div class="h-px bg-gold-500/30 flex-1 max-w-[50px]"></div>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+                
+                <!-- 1. Instruct Ignorant -->
+                <div class="bg-[#0a0a0c] border border-white/5 p-6 rounded hover:border-gold-500/30 transition-all group">
+                    <i class="fa-solid fa-lightbulb text-gold-500/50 text-2xl mb-4 group-hover:scale-110 transition-transform block"></i>
+                    <h3 class="text-white font-serif mb-2">Undervise de uvidende</h3>
+                    <p class="text-xs text-gray-500 sans">Del sandheden med kærlighed. Hjælp andre med at forstå troen.</p>
+                </div>
+
+                <!-- 2. Counsel Doubtful -->
+                <div class="bg-[#0a0a0c] border border-white/5 p-6 rounded hover:border-gold-500/30 transition-all group">
+                    <i class="fa-solid fa-comments text-gold-500/50 text-2xl mb-4 group-hover:scale-110 transition-transform block"></i>
+                    <h3 class="text-white font-serif mb-2">Råde de tvivlende</h3>
+                    <p class="text-xs text-gray-500 sans">Lyt tålmodigt og giv håb til dem, der har mistet modet.</p>
+                </div>
+
+                <!-- 3. Admonish Sinners -->
+                <div class="bg-[#0a0a0c] border border-white/5 p-6 rounded hover:border-gold-500/30 transition-all group">
+                    <i class="fa-solid fa-gavel text-gold-500/50 text-2xl mb-4 group-hover:scale-110 transition-transform block"></i>
+                    <h3 class="text-white font-serif mb-2">Tilrettevise syndere</h3>
+                    <p class="text-xs text-gray-500 sans">Ikke fordømmelse, men broderlig korrektion. "Jeg ønsker ikke din død, men at du lever."</p>
+                </div>
+
+                <!-- 4. Bear Wrongs -->
+                <div class="bg-[#0a0a0c] border border-white/5 p-6 rounded hover:border-gold-500/30 transition-all group">
+                    <i class="fa-solid fa-shield-heart text-gold-500/50 text-2xl mb-4 group-hover:scale-110 transition-transform block"></i>
+                    <h3 class="text-white font-serif mb-2">Bære over med uret</h3>
+                    <p class="text-xs text-gray-500 sans">Tålmodighed, når andre er irriterende eller uretfærdige. Vær langmodig.</p>
+                </div>
+
+                 <!-- 5. Forgive Offenses -->
+                 <div class="bg-[#0a0a0c] border border-white/5 p-6 rounded hover:border-gold-500/30 transition-all group">
+                    <i class="fa-solid fa-handshake text-gold-500/50 text-2xl mb-4 group-hover:scale-110 transition-transform block"></i>
+                    <h3 class="text-white font-serif mb-2">Tilgive fornærmelser</h3>
+                    <p class="text-xs text-gray-500 sans">At slippe vreden. "Forlad os vor skyld, som vi forlader vore skyldnere."</p>
+                </div>
+                
+                 <!-- 6. Comfort Afflicted -->
+                 <div class="bg-[#0a0a0c] border border-white/5 p-6 rounded hover:border-gold-500/30 transition-all group">
+                    <i class="fa-solid fa-hands-holding-circle text-gold-500/50 text-2xl mb-4 group-hover:scale-110 transition-transform block"></i>
+                    <h3 class="text-white font-serif mb-2">Trøste de bedrøvede</h3>
+                    <p class="text-xs text-gray-500 sans">Vær nærværende i andres smerte uden at prøve at "fikse" det med det samme.</p>
+                </div>
+
+                <!-- 7. Pray for Living/Dead -->
+                <div class="bg-[#0a0a0c] border border-white/5 p-6 rounded hover:border-gold-500/30 transition-all group col-span-1 md:col-span-2 lg:col-span-2">
+                    <i class="fa-solid fa-praying-hands text-gold-500/50 text-2xl mb-4 group-hover:scale-110 transition-transform block"></i>
+                    <h3 class="text-white font-serif mb-2">Bede for levende og døde</h3>
+                    <p class="text-xs text-gray-500 sans">Den største gave. At bære andre frem for Guds trone, både venner og fjender.</p>
+                </div>
+
+            </div>
+        </section>
+
+        <!-- OUTRO -->
+        <div class="max-w-2xl mx-auto text-center pt-16">
+            <a href="https://www.caritas.dk" target="_blank" class="inline-block px-8 py-4 bg-red-900/20 text-red-500 font-bold uppercase tracking-widest text-xs rounded hover:bg-red-900/40 transition-colors border border-red-500/50 hover:scale-105 transform">
+                Støt Caritas Danmark <i class="fa-solid fa-arrow-up-right-from-square ml-2"></i>
+            </a>
+            <p class="text-[10px] text-gray-600 mt-4 uppercase tracking-widest">
+                Kirkens officielle hjælpeorganisation
+            </p>
+        </div>
+
+    </main>
+
+</body>
+</html>
