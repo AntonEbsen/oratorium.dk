@@ -27,6 +27,19 @@ const currentGradient = seasonGradients[season.color] || seasonGradients.green;
     <meta name="robots" content="index, follow">
     <meta name="description" content="Oratorium.dk - Den Katolske Kirkes digitale forgård. Find messetider, lær om troen, bed rosenkransen og find vejen hjem.">
     
+    <!-- PWA / App -->
+    <link rel="manifest" href="/manifest.json">
+    <meta name="theme-color" content="#020205">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <script>
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', () => {
+                navigator.serviceWorker.register('/sw.js');
+            });
+        }
+    </script>
+
     <!-- Fonts -->
     <link rel="icon" type="image/svg+xml" href="/assets/favicon-cross.svg">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400&family=Cinzel:wght@400;700&display=swap" rel="stylesheet">
@@ -95,6 +108,9 @@ const currentGradient = seasonGradients[season.color] || seasonGradients.green;
                  </a>
                  <a href="/speculum" class="nav-link group">
                     <span class="group-hover:translate-x-[-5px] transition-transform block">Speculum <i class="fa-solid fa-mirror ml-2 text-gold-500/40 group-hover:text-gold-400"></i></span>
+                 </a>
+                 <a href="/latina" class="nav-link group">
+                    <span class="group-hover:translate-x-[-5px] transition-transform block">Schola Latina <i class="fa-solid fa-language ml-2 text-gold-500/40 group-hover:text-gold-400"></i></span>
                  </a>
                  <a href="/scutum" class="nav-link group">
                     <span class="group-hover:translate-x-[-5px] transition-transform block">Scutum Fidei <i class="fa-solid fa-shield-halved ml-2 text-gold-500/40 group-hover:text-gold-400"></i></span>

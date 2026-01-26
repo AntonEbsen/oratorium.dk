@@ -1,0 +1,291 @@
+
+---
+import '@styles/styles.css';
+---
+
+<!DOCTYPE html>
+<html lang="da">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Monasterium | Ora et Labora</title>
+    <meta name="robots" content="noindex, nofollow">
+    <link rel="icon" type="image/svg+xml" href="/assets/favicon-cross.svg">
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700&family=Inter:wght@300;400;600&family=UnifrakturMaguntia&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    
+    <style>
+        body { font-family: 'Cinzel', serif; background: #050505; color: #e5e7eb; overflow: hidden; height: 100vh; width: 100vw; }
+        .sans { font-family: 'Inter', sans-serif; }
+        .blackletter { font-family: 'UnifrakturMaguntia', cursive; }
+        
+        /* Disable selection for clicker feeling */
+        .no-select { user-select: none; -webkit-user-select: none; }
+        
+        /* Floating Text Animation */
+        @keyframes floatUp {
+            0% { opacity: 1; transform: translateY(0); }
+            100% { opacity: 0; transform: translateY(-30px); }
+        }
+        .float-text {
+            position: absolute;
+            color: #D4AF37;
+            font-weight: bold;
+            pointer-events: none;
+            animation: floatUp 1s ease-out forwards;
+            z-index: 50;
+        }
+
+        /* Scrollbar for upgrades */
+        ::-webkit-scrollbar { width: 6px; }
+        ::-webkit-scrollbar-track { background: #111; }
+        ::-webkit-scrollbar-thumb { background: #333; border-radius: 3px; }
+        ::-webkit-scrollbar-thumb:hover { background: #555; }
+    </style>
+</head>
+<body class="flex flex-col md:flex-row h-screen">
+
+    <!-- LEFT: THE CHAPEL (Clicker) -->
+    <section class="relative w-full md:w-1/2 h-1/2 md:h-full bg-[radial-gradient(circle_at_center,_#1a1a2e_0%,_#000_100%)] flex flex-col items-center justify-center border-b md:border-b-0 md:border-r border-white/10 p-6 no-select">
+        
+        <!-- Background Decor -->
+        <div class="absolute inset-0 opacity-20 pointer-events-none flex items-center justify-center">
+            <i class="fa-solid fa-cross text-[20rem] text-black drop-shadow-[0_0_50px_rgba(255,215,0,0.1)]"></i>
+        </div>
+
+        <!-- Stats Header -->
+        <div class="absolute top-8 w-full text-center">
+            <h2 class="text-xs text-gray-500 uppercase tracking-[0.3em] mb-2">Gratia (Nåde)</h2>
+            <div class="text-5xl md:text-7xl text-gold-400 font-serif drop-shadow-lg" id="grace-display">0</div>
+            <div class="text-xs text-gray-600 mt-2 sans">Per Secunda: <span id="gps-display" class="text-gray-400">0</span></div>
+        </div>
+
+        <!-- The Button (Rose Window) -->
+        <button id="pray-btn" class="relative group w-48 h-48 md:w-64 md:h-64 rounded-full flex items-center justify-center transition-transform active:scale-95 z-10">
+            <!-- Glow -->
+            <div class="absolute inset-0 rounded-full bg-gold-500/10 blur-xl group-hover:bg-gold-500/20 transition-colors duration-500"></div>
+            
+            <!-- Ring -->
+            <div class="absolute inset-0 rounded-full border-2 border-dashed border-gold-500/30 animate-[spin_60s_linear_infinite]"></div>
+            
+            <!-- Icon -->
+            <div class="bg-[#0a0a0c] w-full h-full rounded-full border border-gold-500/50 flex items-center justify-center shadow-[0_0_30px_rgba(0,0,0,0.8)] relative overflow-hidden group-hover:border-gold-400 transition-colors">
+                 <div class="absolute inset-0 bg-[url('https://www.transparenttextures.com/patterns/stardust.png')] opacity-20"></div>
+                 <i class="fa-solid fa-hands-praying text-5xl md:text-7xl text-gold-500 drop-shadow-lg group-hover:scale-110 transition-transform duration-200"></i>
+            </div>
+            
+            <p class="absolute -bottom-12 text-xs uppercase tracking-widest text-gray-500 group-hover:text-gold-500 transition-colors">Bed for os</p>
+        </button>
+
+        <!-- Notification Area -->
+        <div id="toast-area" class="absolute bottom-8 text-xs text-green-500/50 sans italic opacity-0 transition-opacity">
+            Spillet er gemt.
+        </div>
+        
+        <!-- Back Button -->
+        <a href="/" class="absolute top-4 left-4 text-gray-700 hover:text-white transition-colors">
+            <i class="fa-solid fa-arrow-left"></i>
+        </a>
+
+    </section>
+
+    <!-- RIGHT: THE SCRIPTORIUM (Upgrades) -->
+    <section class="w-full md:w-1/2 h-1/2 md:h-full bg-[#08080a] flex flex-col border-l border-white/5">
+        
+        <header class="p-6 border-b border-white/5 bg-[#050505]">
+            <h1 class="text-xl text-gold-500 font-serif">Scriptorium</h1>
+            <p class="text-xs text-gray-500 uppercase tracking-widest">Ora et Labora</p>
+        </header>
+
+        <div id="upgrades-list" class="flex-1 overflow-y-auto p-4 space-y-3">
+             <!-- Upgrades Injected Here -->
+        </div>
+
+        <!-- Quote Footer -->
+        <div class="p-4 border-t border-white/5 bg-[#050505] text-center">
+             <p class="text-[10px] text-gray-600 italic">"Lediggang er sjælens fjende." — St. Benedikt</p>
+        </div>
+
+    </section>
+
+    <script>
+        // --- GAME ENGINE ---
+        
+        const state = {
+            grace: 0,
+            gps: 0,
+            upgrades: [
+                { id: 'novice', name: 'Novice', cost: 15, gps: 1, count: 0, icon: 'fa-user', desc: 'En ung munk under oplæring.' },
+                { id: 'candle', name: 'Votivlys', cost: 100, gps: 5, count: 0, icon: 'fa-fire', desc: 'Brænder foran alteret.' },
+                { id: 'scribe', name: 'Skriver', cost: 500, gps: 15, count: 0, icon: 'fa-pen-nib', desc: 'Kopierer hellige skrifter.' },
+                { id: 'chant', name: 'Gregoriansk Kor', cost: 2000, gps: 40, count: 0, icon: 'fa-music', desc: 'Evig lovsang.' },
+                { id: 'altar', name: 'Højalter', cost: 10000, gps: 150, count: 0, icon: 'fa-church', desc: 'Messen fejres dagligt.' },
+                { id: 'relic', name: 'Helgenrelikvie', cost: 50000, gps: 500, count: 0, icon: 'fa-bone', desc: 'Tiltrækker pilgrimme.' }
+            ]
+        };
+
+        // DOM Elements
+        const elGrace = document.getElementById('grace-display');
+        const elGps = document.getElementById('gps-display');
+        const elBtn = document.getElementById('pray-btn');
+        const elList = document.getElementById('upgrades-list');
+        const elToast = document.getElementById('toast-area');
+
+        // Init
+        loadGame();
+        renderUpgrades();
+        startGameLoop();
+
+        // --- BUTTON LOGIC ---
+        elBtn?.addEventListener('click', (e) => {
+            addGrace(1);
+            spawnFloater(e.clientX, e.clientY, "+1");
+            
+            // Haptic/Visual feedback
+            elBtn.style.transform = "scale(0.95)";
+            setTimeout(() => elBtn.style.transform = "scale(1)", 50);
+        });
+
+        function spawnFloater(x, y, text) {
+            const el = document.createElement('div');
+            el.className = 'float-text text-xl';
+            el.innerText = text;
+            
+            // Random variation
+            const rX = (Math.random() - 0.5) * 40;
+            
+            el.style.left = `${x + rX}px`;
+            el.style.top = `${y - 50}px`;
+            document.body.appendChild(el);
+            
+            setTimeout(() => el.remove(), 1000);
+        }
+
+        function addGrace(amount) {
+            state.grace += amount;
+            updateUI();
+        }
+
+        // --- UPGRADE LOGIC ---
+        function buyUpgrade(index) {
+            const item = state.upgrades[index];
+            if(state.grace >= item.cost) {
+                state.grace -= item.cost;
+                item.count++;
+                item.cost = Math.ceil(item.cost * 1.15); // Cost scaling
+                
+                recalcGPS();
+                renderUpgrades();
+                updateUI();
+                saveGame();
+            }
+        }
+
+        function recalcGPS() {
+            let total = 0;
+            state.upgrades.forEach(u => {
+                total += (u.count * u.gps);
+            });
+            state.gps = total;
+        }
+
+        function renderUpgrades() {
+            if(!elList) return;
+            elList.innerHTML = '';
+            
+            state.upgrades.forEach((u, index) => {
+                const canAfford = state.grace >= u.cost;
+                const div = document.createElement('div');
+                
+                div.className = `p-4 border rounded flex items-center gap-4 transition-all select-none cursor-pointer ${canAfford ? 'bg-white/5 border-white/10 hover:border-gold-500/50 hover:bg-white/10' : 'bg-black/20 border-white/5 opacity-50 cursor-not-allowed'}`;
+                
+                div.onclick = () => { if(canAfford) buyUpgrade(index); };
+
+                div.innerHTML = `
+                    <div class="w-12 h-12 bg-black/50 rounded flex items-center justify-center text-gold-500 text-xl border border-white/5">
+                        <i class="fa-solid ${u.icon}"></i>
+                    </div>
+                    <div class="flex-1">
+                        <div class="flex justify-between items-center mb-1">
+                            <h3 class="font-serif text-gray-200 text-sm">${u.name}</h3>
+                            <span class="text-xs font-bold ${canAfford ? 'text-gold-400' : 'text-red-900'}">${formatNumber(u.cost)} G</span>
+                        </div>
+                        <p class="text-[10px] text-gray-500 mb-1">${u.desc}</p>
+                        <div class="flex justify-between text-[10px] text-gray-600 uppercase tracking-wider">
+                            <span>Ejet: <span class="text-gray-300">${u.count}</span></span>
+                            <span>+${u.gps}/s</span>
+                        </div>
+                    </div>
+                `;
+                elList.appendChild(div);
+            });
+        }
+
+        // --- LOOP & SAVE ---
+        function startGameLoop() {
+            // Tick every 100ms for smoothness in calculation, but only update UI mostly
+            setInterval(() => {
+                if(state.gps > 0) {
+                    addGrace(state.gps / 10); // /10 because 100ms interval
+                }
+            }, 100);
+
+            // Auto-Save every 30s
+            setInterval(() => {
+                saveGame();
+                showToast();
+            }, 30000);
+        }
+
+        function updateUI() {
+            if(elGrace) elGrace.innerText = Math.floor(state.grace).toLocaleString();
+            if(elGps) elGps.innerText = state.gps.toLocaleString();
+            
+            // Re-render only if affordability changes state? 
+            // For simplicity, we might just re-render classes on tick, but that's expensive.
+            // Let's just do a cheap check in a slower loop or modify the existing DOM.
+            // For now, full re-render is fine for < 10 items.
+             renderUpgrades(); 
+        }
+
+        function saveGame() {
+            localStorage.setItem('monasterium_save', JSON.stringify(state));
+        }
+
+        function loadGame() {
+            const saved = localStorage.getItem('monasterium_save');
+            if(saved) {
+                try {
+                    const parsed = JSON.parse(saved);
+                    // Merge saves to handle versioning (simple)
+                    state.grace = parsed.grace || 0;
+                    state.upgrades.forEach(u => {
+                        const savedU = parsed.upgrades?.find(p => p.id === u.id);
+                        if(savedU) {
+                            u.count = savedU.count;
+                            u.cost = savedU.cost;
+                        }
+                    });
+                    recalcGPS();
+                } catch(e) {
+                    console.error("Save Corrupt", e);
+                }
+            }
+        }
+
+        function showToast() {
+            if(elToast) {
+                elToast.style.opacity = '1';
+                setTimeout(() => elToast.style.opacity = '0', 2000);
+            }
+        }
+
+        function formatNumber(num) {
+            if(num >= 1000000) return (num/1000000).toFixed(1) + 'M';
+            if(num >= 1000) return (num/1000).toFixed(1) + 'k';
+            return Math.floor(num).toString();
+        }
+
+    </script>
+</body>
+</html>

@@ -64,9 +64,42 @@ const verse = getDailyVerse();
         </p>
 
         <!-- Refresh / New Verse Button (Subtle) -->
-         <button id="refresh-btn" class="absolute bottom-12 text-gray-800 hover:text-gray-500 transition-colors opacity-0 animate-fade-in" style="animation-delay: 5s;" title="Nyt ord">
+         <button id="refresh-btn" class="absolute bottom-12 right-12 text-gray-800 hover:text-gray-500 transition-colors opacity-0 animate-fade-in" style="animation-delay: 5s;" title="Nyt ord">
             <i class="fa-solid fa-rotate-right"></i>
         </button>
+
+        <!-- ASK THOMAS BUTTON -->
+        <button id="ask-thomas-btn" class="mt-12 px-8 py-3 bg-gold-900/10 hover:bg-gold-500/10 border border-gold-500/30 rounded text-gold-500 uppercase tracking-widest text-xs sans transition-all opacity-0 animate-fade-in hover:scale-105" style="animation-delay: 4s;">
+            <i class="fa-solid fa-feather-pointed mr-2"></i> Hvad siger Thomas?
+        </button>
+
+        <!-- HOMILY MODAL -->
+        <div id="homily-modal" class="hidden fixed inset-0 z-[100] flex items-center justify-center bg-black/90 backdrop-blur-md p-4">
+             <div class="bg-[#101014] border border-gold-500/30 w-full max-w-2xl max-h-[80vh] overflow-y-auto rounded-lg shadow-[0_0_50px_rgba(0,0,0,1)] relative">
+                
+                <!-- Close -->
+                <button id="close-modal" class="absolute top-4 right-4 text-gray-500 hover:text-white transition-colors">
+                    <i class="fa-solid fa-xmark text-2xl"></i>
+                </button>
+
+                <!-- Header -->
+                <div class="bg-gold-900/20 p-6 border-b border-white/5 flex items-center gap-4">
+                     <div class="w-12 h-12 rounded-full bg-black border border-gold-500/30 flex items-center justify-center text-gold-500">
+                        <i class="fa-solid fa-feather"></i>
+                     </div>
+                     <div>
+                         <h3 class="text-gold-100 font-serif text-xl">Doctrina</h3>
+                         <p class="text-xs text-gray-500 uppercase tracking-widest">En refleksion fra Thomas Aquinas</p>
+                     </div>
+                </div>
+
+                <!-- Content -->
+                <div id="homily-content" class="p-8 text-gray-300 font-serif text-lg leading-loose space-y-4">
+                    <!-- AI Text Streamed Here -->
+                </div>
+
+             </div>
+        </div>
 
     </main>
 
@@ -124,11 +157,77 @@ const verse = getDailyVerse();
         const btn = document.getElementById('refresh-btn');
         const textEl = document.querySelector('h1');
         const citeEl = document.querySelector('p.text-gold-500\\/80');
+        
+        // AI Homily Logic
+        const askBtn = document.getElementById('ask-thomas-btn');
+        const modal = document.getElementById('homily-modal');
+        const closeBtn = document.getElementById('close-modal');
+        const homilyContent = document.getElementById('homily-content');
+        
+        let currentVerseText = "{verse.text}"; // Initial server-side value
+        
+        // Update current verse text on initial load if possible, or just trust the DOM
+        // Actually, we can just read from DOM
+        
+        askBtn?.addEventListener('click', async () => {
+             const verseText = textEl?.innerText;
+             const verseCite = citeEl?.innerText.replace('— ', '');
+             if(!verseText) return;
+
+             // Open Modal
+             modal?.classList.remove('hidden');
+             homilyContent!.innerHTML = `
+                <div class="flex flex-col items-center justify-center h-48 animate-pulse">
+                    <div class="w-12 h-12 border-2 border-gold-500 border-t-transparent rounded-full animate-spin mb-4"></div>
+                    <p class="text-gold-500 font-serif italic">Thomas reflekterer...</p>
+                </div>
+             `;
+             
+             try {
+                const prompt = `Giv en kort, dyb teologisk refleksion (homilie) over dette skriftsted: "${verseText}" (${verseCite}). Forklar dets åndelige betydning for en moderne katolik.`;
+                
+                const res = await fetch('/api/aquinas', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ message: prompt })
+                });
+
+                if (!res.ok) {
+                    if (res.status === 429) {
+                        throw new Error("Too Many Requests");
+                    }
+                    throw new Error("API Error");
+                }
+
+                const reader = res.body?.getReader();
+                const decoder = new TextDecoder();
+                homilyContent!.innerHTML = ''; // Clear loading
+                
+                while (true) {
+                    const { done, value } = await reader!.read();
+                    if (done) break;
+                    const chunk = decoder.decode(value, { stream: true });
+                    // Simple streaming append
+                    homilyContent!.innerHTML += chunk.replace(/\n/g, '<br>');
+                }
+
+             } catch(e) {
+                 const msg = e.message === "Too Many Requests" 
+                    ? "Thomas har brug for ro. (For mange forespørgsler, prøv igen om lidt)."
+                    : "Thomas er tavs. (Forbindelsen til himlen er svag).";
+                 homilyContent!.innerHTML = `<p class="text-red-400 italic">${msg}</p>`;
+             }
+        });
+
+        closeBtn?.addEventListener('click', () => {
+            modal?.classList.add('hidden');
+        });
 
         btn?.addEventListener('click', () => {
             // Fade out
             textEl!.style.opacity = '0';
             citeEl!.style.opacity = '0';
+            askBtn!.style.opacity = '0'; // Hide button during transition
             
             setTimeout(() => {
                 const random = verses[Math.floor(Math.random() * verses.length)];
@@ -138,8 +237,9 @@ const verse = getDailyVerse();
                 
                 // Fade in
                 textEl!.style.opacity = '1';
-                textEl!.style.filter = 'blur(0)'; // Ensure filter is reset if it was set
+                textEl!.style.filter = 'blur(0)'; 
                 citeEl!.style.opacity = '1';
+                askBtn!.style.opacity = '1';
             }, 500);
         });
 

@@ -197,14 +197,17 @@ const prayers = [
         
         /* Chalkboard / Parchment feel */
         .latin-word {
+            display: inline-block; /* Crucial for hover/transform */
             position: relative;
             cursor: pointer;
             border-bottom: 1px dotted rgba(212,175,55,0.3);
             transition: all 0.2s;
+            margin: 0 2px; /* Slight spacing */
         }
         .latin-word:hover {
             color: #D4AF37;
             border-bottom: 1px solid #D4AF37;
+            z-index: 50; /* Bring hovered word to front */
         }
 
         /* Tooltip Logic */
@@ -212,20 +215,21 @@ const prayers = [
             visibility: hidden;
             opacity: 0;
             position: absolute;
-            bottom: 120%;
+            bottom: 100%; /* Just above the word */
             left: 50%;
-            transform: translateX(-50%) translateY(10px);
-            background: #1a1a1a;
-            border: 1px solid rgba(212,175,55,0.3);
+            transform: translateX(-50%) translateY(5px);
+            background: #111;
+            border: 1px solid rgba(212,175,55,0.5);
             padding: 8px 12px;
             border-radius: 4px;
             width: max-content;
             max-width: 200px;
             text-align: center;
-            z-index: 50;
+            z-index: 100; /* High z-index */
             transition: all 0.2s ease;
             pointer-events: none;
-            box-shadow: 0 10px 20px rgba(0,0,0,0.5);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.8);
+            margin-bottom: 8px; /* Space between word and tooltip */
         }
         
         .latin-word:hover .tooltip {
@@ -234,19 +238,25 @@ const prayers = [
             transform: translateX(-50%) translateY(0);
         }
 
+        /* Study Mode: Translations below */
+        .show-translations .latin-word {
+             margin-bottom: 1.5em; /* Make room for the translation */
+        }
+
         .show-translations .latin-word::after {
             content: attr(data-danish);
             display: block;
             font-size: 0.5em;
             font-family: 'Inter', sans-serif;
             color: #888;
-            margin-top: 2px;
             font-style: italic;
             position: absolute;
-            left: 0;
-            right: 0;
-            text-align: center;
+            left: 50%;
+            transform: translateX(-50%);
             top: 100%;
+            width: max-content;
+            margin-top: 2px;
+            pointer-events: none;
         }
     </style>
 </head>

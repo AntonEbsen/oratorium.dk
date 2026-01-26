@@ -57,6 +57,11 @@ import '@styles/styles.css';
             <div class="absolute bottom-[-40px] text-gold-500 text-3xl drop-shadow-[0_0_10px_rgba(255,215,0,0.5)]">
                 <i class="fa-solid fa-cross"></i>
             </div>
+            
+             <!-- AUDIO CONTROLS (Floating top) -->
+            <button id="play-btn" class="absolute -top-16 px-6 py-2 bg-gold-500/10 hover:bg-gold-500/20 border border-gold-500/30 rounded-full text-xs uppercase tracking-widest text-gold-500 transition-all z-20">
+                <i class="fa-solid fa-play mr-2"></i> Bed for mig
+            </button>
 
             <!-- Interactive Bead Area -->
             <button id="next-bead" class="group relative px-8 py-4 bg-gold-900/10 hover:bg-gold-500/10 border border-gold-500/30 rounded-full transition-all active:scale-95">
@@ -98,16 +103,44 @@ import '@styles/styles.css';
     </style>
 
     <script>
-        // Data: Prayers
+        // Data: Prayers with Spoken Text (Danish)
         const prayers = [
-            { title: "Signum Crucis", text: "In nomine Patris, et Filii, et Spiritus Sancti. Amen." },
-            { title: "Symbolum Apostolorum", text: "Credo in Deum Patrem omnipotentem, Creatorem caeli et terrae..." },
-            { title: "Pater Noster", text: "Pater noster, qui es in caelis, sanctificetur nomen tuum..." },
-            { title: "Ave Maria", text: "Ave Maria, gratia plena, Dominus tecum..." },
-            { title: "Ave Maria", text: "Ave Maria, gratia plena, Dominus tecum..." },
-            { title: "Ave Maria", text: "Ave Maria, gratia plena, Dominus tecum..." },
-            { title: "Gloria Patri", text: "Gloria Patri, et Filio, et Spiritui Sancto..." },
-            // Simplified loop for demo
+            { 
+                title: "Signum Crucis", 
+                text: "In nomine Patris, et Filii, et Spiritus Sancti. Amen.",
+                spoken: "I Faderens og Sønnens og Helligåndens navn. Amen."
+            },
+            { 
+                title: "Symbolum Apostolorum", 
+                text: "Credo in Deum Patrem omnipotentem, Creatorem caeli et terrae...",
+                spoken: "Jeg tror på Gud Fader, den Almægtige, himlens og jordens skaber."
+            },
+            { 
+                title: "Pater Noster", 
+                text: "Pater noster, qui es in caelis, sanctificetur nomen tuum...",
+                spoken: "Fader vor, du som er i himlene. Helliget vorde dit navn. Komme dit rige."
+            },
+            { 
+                title: "Ave Maria", 
+                text: "Ave Maria, gratia plena, Dominus tecum...",
+                spoken: "Hil dig, Maria, fuld af nåde. Herren er med dig."
+            },
+            { 
+                title: "Ave Maria", 
+                text: "Ave Maria, gratia plena, Dominus tecum...",
+                spoken: "Hil dig, Maria, fuld af nåde. Herren er med dig."
+            },
+            { 
+                title: "Ave Maria", 
+                text: "Ave Maria, gratia plena, Dominus tecum...",
+                spoken: "Hil dig, Maria, fuld af nåde. Herren er med dig."
+            },
+            { 
+                title: "Gloria Patri", 
+                text: "Gloria Patri, et Filio, et Spiritui Sancto...",
+                spoken: "Ære være Faderen og Sønnen og Helligånden."
+            },
+            // In a real app, we would generate the full 53 beads here
         ];
 
         // Supabase
@@ -118,30 +151,85 @@ import '@styles/styles.css';
 
         let currentIndex = 0;
         let totalBeads = 53; 
-        // In full app, prayers array would vary. For demo we loop.
         
         const titleEl = document.getElementById('prayer-title');
         const textEl = document.getElementById('prayer-text');
         const counterEl = document.getElementById('counter');
         const btn = document.getElementById('next-bead');
+        
+        // Audio Logic
+        const audioToggle = document.getElementById('audio-toggle');
+        const playBtn = document.getElementById('play-btn');
+        let isAutoMode = false;
+        let isSpeaking = false;
+        const synth = window.speechSynthesis;
 
-        btn?.addEventListener('click', () => {
+        // Init UI
+        updateDisplay();
+
+        // Handlers
+        btn?.addEventListener('click', nextBead);
+        
+        // Play / Pause Auto Mode
+        playBtn?.addEventListener('click', () => {
+            if(isSpeaking) {
+                // Stop/Pause
+                synth.cancel();
+                isSpeaking = false;
+                playBtn.innerHTML = '<i class="fa-solid fa-play mr-2"></i> Bed for mig';
+                playBtn.classList.remove('bg-red-500/20', 'text-red-400');
+                playBtn.classList.add('bg-gold-500/10', 'text-gold-500');
+            } else {
+                // Start
+                isSpeaking = true;
+                playBtn.innerHTML = '<i class="fa-solid fa-stop mr-2"></i> Stop Bøn';
+                playBtn.classList.remove('bg-gold-500/10', 'text-gold-500');
+                playBtn.classList.add('bg-red-500/20', 'text-red-400');
+                speakCurrent();
+            }
+        });
+
+        function nextBead() {
+            // If manual click during auto-mode, ignore or stop? Let's just advance.
             currentIndex++;
-            if(currentIndex > totalBeads) currentIndex = 1; // Reset loop or stop?
+            if(currentIndex > totalBeads) currentIndex = 1;
             
             updateDisplay();
             
             if(currentIndex === totalBeads) {
                 finishRosary();
+                return;
             }
-        });
+
+            if(isSpeaking) {
+                speakCurrent();
+            }
+        }
+
+        function speakCurrent() {
+            synth.cancel(); // Stop previous
+            const pIndex = currentIndex % prayers.length;
+            const textToSpeak = prayers[pIndex].spoken;
+
+            const utterance = new SpeechSynthesisUtterance(textToSpeak);
+            utterance.lang = 'da-DK'; // Danish
+            utterance.rate = 0.9; // Slightly slower/reverent
+            
+            utterance.onend = () => {
+                // Auto-advance after small pause
+                setTimeout(() => {
+                    if(isSpeaking) nextBead();
+                }, 1000);
+            };
+
+            synth.speak(utterance);
+        }
 
         function updateDisplay() {
             if(!titleEl || !textEl || !counterEl) return;
             
             const pIndex = currentIndex % prayers.length;
             
-            // Fade out
             titleEl.style.opacity = '0';
             textEl.style.opacity = '0';
 
@@ -150,7 +238,6 @@ import '@styles/styles.css';
                 textEl.innerText = prayers[pIndex].text;
                 counterEl.innerText = currentIndex.toString();
                 
-                // Fade in
                 titleEl.classList.remove('animate-fade-in');
                 void titleEl.offsetWidth; 
                 titleEl.classList.add('animate-fade-in');
@@ -164,13 +251,15 @@ import '@styles/styles.css';
         }
 
         async function finishRosary() {
+            synth.cancel();
+            isSpeaking = false;
+            
             const { data: { session } } = await client.auth.getSession();
             if(!session) {
-                alert("Rosenkrans fuldført! Log ind for at gemme den i din buket.");
+                alert("Rosenkrans fuldført!");
                 return;
             }
 
-            // Anim
             const finishMsg = document.createElement('div');
             finishMsg.className = "fixed inset-0 bg-black/90 z-50 flex flex-col items-center justify-center animate-fade-in";
             finishMsg.innerHTML = `
@@ -180,8 +269,6 @@ import '@styles/styles.css';
             `;
             document.body.appendChild(finishMsg);
 
-            // Save
-            // First get current count (or RPC increment)
             const { data: profile } = await client.from('profiles').select('rosary_count').eq('id', session.user.id).single();
             const newCount = (profile?.rosary_count || 0) + 1;
             

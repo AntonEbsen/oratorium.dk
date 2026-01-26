@@ -68,7 +68,7 @@ export const POST: APIRoute = async ({ request }) => {
 
         const genAI = new GoogleGenerativeAI(apiKey);
         const model = genAI.getGenerativeModel({
-            model: "gemini-2.0-flash", // Fast and capable
+            model: "gemini-1.5-pro", // The 'Big Brain' (Tier 1)
             systemInstruction: SYSTEM_PROMPT
         });
 
