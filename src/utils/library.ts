@@ -1,4 +1,5 @@
 export interface Book {
+    id: string; // Unique ID for database referencing
     title: string;
     author: string;
     description: string;
@@ -9,6 +10,7 @@ export interface Book {
 
 export const libraryBooks: Book[] = [
     {
+        id: "confessiones",
         title: "Confessiones",
         author: "Augustine of Hippo",
         description: "En dybt personlig beretning om synd, omvendelse og Guds nåde. Den første selvbiografi i vestlig litteratur.",
@@ -17,6 +19,7 @@ export const libraryBooks: Book[] = [
         tags: ["biography", "classic", "repentance"]
     },
     {
+        id: "summa",
         title: "Summa Theologica",
         author: "Thomas Aquinas",
         description: "Troens intellektuelle katedral. En systematisk gennemgang af teologi, filosofi og moral.",
@@ -25,6 +28,7 @@ export const libraryBooks: Book[] = [
         tags: ["theology", "philosophy", "classic"]
     },
     {
+        id: "orthodoxy",
         title: "Orthodoxy",
         author: "G.K. Chesterton",
         description: "Et sprudlende forsvar for kristendommen som det mest spændende eventyr af alle.",
@@ -33,6 +37,7 @@ export const libraryBooks: Book[] = [
         tags: ["apologetics", "philosophy"]
     },
     {
+        id: "mere_christianity",
         title: "Mere Christianity",
         author: "C.S. Lewis",
         description: "En logisk og klar forklaring af hvad kristendom faktisk er, skrevet for det moderne menneske.",
@@ -41,6 +46,7 @@ export const libraryBooks: Book[] = [
         tags: ["apologetics", "classic"]
     },
     {
+        id: "screwtape",
         title: "The Screwtape Letters",
         author: "C.S. Lewis",
         description: "En senior-dæmons breve til sin nevø. En mesterlig satire over fristelse og menneskelig natur.",
@@ -49,6 +55,7 @@ export const libraryBooks: Book[] = [
         tags: ["fiction", "psychology"]
     },
     {
+        id: "imitatio",
         title: "Imitatio Christi",
         author: "Thomas à Kempis",
         description: "En håndbog i det indre liv. Om ydmyghed, tålmodighed og kærlighed til Jesus.",
@@ -57,6 +64,7 @@ export const libraryBooks: Book[] = [
         tags: ["devotional", "spirituality"]
     },
     {
+        id: "pensees",
         title: "Pensées",
         author: "Blaise Pascal",
         description: "Fragmenter af tanker om menneskets storhed og elendighed, og væddemålet om Guds eksistens.",
@@ -65,6 +73,7 @@ export const libraryBooks: Book[] = [
         tags: ["philosophy", "apologetics"]
     },
     {
+        id: "everlasting_man",
         title: "The Everlasting Man",
         author: "G.K. Chesterton",
         description: "Historien om menneskeheden set gennem det kristne perspektiv. Bogen der omvendte C.S. Lewis.",
