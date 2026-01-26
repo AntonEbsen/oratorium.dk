@@ -1,0 +1,217 @@
+
+---
+import '@styles/styles.css';
+---
+
+<!DOCTYPE html>
+<html lang="da">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Officium | Completorium</title>
+    <meta name="robots" content="noindex, nofollow">
+    <link rel="icon" type="image/svg+xml" href="/assets/favicon-cross.svg">
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700&family=Inter:wght@300;400;600&family=Crimson+Text:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    
+    <style>
+        body { font-family: 'Crimson Text', serif; background: #08080a; color: #d4d4d8; }
+        .head-font { font-family: 'Cinzel', serif; }
+        .sans { font-family: 'Inter', sans-serif; }
+        
+        .rubric { color: #ef4444; font-size: 0.8em; font-style: italic; }
+        .antiphon { color: #facc15; }
+        
+        /* Smooth fade for Amen particles */
+        @keyframes float-amen {
+            0% { opacity: 0; transform: translateY(10px) scale(0.8); }
+            20% { opacity: 1; transform: translateY(0) scale(1.1); }
+            100% { opacity: 0; transform: translateY(-30px) scale(1); }
+        }
+        .amen-particle {
+            position: fixed;
+            color: #FFD700;
+            font-family: 'Cinzel', serif;
+            pointer-events: none;
+            text-shadow: 0 0 10px rgba(255, 215, 0, 0.5);
+            animation: float-amen 3s ease-out forwards;
+            z-index: 100;
+        }
+    </style>
+</head>
+<body class="selection:bg-gold-500/30 min-h-screen flex flex-col items-center">
+
+    <!-- Nav -->
+    <nav class="fixed top-8 left-8 z-50">
+        <a href="/" class="text-white/30 hover:text-white transition-colors text-xl flex items-center gap-2 sans">
+            <i class="fa-solid fa-arrow-left"></i>
+            <span class="text-xs uppercase tracking-widest hidden md:inline">Stilhed</span>
+        </a>
+    </nav>
+    
+    <!-- Presence Indicator -->
+    <div class="fixed top-8 right-8 z-50 flex items-center gap-2 text-gold-500/60 font-mono text-xs">
+        <div class="w-2 h-2 rounded-full bg-green-500 animate-pulse"></div>
+        <span id="voice-count">1</span> <span class="uppercase tracking-widest hidden md:inline">Stemmer</span>
+    </div>
+
+    <!-- MAIN LITURGY -->
+    <main class="w-full max-w-2xl px-6 py-24 text-lg md:text-xl leading-relaxed">
+        
+        <!-- Header -->
+        <header class="text-center mb-16 border-b border-white/5 pb-8">
+            <h1 class="head-font text-3xl md:text-5xl text-gold-500 mb-2">Completorium</h1>
+            <p class="text-sm sans text-gray-500 uppercase tracking-[0.3em]">Natbønnen</p>
+        </header>
+
+        <!-- Indledning -->
+        <section class="space-y-6 mb-12">
+            <p><span class="rubric">V.</span> Gud, kom mig til hjælp.</p>
+            <p><span class="rubric">R.</span> Herre, il mig til undsætning.</p>
+            <p class="opacity-80">Ære være Faderen og Sønnen og Helligånden, som det var i begyndelsen, så nu og altid og i al evighed. Amen. Halleluja.</p>
+        </section>
+
+        <!-- Hymne (Placeholder) -->
+        <section class="space-y-4 mb-16 pl-4 border-l-2 border-gold-900/30 italic text-gray-400">
+            <p>Før lyset svinder, beder vi,<br>
+            o Skaber, i din kærlighed:<br>
+            Vær du vort værn mod nattens gru<br>
+            og vogt os i din mildhed nu.</p>
+        </section>
+
+        <!-- Psalmodi -->
+        <section class="mb-16">
+            <h3 class="head-font text-gold-500/80 mb-4 text-center">Salme 91</h3>
+            <p class="rubric text-center mb-6">Han dækker dig med sine fjer.</p>
+            
+            <div class="space-y-4 text-justify">
+                <p>Den, der sidder i den Højestes skjul,<br>
+                har sin bolig i den Almægtiges skygge;<br>
+                han kan sige om Herren: »Min tilflugt og min borg,<br>
+                min Gud, som jeg stoler på.«</p>
+                
+                <p>Han redder dig fra fuglefængerens fælde,<br>
+                fra den hærgende pest.<br>
+                Han dækker dig med sine fjer,<br>
+                du kan søge ly under hans vinger.</p>
+                
+                <p>Du skal ikke frygte for nattens rædsler<br>
+                eller for pilen, der flyver om dagen,<br>
+                ikke for pesten, der breder sig i mørket,<br>
+                eller for soten, der hærger ved middagstid.</p>
+                
+                <p class="text-center mt-8 opacity-80">
+                    Ære være Faderen og Sønnen<br>
+                    og Helligånden.
+                </p>
+            </div>
+        </section>
+
+        <!-- Kort Læsning -->
+        <section class="mb-16 bg-[#0c0c0f] p-8 rounded border border-white/5 mx-[-1rem] md:mx-0">
+            <h4 class="sans text-xs uppercase tracking-widest text-gray-500 mb-4">Læsning (Åb 22,4-5)</h4>
+            <p>De skal se hans ansigt, og hans navn skal stå på deres pander. Nat skal ikke være mere, og de har ikke brug for lys fra lamper eller lys fra solen, for Herren Gud lyser for dem, og de skal være konger i evighedernes evigheder.</p>
+            <p class="rubric mt-4">R. Gud ske tak og lov.</p>
+        </section>
+        
+        <!-- Respons -->
+        <section class="mb-16 text-center space-y-2">
+            <p>I dine hænder, Herre, overgiver jeg min ånd.</p>
+            <p><span class="rubric">R.</span> I dine hænder, Herre, overgiver jeg min ånd.</p>
+            <p>Du har forløst os, Herre, du trofaste Gud.</p>
+            <p><span class="rubric">R.</span> Jeg overgiver min ånd.</p>
+        </section>
+
+        <!-- Nunc Dimittis -->
+        <section class="mb-20">
+            <h3 class="head-font text-gold-500/80 mb-4 text-center">Nunc Dimittis</h3>
+            <p class="rubric text-center mb-6 antiphon">Frels os, Herre, når vi våger, vogt os, når vi sover.</p>
+            
+            <div class="italic text-center space-y-4">
+                <p>Herre, nu lader du din tjener gå bort med fred<br>
+                efter dit ord.</p>
+                <p>For mine øjne har set din frelse,<br>
+                som du har beredt for alle folk:</p>
+                <p>Et lys til åbenbaring for hedninger<br>
+                og en herlighed for dit folk Israel.</p>
+            </div>
+            
+            <p class="rubric text-center mt-6 antiphon">Frels os, Herre, når vi våger, vogt os, når vi sover, så vi kan våge med Kristus og hvile i fred.</p>
+        </section>
+
+        <!-- Konklusion -->
+        <section class="text-center pb-32">
+            <p class="mb-8">Må den almægtige Gud give os en rolig nat og en fuldendt afslutning.</p>
+            
+            <button id="amen-btn" class="group relative px-12 py-4 bg-transparent border border-gold-500 text-gold-500 head-font text-xl uppercase tracking-[0.2em] transition-all hover:bg-gold-500 hover:text-black overflow-hidden">
+                <span class="relative z-10">Amen</span>
+                <div class="absolute inset-0 bg-white/20 transform -translate-x-full group-hover:translate-x-0 transition-transform duration-500"></div>
+            </button>
+        </section>
+
+    </main>
+
+    <script>
+        // CLIENT CONFIG
+        const SUPABASE_URL = 'https://sdfwawnviylwwlbnwpnj.supabase.co'; 
+        const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InNkZndhd252aXlsd3dsYm53cG5qIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjkyNzY4MjEsImV4cCI6MjA4NDg1MjgyMX0.oIR0N05DQY6ePfDXVNC0UI9DrLrM-LevsK64ANEJGag';
+        
+        // @ts-ignore
+        const supabase = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+        
+        const voiceCount = document.getElementById('voice-count');
+        const amenBtn = document.getElementById('amen-btn');
+        const myId = 'monk-' + Math.random().toString(36).substr(2, 9);
+
+        // Channel
+        const channel = supabase.channel('officium', {
+            config: { presence: { key: myId } },
+        });
+
+        channel
+            .on('presence', { event: 'sync' }, () => {
+                const state = channel.presenceState();
+                const count = Object.keys(state).length;
+                voiceCount.innerText = count.toString();
+            })
+            .on('broadcast', { event: 'amen' }, () => {
+                 showAmenEffect();
+            })
+            .subscribe(async (status) => {
+                if (status === 'SUBSCRIBED') {
+                    await channel.track({ online_at: new Date() });
+                }
+            });
+
+        // Interactions
+        amenBtn?.addEventListener('click', () => {
+             // Visual for me
+             showAmenEffect("AMEN");
+             
+             // Broadcast
+             channel.send({
+                 type: 'broadcast',
+                 event: 'amen',
+                 payload: {}
+             });
+        });
+
+        function showAmenEffect(text = "Amen") {
+            const el = document.createElement('div');
+            el.className = 'amen-particle';
+            el.innerText = text;
+            // Random position near center/bottom
+            const x = Math.random() * 80 + 10;
+            const y = Math.random() * 20 + 60;
+            el.style.left = x + '%';
+            el.style.top = y + '%';
+            el.style.fontSize = (Math.random() * 1 + 1) + 'rem';
+            
+            document.body.appendChild(el);
+            setTimeout(() => el.remove(), 3000);
+        }
+
+    </script>
+</body>
+</html>
