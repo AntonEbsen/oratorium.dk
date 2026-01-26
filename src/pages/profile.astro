@@ -55,6 +55,12 @@ import '@styles/styles.css';
             <p class="text-gray-600 text-xs text-center w-full col-span-2">Indlæser dine bønner...</p>
         </div>
 
+        <!-- My Intercessions -->
+        <h2 class="text-2xl text-gold-500/80 mb-6 font-serif">Mine Forbønner <span class="text-xs text-gray-600 align-middle ml-2">(Bønner jeg støtter)</span></h2>
+        <div id="my-intercessions" class="grid grid-cols-1 md:grid-cols-2 gap-4 text-left mb-16">
+            <p class="text-gray-600 text-xs text-center w-full col-span-2">Indlæser forbønner...</p>
+        </div>
+
         <!-- Scriptorium (Saved Books) -->
         <h2 class="text-2xl text-gold-500/80 mb-6 font-serif">Scriptorium <span class="text-xs text-gray-600 align-middle ml-2">(Gemte Tekster)</span></h2>
         <div id="my-bookmarks" class="grid grid-cols-2 md:grid-cols-4 gap-6 text-left pb-16">
@@ -172,6 +178,48 @@ import '@styles/styles.css';
                 });
             } else {
                 prayersContainer.innerHTML = '<p class="text-gray-600 text-xs text-center w-full col-span-2 italic">Du har ikke delt nogen bønner endnu.</p>';
+            }
+
+            // Streak & Join Date Logic
+            const streakEl = document.querySelector('h3.text-xl.text-white'); // The first h3 is streak
+            if(streakEl && profile?.streak !== undefined) {
+                streakEl.innerText = profile.streak + " Dage";
+                // If streak > 0, make fire icon glow
+                if(profile.streak > 0) {
+                    const fireIcon = document.querySelector('.fa-fire');
+                    fireIcon?.classList.add('text-orange-500', 'animate-pulse');
+                    fireIcon?.classList.remove('text-gold-500');
+                }
+            }
+
+            // Fetch Intercessions (Joined Query)
+            const { data: intercessions } = await client
+                .from('prayer_interactions')
+                .select('prayer_id, prayers(content, author)')
+                .eq('user_id', currentUser.id)
+                .order('created_at', { ascending: false });
+
+            const intContainer = document.getElementById('my-intercessions');
+            if(intercessions && intercessions.length > 0) {
+                intContainer.innerHTML = '';
+                intercessions.forEach(int => {
+                    // Supabase join returns nested object or array depending on relation type,
+                    // but here it is Many-to-One so 'prayers' is object usually? No, it's singular if FK properly set.
+                    // Actually, TypeScript usually warns, but JS is loose. 
+                    // Let's handle 'prayers' as object.
+                    const p = int.prayers; 
+                    if(p) { // Check if prayer still exists
+                        const div = document.createElement('div');
+                        div.className = "bg-white/5 p-4 rounded border border-white/5 opacity-80 hover:opacity-100 transition-opacity";
+                        div.innerHTML = `
+                            <p class="text-gray-400 font-serif italic mb-2 text-xs">"${p.content}"</p>
+                            <p class="text-[9px] uppercase tracking-widest text-gold-500/60">- ${p.author || 'Anonym'}</p>
+                        `;
+                        intContainer.appendChild(div);
+                    }
+                });
+            } else {
+                 intContainer.innerHTML = '<p class="text-gray-600 text-xs text-center w-full col-span-2 italic">Du har ikke bedt for nogen endnu. Besøg Forbønsmuren.</p>';
             }
 
             // Fetch Bookmarks

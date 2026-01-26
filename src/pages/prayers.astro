@@ -225,6 +225,14 @@ import '@styles/styles.css';
 
         // Global function for onclick
         window.prayFor = async (id, currentCount, btn) => {
+            // Check auth
+            const { data: { session } } = await supabase.auth.getSession();
+            if(!session) {
+                alert("Log ind for at bede med.");
+                return;
+            }
+            const userId = session.user.id;
+
             // Optimistic Update
             const countLabel = btn.querySelector('.prayer-count');
             const newCount = currentCount + 1;
@@ -242,11 +250,21 @@ import '@styles/styles.css';
             document.body.appendChild(part);
             setTimeout(() => part.remove(), 1000);
 
-            // DB Update
+            // DB Update 1: Increment Count on Prayer
             await supabase
                 .from('prayers')
                 .update({ prayer_count: newCount })
                 .eq('id', id);
+            
+            // DB Update 2: Record Interaction
+            await supabase
+                .from('prayer_interactions')
+                .insert([{ user_id: userId, prayer_id: id }])
+                .then(({ error }) => {
+                     if(error && error.code !== '23505') { // Ignore unique violation (already prayed)
+                         console.error("Interaction error", error);
+                     }
+                });
         };
 
         // Submit
