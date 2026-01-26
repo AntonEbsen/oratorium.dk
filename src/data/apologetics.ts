@@ -1,93 +1,93 @@
 
 export interface Scenario {
     id: string;
-    category: 'God' | 'Jesus' | 'Morality' | 'Science';
+    category: 'Gud' | 'Jesus' | 'Moral' | 'Videnskab';
     objection: string;
-    objectionSource?: string; // e.g. "Common Atheist Argument"
+    objectionSource?: string;
     correctResponseId: string;
     responses: Response[];
-    explanation: string; // The "Win" text explaining why this is the answer
+    explanation: string;
 }
 
 export interface Response {
     id: string;
     text: string;
-    type: 'Thomistic' | 'Scriptural' | 'Modern' | 'Fallacy'; // Fallacy is a wrong answer
+    type: 'Thomistisk' | 'Bibelsk' | 'Moderne' | 'Fejlslutning';
 }
 
 export const scenarios: Scenario[] = [
     {
         id: 'problem_of_evil',
-        category: 'God',
-        objection: "If God is all-powerful and all-loving, why does suffering exist? Either He can't stop it (not powerful), or He won't (not loving).",
-        objectionSource: "The Problem of Evil (Epicurus)",
+        category: 'Gud',
+        objection: "Hvis Gud er almægtig og kærlig, hvorfor findes der så ondskab? Enten kan Han ikke stoppe det (ikke almægtig), eller også vil Han ikke (ikke kærlig).",
+        objectionSource: "Det Onde's Problem (Epikur)",
         correctResponseId: 'free_will_greater_good',
-        explanation: "St. Thomas Aquinas argues that God permits evil only to bring about a greater good. Without free will (the capacity to choose wrong), true love and virtue would be impossible. Suffering is often the result of this freedom or a means to spiritual perfection.",
+        explanation: "St. Thomas Aquinas argumenterer for, at Gud kun tillader det onde for at frembringe et større gode. Uden fri vilje (evnen til at vælge forkert) ville ægte kærlighed ikke være mulig. Lidelse er ofte prisen for denne frihed eller et middel til sjælens renselse.",
         responses: [
             {
                 id: 'not_powerful',
-                text: "Maybe God isn't totally powerful, He's just doing His best against cosmic forces.",
-                type: 'Fallacy'
+                text: "Måske er Gud ikke helt almægtig, men gør bare sit bedste mod kosmiske kræfter.",
+                type: 'Fejlslutning'
             },
             {
                 id: 'free_will_greater_good',
-                text: "God permits evil in order to draw forth a greater good. Free will is necessary for love, and the potential for evil is the price of that freedom.",
-                type: 'Thomistic'
+                text: "Gud tillader det onde for at muliggøre et større gode. Fri vilje er nødvendig for kærlighed, og muligheden for ondskab er prisen for frihed.",
+                type: 'Thomistisk'
             },
             {
                 id: 'illusion',
-                text: "Suffering is just an illusion of the mind. It is not real.",
-                type: 'Fallacy'
+                text: "Lidelse er bare en illusion i vores sind. Det er ikke virkeligt.",
+                type: 'Fejlslutning'
             }
         ]
     },
     {
         id: 'science_vs_faith',
-        category: 'Science',
-        objection: "Science explains how the universe began (Big Bang, Evolution). We don't need God as an explanation anymore.",
-        objectionSource: "Scientism",
+        category: 'Videnskab',
+        objection: "Videnskaben forklarer universets oprindelse (Big Bang, Evolution). Vi har ikke brug for Gud som forklaring længere.",
+        objectionSource: "Scientisme",
         correctResponseId: 'primary_cause',
-        explanation: "Science studies *secondary causes* (how things work within nature). God is the *Primary Cause* (why nature exists at all). Evolution explains 'how' we developed; God explains 'why' there is something rather than nothing. The Big Bang requires a Prime Mover.",
+        explanation: "Videnskaben studerer *sekundære årsager* (hvordan tingene virker i naturen). Gud er den *Primære Årsag* (hvorfor naturen overhovedet eksisterer). Evolutionen forklarer 'hvordan' vi udviklede os; Gud forklarer 'hvorfor' der er noget frem for intet. Big Bang kræver en Første Bevæger.",
         responses: [
             {
                 id: 'deny_science',
-                text: "Science is a lie. The Big Bang never happened and the earth is 6000 years old.",
-                type: 'Fallacy'
+                text: "Videnskaben lyver. Big Bang skete aldrig, og jorden er kun 6000 år gammel.",
+                type: 'Fejlslutning'
             },
             {
                 id: 'primary_cause',
-                text: "Science describes the mechanisms (secondary causes), but God provides the existence (Primary Cause). Evolution requires a Designer to set the laws in motion.",
-                type: 'Thomistic'
+                text: "Videnskaben beskriver mekanismerne (sekundære årsager), men Gud giver eksistensen (Primær Årsag). Evolution kræver en Designer til at sætte lovene i værk.",
+                type: 'Thomistisk'
             },
             {
                 id: 'separate_magisteria',
-                text: "Science and Religion have nothing to do with each other. Keep them totally separate.",
-                type: 'Modern' // Weak answer
+                text: "Videnskab og religion har intet med hinanden at gøre. Hold dem helt adskilt.",
+                type: 'Moderne'
             }
         ]
     },
     {
         id: 'morality_subjective',
-        category: 'Morality',
-        objection: "Morality is just a social construct or evolutionary survival mechanism. There is no objective 'Good' or 'Bad'.",
-        objectionSource: "Moral Relativism",
+        category: 'Moral',
+        objection: "Moral er bare en social konstruktion eller evolutionær overlevelse. Der findes ikke 'Godt' eller 'Ondt' objektivt set.",
+        objectionSource: "Moralrelativisme",
         correctResponseId: 'natural_law',
-        explanation: "If morality is subjective, then we cannot say the Holocaust was 'wrong', only that we disliked it. The Natural Law is written on the human heart; we recognize objective moral truths (like 'it is wrong to punish the innocent') which points to a Moral Lawgiver.",
+        explanation: "Hvis moral er subjektiv, kan vi ikke sige, at Holocaust var 'forkert', kun at vi ikke kunne lide det. Naturloven er skrevet i menneskets hjerte; vi genkender objektive moralske sandheder (f.eks. 'det er forkert at straffe den uskyldige'), hvilket peger på en Moralsk Lovgiver.",
         responses: [
             {
                 id: 'society_says',
-                text: "You are right, we just follow what society votes is best for everyone.",
-                type: 'Fallacy'
+                text: "Du har ret, vi følger bare, hvad samfundet stemmer om er bedst for alle.",
+                type: 'Fejlslutning'
             },
             {
                 id: 'feeling',
-                text: "Good is just what feels good to me personally.",
-                type: 'Fallacy'
+                text: "Det gode er bare det, der føles godt for mig personligt.",
+                type: 'Fejlslutning'
             },
             {
                 id: 'natural_law',
-                text: "Objective moral duties exist (Natural Law). Even you admit some things are truly evil. An objective Moral Law requires a transcendent Moral Lawgiver.",
-                type: 'Thomistic'
+                text: "Objektive moralske pligter findes (Naturloven). En objektiv Moralsk Lov kræver en transcendent Moralsk Lovgiver.",
+                type: 'Thomistisk'
             }
         ]
     }
