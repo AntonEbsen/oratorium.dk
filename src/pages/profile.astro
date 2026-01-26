@@ -294,10 +294,11 @@ import '@styles/styles.css';
 
             // Streak & Join Date Logic
             const streakEl = document.querySelector('h3.text-xl.text-white'); // The first h3 is streak
-            if(streakEl && profile?.streak !== undefined) {
-                streakEl.innerText = profile.streak + " Dage";
+            if(streakEl) {
+                const s = profile?.prayer_streak || 0;
+                streakEl.innerText = s + " Dage";
                 // If streak > 0, make fire icon glow
-                if(profile.streak > 0) {
+                if(s > 0) {
                     const fireIcon = document.querySelector('.fa-fire');
                     fireIcon?.classList.add('text-orange-500', 'animate-pulse');
                     fireIcon?.classList.remove('text-gold-500');

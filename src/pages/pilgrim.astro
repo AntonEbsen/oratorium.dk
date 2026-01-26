@@ -107,9 +107,9 @@ import '@styles/styles.css';
             
             const joinDate = new Date(profile.created_at).toLocaleDateString('da-DK', { year: 'numeric', month: 'long' });
 
-            const streakHtml = profile.streak > 0 
+            const streakHtml = profile.prayer_streak > 0 
                 ? `<div class="p-4 bg-orange-900/10 border border-orange-500/30 rounded inline-block text-orange-400 mb-6">
-                     <i class="fa-solid fa-fire mr-2"></i> ${profile.streak} Dages Streak
+                     <i class="fa-solid fa-fire mr-2"></i> ${profile.prayer_streak} Dages Streak
                    </div>` 
                 : '';
 

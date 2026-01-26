@@ -95,8 +95,10 @@ import '@styles/styles.css';
                 // Joined Date
                 const joined = new Date(p.created_at).toLocaleDateString('da-DK', { month: 'short', year: 'numeric' });
 
+                const joined = new Date(p.created_at).toLocaleDateString('da-DK', { month: 'short', year: 'numeric' });
+
                 // Stats
-                const streak = p.streak || 0;
+                const streak = p.prayer_streak || 0;
                 const roses = p.rosary_count || 0;
 
                 const el = document.createElement('a');
