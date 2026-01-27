@@ -85,7 +85,7 @@ export function getLiturgicalSeason(date: Date = new Date()): LiturgicalSeason {
     }
 
     // 2. CHRISTMAS (White)
-    const epiphany = new Date(year + 1, 0, 6); // Jan 6
+
     if (now >= christmas.getTime() || (date.getMonth() === 0 && date.getDate() <= 6)) {
         return {
             name: "Juletiden",

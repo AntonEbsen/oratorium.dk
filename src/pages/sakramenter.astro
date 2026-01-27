@@ -1,0 +1,212 @@
+---
+import '@styles/styles.css';
+---
+
+<!DOCTYPE html>
+<html lang="da">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>De Syv Sakramenter | Oratorium</title>
+    <meta name="description" content="Kirkens syv hellige handlinger, der giver nåde.">
+    <link rel="icon" type="image/svg+xml" href="/assets/favicon-cross.svg">
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700&family=Inter:wght@300;400;600&family=UnifrakturMaguntia&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    
+    <style>
+        body { font-family: 'Cinzel', serif; background: #050505; color: #f3f4f6; }
+        .sans { font-family: 'Inter', sans-serif; }
+        .blackletter { font-family: 'UnifrakturMaguntia', serif; }
+        
+        .sacrament-card {
+            transition: transform 0.3s ease, border-color 0.3s ease;
+        }
+        .sacrament-card:hover {
+            transform: translateY(-5px);
+            border-color: #d4af37; /* Gold-400 */
+        }
+    </style>
+</head>
+<body class="selection:bg-gold-500/30 min-h-screen flex flex-col pt-32">
+
+    <!-- Nav -->
+    <nav class="fixed top-8 left-8 z-50">
+        <a href="/" class="text-gold-500 hover:text-gold-300 transition-colors text-xl flex items-center gap-2 sans bg-black/50 p-2 rounded backdrop-blur">
+            <i class="fa-solid fa-arrow-left"></i>
+            <span class="text-xs uppercase tracking-widest hidden md:inline">Tilbage</span>
+        </a>
+    </nav>
+
+    <!-- Header -->
+    <header class="text-center mb-20 px-4">
+        <div class="mb-6 inline-block">
+            <i class="fa-solid fa-church text-6xl text-gold-500 drop-shadow-[0_0_15px_rgba(212,175,55,0.3)]"></i>
+        </div>
+        <h1 class="text-4xl md:text-6xl text-gold-100 mb-6 font-serif tracking-tight">De Syv Sakramenter</h1>
+        <p class="text-lg text-gray-400 italic font-serif mb-8 max-w-2xl mx-auto">
+            "Synlige tegn på usynlig nåde." — St. Augustin
+        </p>
+        <div class="h-px w-32 bg-gold-600 mx-auto"></div>
+    </header>
+
+    <main class="max-w-6xl mx-auto px-6 w-full mb-32 space-y-24">
+
+        <!-- INITIALISERING -->
+        <section>
+            <div class="flex items-center gap-4 mb-8 border-b border-gray-800 pb-4">
+                <span class="text-gold-500 text-2xl blackletter">I</span>
+                <h2 class="text-2xl text-gray-200 uppercase tracking-widest font-bold">Initiationens Sakramenter</h2>
+            </div>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                
+                <!-- DÅBEN -->
+                <div class="sacrament-card bg-white/5 border border-white/10 p-8 rounded relative overflow-hidden group">
+                    <div class="absolute top-0 right-0 p-6 opacity-10 text-8xl text-blue-500 group-hover:opacity-20 transition-opacity">
+                        <i class="fa-solid fa-water"></i>
+                    </div>
+                    <div class="relative z-10">
+                        <h3 class="text-2xl text-gold-200 font-bold mb-1">Dåben</h3>
+                        <p class="text-xs text-gray-500 uppercase tracking-widest mb-4 italic">Janua Vitae</p>
+                        <p class="text-gray-300 sans text-sm leading-relaxed mb-6">
+                            Porten til det åndelige liv. Ved vand og Helligånden renses vi for arvesynden og bliver Guds børn. Det er fundamentet for hele det kristne liv.
+                        </p>
+                        <div class="text-xs text-gold-500/80 font-mono border-t border-white/5 pt-4">
+                            <i class="fa-solid fa-quote-left mr-2"></i>"Jeg døber dig i Faderens..."
+                        </div>
+                    </div>
+                </div>
+
+                <!-- FIRMELSEN -->
+                <div class="sacrament-card bg-white/5 border border-white/10 p-8 rounded relative overflow-hidden group">
+                    <div class="absolute top-0 right-0 p-6 opacity-10 text-8xl text-red-500 group-hover:opacity-20 transition-opacity">
+                        <i class="fa-solid fa-fire"></i>
+                    </div>
+                    <div class="relative z-10">
+                        <h3 class="text-2xl text-gold-200 font-bold mb-1">Firmelsen</h3>
+                        <p class="text-xs text-gray-500 uppercase tracking-widest mb-4 italic">Signaculum Spiritus</p>
+                        <p class="text-gray-300 sans text-sm leading-relaxed mb-6">
+                            Bekræftelsen. Helligånden gives ifylde for at styrke den troende til at vidne om troen. En personlig pinse, der udruster os til åndelig kamp.
+                        </p>
+                        <div class="text-xs text-gold-500/80 font-mono border-t border-white/5 pt-4">
+                            <i class="fa-solid fa-quote-left mr-2"></i>"Vær beseglet med Helligåndens gave."
+                        </div>
+                    </div>
+                </div>
+
+                <!-- EUKARISTIEN -->
+                <div class="sacrament-card bg-white/5 border border-white/10 p-8 rounded relative overflow-hidden group">
+                    <div class="absolute top-0 right-0 p-6 opacity-10 text-8xl text-gold-400 group-hover:opacity-20 transition-opacity">
+                        <i class="fa-solid fa-bread-slice"></i>
+                    </div>
+                    <div class="relative z-10">
+                        <h3 class="text-2xl text-gold-200 font-bold mb-1">Eukaristien</h3>
+                        <p class="text-xs text-gray-500 uppercase tracking-widest mb-4 italic">Corpus Christi</p>
+                        <p class="text-gray-300 sans text-sm leading-relaxed mb-6">
+                            Kilden og højdepunktet. Under brødets og vinens skikkelse er Kristus sandt, virkeligt og substantielt til stede. Det er sjælens føde.
+                        </p>
+                        <div class="text-xs text-gold-500/80 font-mono border-t border-white/5 pt-4">
+                            <i class="fa-solid fa-quote-left mr-2"></i>"Dette er mit legeme."
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </section>
+
+        <!-- HELBREDELSE -->
+        <section>
+            <div class="flex items-center gap-4 mb-8 border-b border-gray-800 pb-4">
+                <span class="text-gold-500 text-2xl blackletter">II</span>
+                <h2 class="text-2xl text-gray-200 uppercase tracking-widest font-bold">Helbredelsens Sakramenter</h2>
+            </div>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                
+                <!-- SKRIFTEMÅLET -->
+                <div class="sacrament-card bg-white/5 border border-white/10 p-8 rounded relative overflow-hidden group">
+                    <div class="absolute top-0 right-0 p-6 opacity-10 text-8xl text-purple-500 group-hover:opacity-20 transition-opacity">
+                        <i class="fa-solid fa-key"></i>
+                    </div>
+                    <div class="relative z-10">
+                        <h3 class="text-2xl text-gold-200 font-bold mb-1">Skriftemålet</h3>
+                        <p class="text-xs text-gray-500 uppercase tracking-widest mb-4 italic">Reconciliatio</p>
+                        <p class="text-gray-300 sans text-sm leading-relaxed mb-6">
+                            Guds barmhjertigheds domstol. Her tilgives synder begået efter dåben, og sjælen genoprettes til nådens stand gennem præstens absolution.
+                        </p>
+                        <div class="text-xs text-gold-500/80 font-mono border-t border-white/5 pt-4">
+                            <i class="fa-solid fa-quote-left mr-2"></i>"Jeg løser dig fra dine synder..."
+                        </div>
+                    </div>
+                </div>
+
+                <!-- SYGES SALVELSE -->
+                <div class="sacrament-card bg-white/5 border border-white/10 p-8 rounded relative overflow-hidden group">
+                    <div class="absolute top-0 right-0 p-6 opacity-10 text-8xl text-green-500 group-hover:opacity-20 transition-opacity">
+                        <i class="fa-solid fa-oil-well"></i>
+                    </div>
+                    <div class="relative z-10">
+                        <h3 class="text-2xl text-gold-200 font-bold mb-1">Syges Salvelse</h3>
+                        <p class="text-xs text-gray-500 uppercase tracking-widest mb-4 italic">Unctio Infirmorum</p>
+                        <p class="text-gray-300 sans text-sm leading-relaxed mb-6">
+                            Styrke i lidelse. Den syge salves med hellig olie for at modtage trøst, fred og mod til at bære sygdommens byrde, og, hvis Gud vil, helbredelse.
+                        </p>
+                        <div class="text-xs text-gold-500/80 font-mono border-t border-white/5 pt-4">
+                            <i class="fa-solid fa-quote-left mr-2"></i>"Ved denne hellige salvelse..."
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </section>
+
+        <!-- KALDELSE -->
+        <section>
+            <div class="flex items-center gap-4 mb-8 border-b border-gray-800 pb-4">
+                <span class="text-gold-500 text-2xl blackletter">III</span>
+                <h2 class="text-2xl text-gray-200 uppercase tracking-widest font-bold">Tjenestens Sakramenter</h2>
+            </div>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                
+                <!-- ORDENEN -->
+                <div class="sacrament-card bg-white/5 border border-white/10 p-8 rounded relative overflow-hidden group">
+                    <div class="absolute top-0 right-0 p-6 opacity-10 text-8xl text-yellow-600 group-hover:opacity-20 transition-opacity">
+                        <i class="fa-solid fa-hands-praying"></i>
+                    </div>
+                    <div class="relative z-10">
+                        <h3 class="text-2xl text-gold-200 font-bold mb-1">Præstevielsen</h3>
+                        <p class="text-xs text-gray-500 uppercase tracking-widest mb-4 italic">Ordo Sanctus</p>
+                        <p class="text-gray-300 sans text-sm leading-relaxed mb-6">
+                            Gennem håndspålæggelse indvies mænd til at tjene Kirken som diakoner, præster og biskopper, handlende <em>in persona Christi</em> (i Kristi person).
+                        </p>
+                        <div class="text-xs text-gold-500/80 font-mono border-t border-white/5 pt-4">
+                            <i class="fa-solid fa-quote-left mr-2"></i>"Du er præst til evig tid..."
+                        </div>
+                    </div>
+                </div>
+
+                <!-- ÆGTESKABET -->
+                <div class="sacrament-card bg-white/5 border border-white/10 p-8 rounded relative overflow-hidden group">
+                    <div class="absolute top-0 right-0 p-6 opacity-10 text-8xl text-pink-500 group-hover:opacity-20 transition-opacity">
+                        <i class="fa-solid fa-rings-wedding"></i>
+                    </div>
+                    <div class="relative z-10">
+                        <h3 class="text-2xl text-gold-200 font-bold mb-1">Ægteskabet</h3>
+                        <p class="text-xs text-gray-500 uppercase tracking-widest mb-4 italic">Matrimonium</p>
+                        <p class="text-gray-300 sans text-sm leading-relaxed mb-6">
+                            En pagt mellem mand og kvinde, der afspejler Kristi kærlighed til Kirken. Det helliger familielivet og er rettet mod ægtefællernes frelse og børns opdragelse.
+                        </p>
+                        <div class="text-xs text-gold-500/80 font-mono border-t border-white/5 pt-4">
+                            <i class="fa-solid fa-quote-left mr-2"></i>"Hvad Gud har sammenføjet..."
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </section>
+
+    </main>
+
+    <!-- Footer Decoration -->
+    <div class="fixed bottom-0 left-0 w-full h-1 bg-gradient-to-r from-gold-900 via-gold-500 to-gold-900"></div>
+
+</body>
+</html>

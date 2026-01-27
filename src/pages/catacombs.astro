@@ -159,7 +159,7 @@ import '@styles/styles.css';
         window.addEventListener('scroll', () => {
             const scrollY = window.scrollY;
             const maxScroll = document.body.scrollHeight - window.innerHeight;
-            const percent = scrollY / maxScroll;
+            // const percent = scrollY / maxScroll;
             
             // Update Depth Meter
             if(depthMeter) depthMeter.innerText = Math.floor(scrollY / 10).toString();

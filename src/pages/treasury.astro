@@ -93,7 +93,7 @@ const saint = getSaint(today);
     </div>
 
     <!-- DATA for JS -->
-    <script define:vars={{ saintName: saint?.name || "", saintTitle: saint?.title || "", dateKey: `${today.getMonth()+1}-${today.getDay()}` }}>
+    <script define:vars={{ saintName: saint?.name || "", saintTitle: saint?.title || "", dateKey: `${today.getMonth()+1}-${today.getDate()}` }}>
         // Types
         const key = "shrine_relics";
         const todayKey = new Date().toISOString().split('T')[0]; // simple YYYY-MM-DD to avoid collecting same thing twice same day? Or use Saint Name as ID.

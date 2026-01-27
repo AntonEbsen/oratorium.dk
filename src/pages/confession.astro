@@ -122,7 +122,7 @@ import '@styles/styles.css';
         let currentQIndex = 0;
         let reflectionProgress = 0; // 0 to 100
         let isHolding = false;
-        let animationFrame: any;
+        let animationFrame: number;
 
         const intro = document.getElementById('intro-screen');
         const mirror = document.getElementById('mirror-screen');
@@ -177,6 +177,7 @@ import '@styles/styles.css';
                 mirror?.classList.add('hidden');
                 finale?.classList.remove('hidden');
                 setTimeout(() => finale?.classList.remove('opacity-0'), 100);
+                if (animationFrame) cancelAnimationFrame(animationFrame);
             }, 1000);
         }
 

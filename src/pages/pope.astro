@@ -1,0 +1,149 @@
+---
+import '@styles/styles.css';
+---
+
+<!DOCTYPE html>
+<html lang="da">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Paven | Petri Stol</title>
+    <meta name="robots" content="index, follow">
+    <link rel="icon" type="image/svg+xml" href="/assets/favicon-cross.svg">
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700&family=Inter:wght@300;400;600&family=UnifrakturMaguntia&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    
+    <style>
+        body { font-family: 'Cinzel', serif; background: #fdfbf7; color: #0a0a0a; } /* VATICAN WHITE/GOLD THEME */
+        .sans { font-family: 'Inter', sans-serif; }
+        .blackletter { font-family: 'UnifrakturMaguntia', serif; }
+        /* Boost contrast for inputs/text */
+        p { color: #1a1a1a; }
+        .blackletter { font-family: 'UnifrakturMaguntia', serif; }
+        
+        .papal-bg {
+            background-color: #fdfbf7;
+            background-image: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23e5c100' fill-opacity='0.05'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+        }
+    </style>
+</head>
+<body class="selection:bg-gold-500/30 min-h-screen flex flex-col pt-32 papal-bg">
+
+    <!-- Nav (Dark for contrast on light bg) -->
+    <nav class="fixed top-8 left-8 z-50">
+        <a href="/" class="text-black hover:text-gold-700 transition-colors text-xl flex items-center gap-2 sans font-bold">
+            <i class="fa-solid fa-arrow-left"></i>
+            <span class="text-xs uppercase tracking-widest hidden md:inline">Tilbage</span>
+        </a>
+    </nav>
+
+    <!-- Header -->
+    <header class="text-center mb-24 px-4 relative">
+        
+        <!-- Papal Keys Icon -->
+        <div class="mb-8 relative inline-block">
+             <i class="fa-solid fa-key text-6xl text-gold-600 transform -rotate-45 translate-x-4 drop-shadow-sm"></i>
+             <i class="fa-solid fa-key text-6xl text-gray-500 transform rotate-45 -translate-x-4 absolute top-0 left-0 -z-10 drop-shadow-sm"></i> 
+             <!-- Silver and Gold keys -->
+        </div>
+
+        <h1 class="text-5xl md:text-7xl text-black mb-6 font-serif tracking-tight drop-shadow-sm">Petri Stol</h1>
+        <p class="text-lg text-gray-900 italic font-serif mb-8 max-w-2xl mx-auto font-medium">
+            "Du er Peter, og på den klippe vil jeg bygge min kirke." — Matthæus 16:18
+        </p>
+        <div class="h-px w-32 bg-gold-600 mx-auto"></div>
+    </header>
+
+    <main class="max-w-4xl mx-auto px-6 w-full mb-32 space-y-32">
+
+        <!-- THE OFFICE -->
+        <section class="grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
+            <div>
+                 <h2 class="text-3xl text-black font-serif mb-4 font-bold">Klippen</h2>
+                 <p class="text-gray-900 sans leading-relaxed mb-4 text-justify font-medium">
+                     Paven er ikke en konge eller en diktator. Han er "Servus Servorum Dei" — Guds tjeneres tjener. Hans embede er at være det synlige enhedspunkt for hele Kirken og at bevare den tro, som er overleveret fra Apostlene, uforandret.
+                 </p>
+                 <p class="text-gray-900 sans leading-relaxed mb-4 text-justify font-medium">
+                     Når stormen raser, er Paven klippen, der sikrer, at Kirken ikke driver bort med tidsånden. Han har "Nøglemagten" til at binde og løse på jorden, et mandat givet direkte af Kristus til Peter.
+                 </p>
+            </div>
+            <div class="bg-white p-2 border border-gold-400 shadow-xl rotate-1">
+                 <!-- St Peter Image -->
+                 <div class="aspect-[1/1] bg-gray-200 flex items-center justify-center text-gray-400 italic font-serif relative overflow-hidden">
+                     <img src="/assets/keys_to_peter.png" class="w-full h-full object-cover" alt="Nøgleoverdragelsen">
+                 </div>
+                 <p class="text-[12px] text-center text-black mt-2 uppercase tracking-widest font-bold">Kristus giver Himmerigets Nøgler til Peter</p>
+            </div>
+        </section>
+
+        <!-- INFALLIBILITY -->
+        <section class="bg-white border border-gold-300 p-12 shadow-lg relative">
+            <div class="absolute -top-6 left-1/2 -translate-x-1/2 bg-[#fdfbf7] px-4 text-2xl text-gold-700"><i class="fa-solid fa-shield-halved"></i></div>
+            <h3 class="text-center text-2xl font-serif text-black mb-6 font-bold">Er Paven ufejlbarlig?</h3>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8 text-sm sans text-gray-900 font-medium">
+                <div>
+                     <h4 class="font-bold text-red-900 mb-2 uppercase tracking-widest"><i class="fa-solid fa-xmark mr-2"></i> Misforståelsen</h4>
+                     <p>Mange tror, at alt hvad Paven siger (selv om vejret eller fodbold) er ufejlbarligt, eller at han aldrig kan synde. Dette er forkert. Paven går til skriftemål ligesom os andre.</p>
+                </div>
+                <div>
+                     <h4 class="font-bold text-green-900 mb-2 uppercase tracking-widest"><i class="fa-solid fa-check mr-2"></i> Dogmet</h4>
+                     <p>Ufejlbarlighed gælder <strong>kun</strong> når han taler <em>"Ex Cathedra"</em> (fra lærestolen) og endegyldigt definerer et dogme om tro eller moral, som hele Kirken skal holde. Dette er sket yderst sjældent i historien.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- CURRENT POPE -->
+        <section class="text-center">
+            <h2 class="text-3xl text-black font-serif mb-12 font-bold">Leo XIV</h2>
+            <div class="relative inline-block group">
+                 <div class="absolute inset-0 bg-gold-400 rounded-full blur-[50px] opacity-20 group-hover:opacity-40 transition-opacity"></div>
+                 <img src="/assets/pope_leo_xiv_official.png" class="relative z-10 w-64 h-64 rounded-full object-cover border-4 border-white shadow-2xl mx-auto mb-6" alt="Pave Leo XIV">
+            </div>
+            <p class="text-xl font-serif text-black mb-2 font-bold">Pave Leo XIV</p>
+            <p class="text-xs uppercase tracking-widest text-gray-900 mb-6 font-bold">(Nuværende Pontifex)</p>
+            <p class="max-w-xl mx-auto text-black sans text-sm leading-relaxed mb-8 font-medium">
+                Den 267. efterfølger til Peter. Valgt for nylig til at lede Kirken i en ny tid. Han har taget navnet Leo for at ære de store paver, der forsvarede troen mod tidsånden.
+            </p>
+            
+            <a href="https://www.vatican.va" target="_blank" class="inline-block border border-gold-600 text-gold-800 px-8 py-3 rounded hover:bg-gold-600 hover:text-white transition-colors uppercase text-xs tracking-widest font-bold">
+                Besøg Vatikanets Side
+            </a>
+        </section>
+
+        <!-- LIST OF POPES (Snippet) -->
+         <section class="border-t border-gold-200 pt-12">
+             <h3 class="text-center font-serif text-gray-400 text-lg mb-8">Apostolisk Succession (Uddrag)</h3>
+             <div class="flex flex-wrap justify-center gap-4 opacity-60 hover:opacity-100 transition-opacity">
+                 <div class="text-center p-4">
+                     <div class="text-gold-500 font-bold blackletter text-2xl">I</div>
+                     <span class="text-xs uppercase font-bold text-gray-600">Petrus</span>
+                 </div>
+                 <div class="h-px w-8 bg-gray-300 self-center"></div>
+                 <div class="text-center p-4">
+                     <div class="text-gray-400 font-bold blackletter text-2xl">II</div>
+                     <span class="text-xs uppercase text-gray-500">Linus</span>
+                 </div>
+                 <div class="h-px w-8 bg-gray-300 self-center"></div>
+                 <div class="text-center p-4">
+                     <div class="text-gray-400 font-bold blackletter text-2xl">...</div>
+                 </div>
+                 <div class="h-px w-8 bg-gray-300 self-center"></div>
+                  <div class="text-center p-4">
+                     <div class="text-gray-500 font-bold blackletter text-2xl">CCLXV</div>
+                     <span class="text-xs uppercase text-gray-500">Benedict XVI</span>
+                 </div>
+                 <div class="h-px w-8 bg-gray-300 self-center"></div>
+                 <div class="text-center p-4 border border-gold-400 rounded bg-white">
+                     <div class="text-gold-700 font-bold blackletter text-2xl">CCLXVII</div>
+                     <span class="text-xs uppercase font-bold text-black">Leo XIV</span>
+                 </div>
+             </div>
+         </section>
+
+    </main>
+    
+    <!-- Footer Decoration -->
+    <div class="fixed bottom-0 left-0 w-full h-2 bg-gradient-to-r from-gold-200 via-gold-400 to-gold-200"></div>
+
+</body>
+</html>

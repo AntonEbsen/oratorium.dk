@@ -266,7 +266,7 @@ import '@styles/styles.css';
                 </p>
             </a>
             
-             <!-- 8. Catechism (Guide) -->
+            <!-- 8. Catechism (Guide) -->
             <a href="/catechism" class="bg-[#101015] border border-white/10 p-8 rounded hover:border-blue-500/50 transition-all group relative overflow-hidden">
                 <div class="absolute inset-0 bg-blue-900/5 group-hover:bg-blue-900/10 transition-colors"></div>
                  <i class="fa-solid fa-book-bible text-blue-500 text-3xl mb-4 group-hover:scale-110 transition-transform block relative z-10"></i>
@@ -274,6 +274,17 @@ import '@styles/styles.css';
                 <p class="text-xs text-gray-500 uppercase tracking-widest mb-4 relative z-10">Troens Fire Søjler</p>
                 <p class="text-gray-400 sans text-sm leading-relaxed relative z-10">
                     Forstå hele den katolske tro gennem de 4 hovedsøjler: Credo, Liturgi, Moral og Bøn.
+                </p>
+            </a>
+
+            <!-- 9. Pope (NEW) -->
+             <a href="/pope" class="bg-[#fdfbf7] border border-white/10 p-8 rounded hover:border-gold-500 transition-all group relative overflow-hidden">
+                <div class="absolute inset-0 bg-white/5 group-hover:bg-white/10 transition-colors"></div>
+                <i class="fa-solid fa-key text-gold-600 text-3xl mb-4 group-hover:scale-110 transition-transform block relative z-10"></i>
+                <h3 class="text-xl text-gray-900 font-serif mb-2 relative z-10">Paven</h3>
+                <p class="text-xs text-gray-500 uppercase tracking-widest mb-4 relative z-10">Petri Stol</p>
+                <p class="text-gray-600 sans text-sm leading-relaxed relative z-10">
+                    Hvem er Paven? Forstå klippen, nøglerne og den apostolske succession.
                 </p>
             </a>
 
@@ -353,7 +364,7 @@ import '@styles/styles.css';
             <p class="text-xs text-gray-500 uppercase tracking-widest sans">Forstå Kirkens Hellige Handlinger</p>
         </div>
 
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
             <!-- Mass Guide -->
             <a href="/mass" class="group relative block bg-[#0a0a0c] border border-white/10 rounded-lg overflow-hidden h-64">
                 <div class="absolute inset-0 bg-[url('https://www.transparenttextures.com/patterns/black-linen.png')] opacity-20"></div>
@@ -375,6 +386,18 @@ import '@styles/styles.css';
                     <i class="fa-solid fa-hands-praying text-4xl text-purple-500 mb-4 drop-shadow-md"></i>
                     <h3 class="text-2xl text-white font-serif mb-2 group-hover:text-purple-200 transition-colors">Skriftemål</h3>
                     <p class="text-gray-400 sans text-xs uppercase tracking-widest group-hover:text-white transition-colors">Samvittighedens Spejl</p>
+                </div>
+            </a>
+
+            <!-- Sacraments Guide -->
+            <a href="/sakramenter" class="group relative block bg-[#0a0a0c] border border-white/10 rounded-lg overflow-hidden h-64">
+                 <div class="absolute inset-0 bg-[url('https://www.transparenttextures.com/patterns/diagmonds-light.png')] opacity-10"></div>
+                 <div class="absolute inset-0 bg-blue-900/10 group-hover:bg-blue-900/20 transition-colors duration-700"></div> 
+                 
+                <div class="absolute inset-0 flex flex-col items-center justify-center z-10 p-6 text-center">
+                    <i class="fa-solid fa-dove text-4xl text-blue-400 mb-4 drop-shadow-md"></i>
+                    <h3 class="text-2xl text-white font-serif mb-2 group-hover:text-blue-200 transition-colors">Sakramenterne</h3>
+                    <p class="text-gray-400 sans text-xs uppercase tracking-widest group-hover:text-white transition-colors">De Syv Kilder</p>
                 </div>
             </a>
         </div>
@@ -407,9 +430,9 @@ import '@styles/styles.css';
         const progressBar = document.getElementById('progress-bar-container');
         const progressFill = document.getElementById('progress-fill');
         const progressText = document.getElementById('progress-text');
-        const checkboxes = document.querySelectorAll('input[type="checkbox"]');
+        const checkboxes = document.querySelectorAll<HTMLInputElement>('input[type="checkbox"]');
         
-        let currentUser = null;
+        let currentUser: any = null;
 
         async function init() {
             const { data: { session } } = await client.auth.getSession();
@@ -422,7 +445,7 @@ import '@styles/styles.css';
                 // Optional: Show "Log in to track progress" message?
                 // For now, checkboxes remain interactive but warn on click? 
                 // Or let's disable them visually or make them redirect to login.
-                checkboxes.forEach((cb: any) => {
+                checkboxes.forEach((cb) => {
                     cb.addEventListener('click', (e) => {
                         e.preventDefault();
                         if(confirm("Log ind for at gemme din rejse.")) {
@@ -446,7 +469,7 @@ import '@styles/styles.css';
             let total = checkboxes.length;
             let count = 0;
 
-            checkboxes.forEach((cb: any) => {
+            checkboxes.forEach((cb) => {
                 const id = cb.dataset.id;
                 if(checkedIds.includes(id)) {
                     cb.checked = true;
