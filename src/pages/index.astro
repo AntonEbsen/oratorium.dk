@@ -37,12 +37,20 @@ const jsonLd = {
             name: 'Oratorium',
             url: 'https://oratorium.dk/',
             logo: 'https://oratorium.dk/assets/favicon-cross.svg',
+            email: 'anton.ebsen@proton.me',
+            contactPoint: {
+                '@type': 'ContactPoint',
+                email: 'anton.ebsen@proton.me',
+                contactType: 'customer support',
+                availableLanguage: ['da', 'en'],
+            },
         },
     ],
 };
 ---
 
 <Layout
+    fullscreen
     title="Ad Majorem Dei Gloriam ✝️ | Oratorium"
     description="Oratorium.dk – Den Katolske Kirkes digitale forgård. Find messetider, lær om troen, bed rosenkransen og find vejen hjem."
     bodyClass="bg-[#020205] text-white overflow-hidden h-screen w-screen m-0 p-0"

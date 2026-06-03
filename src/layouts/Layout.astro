@@ -4,6 +4,7 @@
 // can inject page-specific <link>/<style> into <head> via the "head" slot.
 import '@styles/styles.css';
 import BaseHead from '@components/BaseHead.astro';
+import Footer from '@components/Footer.astro';
 
 export interface Props {
     title?: string;
@@ -16,6 +17,8 @@ export interface Props {
     bodyClass?: string;
     /** Optional id for <body> (some pages' scripts target it). */
     bodyId?: string;
+    /** Skip the shared footer on immersive full-screen pages. */
+    fullscreen?: boolean;
     lang?: string;
 }
 
@@ -28,6 +31,7 @@ const {
     noindex,
     bodyClass = '',
     bodyId,
+    fullscreen = false,
     lang = 'da',
 } = Astro.props;
 ---
@@ -46,7 +50,22 @@ const {
         <slot name="head" />
     </head>
     <body id={bodyId} class:list={['selection:bg-gold-500/30', bodyClass]}>
+        <a href="#hovedindhold" class="skip-link sans">Spring til indhold</a>
         <slot />
+        {!fullscreen && <Footer />}
+        <script is:inline>
+            (() => {
+                const m = document.querySelector('main');
+                const sk = document.querySelector('.skip-link');
+                if (m) {
+                    if (!m.id) m.id = 'hovedindhold';
+                    m.setAttribute('tabindex', '-1');
+                    if (sk) sk.setAttribute('href', '#' + m.id);
+                } else if (sk) {
+                    sk.remove();
+                }
+            })();
+        </script>
     </body>
 </html>
 
@@ -63,5 +82,44 @@ const {
     }
     html {
         scroll-behavior: smooth;
+    }
+
+    :focus-visible {
+        outline: 2px solid #d4af37;
+        outline-offset: 2px;
+        border-radius: 2px;
+    }
+
+    .skip-link {
+        position: fixed;
+        top: 0;
+        left: 0;
+        z-index: 100;
+        transform: translateY(-130%);
+        background: #d4af37;
+        color: #000;
+        padding: 0.7rem 1.2rem;
+        font-size: 0.75rem;
+        letter-spacing: 0.1em;
+        text-transform: uppercase;
+        transition: transform 0.2s ease;
+    }
+    .skip-link:focus {
+        transform: translateY(0);
+    }
+
+    /* Respect users who prefer reduced motion — neutralize the site's
+       many ambient animations/transitions. */
+    @media (prefers-reduced-motion: reduce) {
+        *,
+        *::before,
+        *::after {
+            animation-duration: 0.001ms !important;
+            animation-iteration-count: 1 !important;
+            transition-duration: 0.001ms !important;
+        }
+        html {
+            scroll-behavior: auto !important;
+        }
     }
 </style>

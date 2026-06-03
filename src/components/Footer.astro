@@ -1,0 +1,75 @@
+---
+// Shared site footer. Rendered by Layout.astro on scrollable content pages
+// (skipped on immersive full-screen pages via the `fullscreen` prop).
+const year = new Date().getFullYear();
+
+const findLinks = [
+    { label: 'Vejen Hjem', href: '/seek' },
+    { label: 'Messetider', href: '/locations' },
+    { label: 'Messen forklaret', href: '/mass' },
+    { label: 'Om Oratorium', href: '/om' },
+];
+const prayLinks = [
+    { label: 'Rosenkransen', href: '/rosary' },
+    { label: 'Bønner', href: '/prayers' },
+    { label: 'Dagligt Examen', href: '/speculum' },
+    { label: 'Kirkekalenderen', href: '/calendar' },
+];
+---
+
+<footer class="sans mt-auto border-t border-gold-900/40 bg-black/40 text-gray-400">
+    <div class="max-w-6xl mx-auto px-6 py-16 grid grid-cols-1 md:grid-cols-4 gap-10">
+        <!-- Brand -->
+        <div class="md:col-span-1">
+            <div class="flex items-center gap-2 mb-4">
+                <i class="fa-solid fa-cross text-gold-500" aria-hidden="true"></i>
+                <span class="font-serif text-gold-200 text-lg tracking-wide">Oratorium</span>
+            </div>
+            <p class="text-xs leading-relaxed text-gray-500">
+                Den Katolske Kirkes digitale forgård — et sted for bøn, læring og fordybelse.
+                <span class="block mt-2 text-gold-500/70 italic">Ad Majorem Dei Gloriam.</span>
+            </p>
+        </div>
+
+        <!-- Find vej -->
+        <nav aria-label="Find vej">
+            <h2 class="text-[10px] uppercase tracking-[0.3em] text-gold-500/60 mb-4">Find vej</h2>
+            <ul class="space-y-2 text-sm">
+                {findLinks.map((l) => (
+                    <li><a href={l.href} class="hover:text-gold-300 transition-colors">{l.label}</a></li>
+                ))}
+            </ul>
+        </nav>
+
+        <!-- Bed -->
+        <nav aria-label="Bøn og andagt">
+            <h2 class="text-[10px] uppercase tracking-[0.3em] text-gold-500/60 mb-4">Bøn &amp; andagt</h2>
+            <ul class="space-y-2 text-sm">
+                {prayLinks.map((l) => (
+                    <li><a href={l.href} class="hover:text-gold-300 transition-colors">{l.label}</a></li>
+                ))}
+            </ul>
+        </nav>
+
+        <!-- Contact + legal -->
+        <div>
+            <h2 class="text-[10px] uppercase tracking-[0.3em] text-gold-500/60 mb-4">Kontakt</h2>
+            <ul class="space-y-2 text-sm">
+                <li>
+                    <a href="mailto:anton.ebsen@proton.me" class="hover:text-gold-300 transition-colors break-all">
+                        <i class="fa-solid fa-envelope mr-2 text-gold-500/50" aria-hidden="true"></i>anton.ebsen@proton.me
+                    </a>
+                </li>
+                <li>
+                    <a href="/privatlivspolitik" class="hover:text-gold-300 transition-colors">
+                        <i class="fa-solid fa-shield-halved mr-2 text-gold-500/50" aria-hidden="true"></i>Privatlivspolitik
+                    </a>
+                </li>
+            </ul>
+        </div>
+    </div>
+
+    <div class="border-t border-white/5 py-6 px-6 text-center text-[11px] text-gray-600">
+        © {year} Oratorium · oratorium.dk
+    </div>
+</footer>

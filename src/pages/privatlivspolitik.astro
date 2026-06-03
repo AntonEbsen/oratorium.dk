@@ -1,0 +1,91 @@
+---
+import Layout from '@layouts/Layout.astro';
+
+const updated = '3. juni 2026';
+const email = 'anton.ebsen@proton.me';
+
+const sections = [
+    {
+        h: 'Dataansvarlig',
+        body: `Denne hjemmeside (oratorium.dk) drives privat af Anton Meier Ebsen Jørgensen. Spørgsmål om dine personoplysninger kan rettes til ${email}.`,
+    },
+    {
+        h: 'Hvilke oplysninger behandler vi?',
+        list: [
+            '<strong>Konto (Pilgrimspas):</strong> Hvis du opretter en konto, gemmes din e-mailadresse og et krypteret kodeord, så du kan logge ind.',
+            '<strong>Din rejse:</strong> Fremskridt, stempler og afkrydsninger, du selv vælger at gemme, knyttes til din konto.',
+            '<strong>Forbøn og lys:</strong> Tekst, du selv indtaster (bønneintentioner), gemmes for at kunne vises i fællesskabet. Skriv ikke følsomme personoplysninger her.',
+            '<strong>Statistik:</strong> Vi bruger Vercel Web Analytics, som er anonym, cookiefri og aggregeret (fx antal sidevisninger). Den indsamler ikke personhenførbare oplysninger.',
+        ],
+    },
+    {
+        h: 'Cookies',
+        body: 'Vi bruger ikke cookies til sporing eller markedsføring. Hvis du logger ind, gemmes din session i din browsers lokale lager (localStorage) — ikke i cookies. Derfor viser vi ingen cookie-samtykkebanner.',
+    },
+    {
+        h: 'Databehandlere',
+        list: [
+            '<strong>Supabase</strong> — database og login.',
+            '<strong>Vercel</strong> — hosting og anonym statistik.',
+            '<strong>Google (Gemini)</strong> — driver AI-samtalen med "Thomas Aquinas". De beskeder, du sender i chatten, behandles af Google for at generere et svar. Indtast ikke følsomme personoplysninger i chatten.',
+        ],
+    },
+    {
+        h: 'Dine rettigheder',
+        body: 'Efter databeskyttelsesforordningen (GDPR) har du ret til indsigt i, berigtigelse og sletning af dine oplysninger samt til at gøre indsigelse mod behandlingen. Du kan slette din konto eller bede os om det ved at skrive til os. Du kan også klage til Datatilsynet (datatilsynet.dk).',
+    },
+    {
+        h: 'Opbevaring',
+        body: 'Vi opbevarer dine oplysninger, så længe du har en konto. Sletter du din konto, slettes dine tilknyttede data.',
+    },
+    {
+        h: 'Ændringer',
+        body: 'Vi kan opdatere denne politik. Den nyeste version findes altid på denne side.',
+    },
+];
+---
+
+<Layout
+    title="Privatlivspolitik | Oratorium"
+    description="Sådan behandler oratorium.dk dine personoplysninger: konto, forbøn, statistik og dine rettigheder efter GDPR."
+    bodyClass="selection:bg-gold-500/30 min-h-screen flex flex-col pt-32"
+>
+    <!-- Nav -->
+    <nav class="fixed top-8 left-8 z-50">
+        <a
+            href="/"
+            class="text-gold-500/60 hover:text-gold-400 transition-colors text-xl flex items-center gap-2 sans"
+        >
+            <i class="fa-solid fa-arrow-left" aria-hidden="true"></i>
+            <span class="text-xs uppercase tracking-widest hidden md:inline">Tilbage til Helligdommen</span>
+        </a>
+    </nav>
+
+    <main class="max-w-3xl mx-auto px-6 pb-32 w-full">
+        <header class="text-center mb-16">
+            <h1 class="text-4xl md:text-5xl text-gold-500 font-serif mb-4 drop-shadow-[0_0_15px_rgba(212,175,55,0.25)]">
+                Privatlivspolitik
+            </h1>
+            <p class="text-xs text-gray-500 uppercase tracking-[0.3em] sans">Senest opdateret: {updated}</p>
+        </header>
+
+        <div class="space-y-12 sans">
+            {sections.map((s) => (
+                <section>
+                    <h2 class="text-xl text-gold-200 font-serif mb-4 border-b border-gold-900/40 pb-2">{s.h}</h2>
+                    {s.body && <p class="text-gray-400 text-sm leading-relaxed" set:html={s.body} />}
+                    {s.list && (
+                        <ul class="space-y-3 text-gray-400 text-sm leading-relaxed list-disc pl-5">
+                            {s.list.map((item) => <li set:html={item} />)}
+                        </ul>
+                    )}
+                </section>
+            ))}
+
+            <p class="text-center text-gray-500 text-sm pt-6">
+                Spørgsmål? Skriv til
+                <a href={`mailto:${email}`} class="text-gold-400 hover:text-gold-200 transition-colors">{email}</a>.
+            </p>
+        </div>
+    </main>
+</Layout>
