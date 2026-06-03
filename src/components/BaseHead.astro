@@ -1,13 +1,12 @@
 ---
-// Single source of truth for <head>: meta, fonts, PWA, SEO, service worker.
-// Pages set page-specific fonts via the `extraFonts` prop and inject any extra
-// head markup through the named "head" slot exposed by Layout.astro.
+// Single source of truth for <head>: meta, PWA, SEO, service worker.
+// Fonts + Font Awesome are self-hosted and imported globally in Layout.astro.
 export interface Props {
     title?: string;
     description?: string;
     /** Path or absolute URL to the social share image. */
     image?: string;
-    /** Extra Google Fonts family specifiers, e.g. "Playfair+Display:wght@400;700". */
+    /** Deprecated: fonts are now self-hosted globally; kept for back-compat. */
     extraFonts?: string[];
     /** Open Graph type, e.g. "website" or "article". */
     ogType?: string;
@@ -19,18 +18,12 @@ const {
     title = 'Oratorium | Det Digitale Kapel',
     description = 'Oratorium.dk – Den Katolske Kirkes digitale forgård. Find messetider, lær om troen, bed rosenkransen og find vejen hjem.',
     image = '/assets/monstrance.png',
-    extraFonts = [],
     ogType = 'website',
     noindex = false,
 } = Astro.props;
 
 const canonical = new URL(Astro.url.pathname, SITE).href;
 const ogImage = new URL(image, SITE).href;
-
-// Cinzel + Inter are loaded on every page; pages opt into the rest.
-const baseFonts = ['Cinzel:wght@400;700', 'Inter:wght@300;400;600'];
-const fontQuery = [...baseFonts, ...extraFonts].map((f) => `family=${f}`).join('&');
-const fontsHref = `https://fonts.googleapis.com/css2?${fontQuery}&display=swap`;
 ---
 
 <meta charset="UTF-8" />
@@ -61,15 +54,6 @@ const fontsHref = `https://fonts.googleapis.com/css2?${fontQuery}&display=swap`;
 <meta name="twitter:title" content={title} />
 <meta name="twitter:description" content={description} />
 <meta name="twitter:image" content={ogImage} />
-
-<!-- Fonts -->
-<link rel="preconnect" href="https://fonts.googleapis.com" />
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-<link href={fontsHref} rel="stylesheet" />
-<link
-    rel="stylesheet"
-    href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"
-/>
 
 <!-- Service Worker -->
 <script is:inline>

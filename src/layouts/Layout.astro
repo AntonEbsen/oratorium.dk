@@ -6,6 +6,25 @@ import '@styles/styles.css';
 import BaseHead from '@components/BaseHead.astro';
 import Footer from '@components/Footer.astro';
 
+// Self-hosted fonts (replaces the Google Fonts CDN) + Font Awesome (replaces cdnjs).
+// @font-face CSS is global, but each woff2 is fetched only on pages that use it.
+import '@fontsource/cinzel/400.css';
+import '@fontsource/cinzel/700.css';
+import '@fontsource/inter/300.css';
+import '@fontsource/inter/400.css';
+import '@fontsource/inter/600.css';
+import '@fontsource/playfair-display/400.css';
+import '@fontsource/playfair-display/700.css';
+import '@fontsource/playfair-display/400-italic.css';
+import '@fontsource/playfair-display/700-italic.css';
+import '@fontsource/crimson-text/400.css';
+import '@fontsource/crimson-text/600.css';
+import '@fontsource/crimson-text/400-italic.css';
+import '@fontsource/unifrakturmaguntia/400.css';
+import '@fontsource/nanum-myeongjo/400.css';
+import '@fontsource/nanum-myeongjo/700.css';
+import '@fortawesome/fontawesome-free/css/all.min.css';
+
 export interface Props {
     title?: string;
     description?: string;

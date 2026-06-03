@@ -42,6 +42,9 @@ export default {
             },
             fontFamily: {
                 sans: ['var(--font-main)', 'sans-serif'],
+                // Map Tailwind's `font-serif` to the brand display face (Cinzel),
+                // which is loaded site-wide; previously it fell back to Georgia.
+                serif: ['Cinzel', 'ui-serif', 'Georgia', 'serif'],
             }
         },
     },
