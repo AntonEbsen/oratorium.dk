@@ -1,23 +1,14 @@
 
 ---
-import '@styles/styles.css';
+import Layout from '@layouts/Layout.astro';
 ---
 
-<!DOCTYPE html>
-<html lang="da">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Vejen Hjem | Oratorium</title>
-    <meta name="robots" content="index, follow">
-    <link rel="icon" type="image/svg+xml" href="/assets/favicon-cross.svg">
-    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700&family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
-    
+<Layout
+    title="Vejen Hjem | Oratorium"
+    description="For dig, der søger sandheden, skønheden og det evige. En guide til vejen ind i Den Katolske Kirke — fra de første spørgsmål til optagelse."
+    bodyClass="min-h-screen flex flex-col pt-32"
+>
     <style>
-        body { font-family: 'Cinzel', serif; background: #020205; color: #e5e7eb; }
-        .sans { font-family: 'Inter', sans-serif; }
-        
         /* Timeline Line */
         .timeline-line::before {
             content: '';
@@ -31,8 +22,6 @@ import '@styles/styles.css';
             z-index: 0;
         }
     </style>
-</head>
-<body class="selection:bg-gold-500/30 min-h-screen flex flex-col pt-32">
 
     <!-- Nav -->
     <nav class="fixed top-8 left-8 z-50">
@@ -501,5 +490,4 @@ import '@styles/styles.css';
 
         init();
     </script>
-</body>
-</html>
+</Layout>
