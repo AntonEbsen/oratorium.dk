@@ -1,31 +1,23 @@
-
 ---
-import '@styles/styles.css';
+import Layout from '@layouts/Layout.astro';
 ---
 
-<!DOCTYPE html>
-<html lang="da">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Pilgrimsrejser | Oratorium</title>
-    <meta name="robots" content="index, follow">
-    <link rel="icon" type="image/svg+xml" href="/assets/favicon-cross.svg">
-    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700&family=Inter:wght@300;400;600&family=Playfair+Display:ital@0;1&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
-    
-    <style>
-        body { font-family: 'Cinzel', serif; background: #050508; color: #e5e7eb; }
+<Layout
+    title="Pilgrimsrejser | Oratorium"
+    description="Pilgrimsrejser og danske helligdomme — find vej til Åsebakken, Øm Kloster og andre hellige steder i Danmark."
+    extraFonts={["Playfair+Display:ital@0;1"]}
+    bodyClass="selection:bg-green-800/30 min-h-screen flex flex-col pt-32"
+>
+
+<style is:global>
+body { font-family: 'Cinzel', serif; background: #050508; color: #e5e7eb; }
         .sans { font-family: 'Inter', sans-serif; }
         
         .map-card:hover {
             transform: translateY(-5px);
             box-shadow: 0 10px 30px rgba(0,0,0,0.5);
         }
-    </style>
-</head>
-<body class="selection:bg-green-800/30 min-h-screen flex flex-col pt-32">
-
+</style>
     <!-- Nav -->
     <nav class="fixed top-8 left-8 z-50">
         <a href="/seek" class="text-green-600 hover:text-green-400 transition-colors text-xl flex items-center gap-2 sans bg-black/50 p-2 rounded backdrop-blur">
@@ -166,5 +158,4 @@ import '@styles/styles.css';
 
     </main>
 
-</body>
-</html>
+</Layout>

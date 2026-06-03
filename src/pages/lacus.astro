@@ -1,23 +1,15 @@
-
 ---
-import '@styles/styles.css';
+import Layout from '@layouts/Layout.astro';
 ---
 
-<!DOCTYPE html>
-<html lang="da">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Lacus | Refleksionsbassinet</title>
-    <meta name="robots" content="noindex, nofollow">
-    
-    <link rel="icon" type="image/svg+xml" href="/assets/favicon-cross.svg">
-    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
-    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-    
-    <style>
-        body { font-family: 'Cinzel', serif; background: #000205; overflow: hidden; }
+<Layout
+    title="Lacus | Refleksionsbassinet"
+    noindex
+    bodyClass="w-screen h-screen"
+>
+
+<style is:global>
+body { font-family: 'Cinzel', serif; background: #000205; overflow: hidden; }
         
         /* Water Effect */
         .water-bg {
@@ -108,11 +100,9 @@ import '@styles/styles.css';
             text-transform: uppercase;
             letter-spacing: 0.2em;
         }
+</style>
 
-    </style>
-</head>
-<body class="w-screen h-screen">
-
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <!-- Nav -->
     <nav class="fixed top-8 left-8 z-50">
         <a href="/" class="text-white/40 hover:text-white transition-colors text-xl flex items-center gap-2">
@@ -287,5 +277,4 @@ import '@styles/styles.css';
         // Maybe later.
         
     </script>
-</body>
-</html>
+</Layout>

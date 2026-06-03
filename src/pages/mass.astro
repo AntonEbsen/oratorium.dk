@@ -1,21 +1,35 @@
-
 ---
-import '@styles/styles.css';
+import Layout from '@layouts/Layout.astro';
+
+const jsonLd = {
+    '@context': 'https://schema.org',
+    '@type': 'Article',
+    headline: 'Messen forklart — en guide til den katolske liturgi',
+    description: 'Messen forklart, trin for trin — fra indgangsbøn til velsignelse, i både den nye og den traditionelle messe (Vetus Ordo).',
+    inLanguage: 'da-DK',
+    mainEntityOfPage: 'https://oratorium.dk/mass',
+    about: [
+        { '@type': 'Thing', name: 'Den hellige messe' },
+        { '@type': 'Thing', name: 'Katolsk liturgi' },
+    ],
+    publisher: {
+        '@type': 'Organization',
+        name: 'Oratorium',
+        url: 'https://oratorium.dk/',
+    },
+};
 ---
 
-<!DOCTYPE html>
-<html lang="da">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Messen Forklart | Oratorium</title>
-    <meta name="robots" content="index, follow">
-    <link rel="icon" type="image/svg+xml" href="/assets/favicon-cross.svg">
-    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700&family=Inter:wght@300;400;600&family=UnifrakturMaguntia&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
-    
-    <style>
-        body { font-family: 'Cinzel', serif; background: #020205; color: #e5e7eb; transition: background 0.5s ease; }
+<Layout
+    title="Messen Forklart | Oratorium"
+    description="Messen forklart, trin for trin — fra indgangsbøn til velsignelse. Forstå liturgien i både den nye og den traditionelle messe (Vetus Ordo)."
+    extraFonts={["UnifrakturMaguntia"]}
+    bodyClass="selection:bg-gold-500/30 min-h-screen flex flex-col pt-32"
+>
+    <script type="application/ld+json" slot="head" set:html={JSON.stringify(jsonLd)}></script>
+
+<style is:global>
+body { font-family: 'Cinzel', serif; background: #020205; color: #e5e7eb; transition: background 0.5s ease; }
         .sans { font-family: 'Inter', sans-serif; }
         .blackletter { font-family: 'UnifrakturMaguntia', cursive; }
         
@@ -58,10 +72,7 @@ import '@styles/styles.css';
             animation: slideIn 0.6s ease-out forwards;
             opacity: 0;
         }
-    </style>
-</head>
-<body class="selection:bg-gold-500/30 min-h-screen flex flex-col pt-32">
-
+</style>
     <!-- Nav -->
     <nav class="fixed top-8 left-8 z-50">
         <a href="/seek" class="text-gold-500/60 hover:text-gold-400 transition-colors text-xl flex items-center gap-2 sans bg-black/50 p-2 rounded backdrop-blur">
@@ -304,5 +315,4 @@ import '@styles/styles.css';
         window.setMode = setMode;
 
     </script>
-</body>
-</html>
+</Layout>

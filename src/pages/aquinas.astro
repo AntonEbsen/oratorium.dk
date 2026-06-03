@@ -1,25 +1,16 @@
 ---
-import '@styles/styles.css';
+import Layout from '@layouts/Layout.astro';
 ---
 
-<!DOCTYPE html>
-<html lang="da">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Summa | Thomas Aquinas</title>
-    <meta name="robots" content="noindex, nofollow">
-    
-    <!-- Fonts -->
-    <link rel="icon" type="image/svg+xml" href="/assets/favicon-cross.svg">
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700&family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=UnifrakturMaguntia&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
-    
-    <style>
-        body { font-family: 'Cinzel', serif; }
+<Layout
+    title="Summa | Thomas Aquinas"
+    extraFonts={["Playfair+Display:ital,wght@0,400;0,700;1,400","UnifrakturMaguntia"]}
+    noindex
+    bodyClass="bg-[#0a0a0c] text-gray-300 h-screen w-screen overflow-hidden m-0 p-0 selection:bg-gold-500/30"
+>
+
+<style is:global>
+body { font-family: 'Cinzel', serif; }
         .text-body { font-family: 'Playfair Display', serif; }
         
         /* Scriptorium Mode (Gothic) */
@@ -100,10 +91,9 @@ import '@styles/styles.css';
         ::-webkit-scrollbar-track { background: #1a1a1a; }
         ::-webkit-scrollbar-thumb { background: #444; border-radius: 3px; }
         ::-webkit-scrollbar-thumb:hover { background: #888; }
-    </style>
-</head>
-<body class="bg-[#0a0a0c] text-gray-300 h-screen w-screen overflow-hidden m-0 p-0 selection:bg-gold-500/30">
+</style>
 
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
     <!-- Background: Dark Monastery Cell -->
     <div class="fixed inset-0 z-0 pointer-events-none bg-radial-gradient from-[#1a1a20] via-[#050508] to-black">
         <!-- Subtle paper texture overlay -->
@@ -585,5 +575,4 @@ import '@styles/styles.css';
             to { opacity: 1; }
         }
     </style>
-</body>
-</html>
+</Layout>

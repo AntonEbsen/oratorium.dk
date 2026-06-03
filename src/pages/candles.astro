@@ -1,25 +1,16 @@
-
 ---
-import '@styles/styles.css';
+import Layout from '@layouts/Layout.astro';
 ---
 
-<!DOCTYPE html>
-<html lang="da">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Capella Lucis | Votivekapellet</title>
-    <meta name="robots" content="noindex, nofollow">
-    
-    <!-- Fonts -->
-    <link rel="icon" type="image/svg+xml" href="/assets/favicon-cross.svg">
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700&family=Playfair+Display:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
-    
-    <style>
-        body { font-family: 'Cinzel', serif; }
+<Layout
+    title="Capella Lucis | Votivekapellet"
+    extraFonts={["Playfair+Display:ital,wght@0,400;0,700;1,400"]}
+    noindex
+    bodyClass="bg-[#050508] text-gray-300 min-h-screen relative overflow-hidden selection:bg-orange-500/30"
+>
+
+<style is:global>
+body { font-family: 'Cinzel', serif; }
         .text-body { font-family: 'Playfair Display', serif; }
         
         /* Candle Flickering Animation */
@@ -42,10 +33,7 @@ import '@styles/styles.css';
         .candle-glow:hover {
             box-shadow: 0 0 25px 5px rgba(255, 165, 0, 0.5);
         }
-    </style>
-</head>
-<body class="bg-[#050508] text-gray-300 min-h-screen relative overflow-hidden selection:bg-orange-500/30">
-
+</style>
     <!-- Background -->
     <div class="fixed inset-0 z-0 pointer-events-none bg-black">
         <div class="absolute inset-0 bg-gradient-to-b from-black via-[#0a0500] to-[#1a0f05] opacity-80"></div>
@@ -292,5 +280,4 @@ import '@styles/styles.css';
         .delay-100 { animation-delay: 0.1s; }
         .delay-200 { animation-delay: 0.2s; }
     </style>
-</body>
-</html>
+</Layout>

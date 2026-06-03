@@ -1,25 +1,20 @@
-
 ---
-import '@styles/styles.css';
+import Layout from '@layouts/Layout.astro';
 import { dictionary } from '../data/dictionary';
 
 // Sort alphabetically
 const sortedDictionary = dictionary.sort((a, b) => a.word.localeCompare(b.word));
 ---
 
-<!DOCTYPE html>
-<html lang="da">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Katolsk Ordbog | Oratorium</title>
-    <meta name="robots" content="index, follow">
-    <link rel="icon" type="image/svg+xml" href="/assets/favicon-cross.svg">
-    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700&family=Inter:wght@300;400;600&family=Playfair+Display:ital@0;1&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
-    
-    <style>
-        body { font-family: 'Cinzel', serif; background: #08080a; color: #e5e7eb; }
+<Layout
+    title="Katolsk Ordbog | Oratorium"
+    description="Katolsk ordbog — slå kirkens ord og begreber op. Forstå eukaristi, transsubstantiation, nåde, liturgi og meget mere på dansk."
+    extraFonts={["Playfair+Display:ital@0;1"]}
+    bodyClass="selection:bg-gold-500/30 min-h-screen flex flex-col pt-32 relative"
+>
+
+<style is:global>
+body { font-family: 'Cinzel', serif; background: #08080a; color: #e5e7eb; }
         .sans { font-family: 'Inter', sans-serif; }
         .serif-italic { font-family: 'Playfair Display', serif; font-style: italic; }
         
@@ -28,10 +23,7 @@ const sortedDictionary = dictionary.sort((a, b) => a.word.localeCompare(b.word))
             opacity: 0.05;
             pointer-events: none;
         }
-    </style>
-</head>
-<body class="selection:bg-gold-500/30 min-h-screen flex flex-col pt-32 relative">
-    
+</style>
     <div class="fixed inset-0 paper-texture z-0"></div>
 
     <!-- Nav -->
@@ -124,5 +116,4 @@ const sortedDictionary = dictionary.sort((a, b) => a.word.localeCompare(b.word))
             }
         });
     </script>
-</body>
-</html>
+</Layout>

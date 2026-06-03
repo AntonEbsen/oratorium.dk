@@ -1,25 +1,17 @@
-
 ---
-import '@styles/styles.css';
+import Layout from '@layouts/Layout.astro';
 ---
 
-<!DOCTYPE html>
-<html lang="da">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Adoratio Perpetua | Det Stille Vagt</title>
-    <meta name="robots" content="noindex, nofollow">
-    
-    <!-- Fonts -->
-    <link rel="icon" type="image/svg+xml" href="/assets/favicon-cross.svg">
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700&family=Playfair+Display:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
-    
-    <style>
-        body { font-family: 'Cinzel', serif; }
+<Layout
+    title="Adoratio Perpetua | Det Stille Vagt"
+    extraFonts={["Playfair+Display:ital,wght@0,400;0,700;1,400"]}
+    noindex
+    bodyClass="bg-black text-gold-100 min-h-screen relative overflow-hidden flex flex-col items-center justify-center select-none cursor-none"
+    bodyId="body"
+>
+
+<style is:global>
+body { font-family: 'Cinzel', serif; }
         .text-body { font-family: 'Playfair Display', serif; }
         
         /* Monstrance Glow */
@@ -37,10 +29,7 @@ import '@styles/styles.css';
             pointer-events: none;
             transition: opacity 2s ease-in-out;
         }
-    </style>
-</head>
-<body class="bg-black text-gold-100 min-h-screen relative overflow-hidden flex flex-col items-center justify-center select-none cursor-none" id="body">
-
+</style>
     <!-- Background (Darkness) -->
     <div class="fixed inset-0 z-0 bg-[#020202]">
         <div class="absolute inset-0 bg-gradient-radial from-[#1a1205] to-black opacity-60"></div>
@@ -230,5 +219,4 @@ import '@styles/styles.css';
         }
 
     </script>
-</body>
-</html>
+</Layout>

@@ -1,7 +1,5 @@
-
 ---
-import '@styles/styles.css';
-
+import Layout from '@layouts/Layout.astro';
 // Data: Latin Prayers broken down word-by-word
 const prayers = [
     {
@@ -179,19 +177,15 @@ const prayers = [
 ];
 ---
 
-<!DOCTYPE html>
-<html lang="da">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Schola Latina | Lær Kirkens Sprog</title>
-    <meta name="robots" content="index, follow">
-    <link rel="icon" type="image/svg+xml" href="/assets/favicon-cross.svg">
-    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700&family=Inter:wght@300;400;600&family=Playfair+Display:ital@0;1&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
-    
-    <style>
-        body { font-family: 'Cinzel', serif; background: #050505; color: #e5e7eb; }
+<Layout
+    title="Schola Latina | Lær Kirkens Sprog"
+    description="Schola Latina — lær Kirkens sprog. Bed Pater Noster og Ave Maria på latin, og forstå dybden i de hellige ord."
+    extraFonts={["Playfair+Display:ital@0;1"]}
+    bodyClass="selection:bg-gold-500/30 min-h-screen flex flex-col pt-32 pb-24"
+>
+
+<style is:global>
+body { font-family: 'Cinzel', serif; background: #050505; color: #e5e7eb; }
         .sans { font-family: 'Inter', sans-serif; }
         .serif-italic { font-family: 'Playfair Display', serif; font-style: italic; }
         
@@ -258,10 +252,7 @@ const prayers = [
             margin-top: 2px;
             pointer-events: none;
         }
-    </style>
-</head>
-<body class="selection:bg-gold-500/30 min-h-screen flex flex-col pt-32 pb-24">
-
+</style>
     <!-- Nav -->
     <nav class="fixed top-8 left-8 z-50">
         <a href="/seek" class="text-white/40 hover:text-white transition-colors text-xl flex items-center gap-2">
@@ -414,5 +405,4 @@ const prayers = [
         #prayer-content { transition: opacity 0.2s ease; }
     </style>
 
-</body>
-</html>
+</Layout>

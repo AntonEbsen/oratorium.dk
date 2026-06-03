@@ -1,20 +1,16 @@
 ---
-import '@styles/styles.css';
+import Layout from '@layouts/Layout.astro';
 ---
 
-<!DOCTYPE html>
-<html lang="da">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>De Syv Sakramenter | Oratorium</title>
-    <meta name="description" content="Kirkens syv hellige handlinger, der giver nåde.">
-    <link rel="icon" type="image/svg+xml" href="/assets/favicon-cross.svg">
-    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700&family=Inter:wght@300;400;600&family=UnifrakturMaguntia&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
-    
-    <style>
-        body { font-family: 'Cinzel', serif; background: #050505; color: #f3f4f6; }
+<Layout
+    title="De Syv Sakramenter | Oratorium"
+    description="Kirkens syv hellige handlinger, der giver nåde."
+    extraFonts={["UnifrakturMaguntia"]}
+    bodyClass="selection:bg-gold-500/30 min-h-screen flex flex-col pt-32"
+>
+
+<style is:global>
+body { font-family: 'Cinzel', serif; background: #050505; color: #f3f4f6; }
         .sans { font-family: 'Inter', sans-serif; }
         .blackletter { font-family: 'UnifrakturMaguntia', serif; }
         
@@ -25,10 +21,7 @@ import '@styles/styles.css';
             transform: translateY(-5px);
             border-color: #d4af37; /* Gold-400 */
         }
-    </style>
-</head>
-<body class="selection:bg-gold-500/30 min-h-screen flex flex-col pt-32">
-
+</style>
     <!-- Nav -->
     <nav class="fixed top-8 left-8 z-50">
         <a href="/" class="text-gold-500 hover:text-gold-300 transition-colors text-xl flex items-center gap-2 sans bg-black/50 p-2 rounded backdrop-blur">
@@ -208,5 +201,4 @@ import '@styles/styles.css';
     <!-- Footer Decoration -->
     <div class="fixed bottom-0 left-0 w-full h-1 bg-gradient-to-r from-gold-900 via-gold-500 to-gold-900"></div>
 
-</body>
-</html>
+</Layout>

@@ -14,6 +14,8 @@ export interface Props {
     noindex?: boolean;
     /** Extra classes for <body> (e.g. layout/scroll modifiers per page). */
     bodyClass?: string;
+    /** Optional id for <body> (some pages' scripts target it). */
+    bodyId?: string;
     lang?: string;
 }
 
@@ -25,6 +27,7 @@ const {
     ogType,
     noindex,
     bodyClass = '',
+    bodyId,
     lang = 'da',
 } = Astro.props;
 ---
@@ -42,13 +45,17 @@ const {
         />
         <slot name="head" />
     </head>
-    <body class:list={['bg-[#020205] text-[#e5e7eb] selection:bg-gold-500/30', bodyClass]}>
+    <body id={bodyId} class:list={['selection:bg-gold-500/30', bodyClass]}>
         <slot />
     </body>
 </html>
 
 <style is:global>
+    /* Defaults via element selector (low specificity) so a page's own
+       background or text utility in bodyClass overrides them deterministically. */
     body {
+        background-color: #020205;
+        color: #e5e7eb;
         font-family: 'Cinzel', serif;
     }
     .sans {

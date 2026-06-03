@@ -1,25 +1,16 @@
-
 ---
-import '@styles/styles.css';
+import Layout from '@layouts/Layout.astro';
 ---
 
-<!DOCTYPE html>
-<html lang="da">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Catacombs | Memento Mori</title>
-    <meta name="robots" content="noindex, nofollow">
-    
-    <!-- Fonts -->
-    <link rel="icon" type="image/svg+xml" href="/assets/favicon-cross.svg">
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700&family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=Nanum+Myeongjo&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
-    
-    <style>
-        body { font-family: 'Cinzel', serif; }
+<Layout
+    title="Catacombs | Memento Mori"
+    extraFonts={["Playfair+Display:ital,wght@0,400;0,700;1,400","Nanum+Myeongjo"]}
+    noindex
+    bodyClass="bg-[#050505] text-gray-400 min-h-screen selection:bg-gray-500/30 overflow-x-hidden"
+>
+
+<style is:global>
+body { font-family: 'Cinzel', serif; }
         .text-carved { font-family: 'Nanum Myeongjo', serif; } /* Looks like chiseled text */
         
         .stone-texture {
@@ -42,10 +33,7 @@ import '@styles/styles.css';
         .eroded-1 { opacity: 0.8; filter: blur(0.5px); }
         .eroded-2 { opacity: 0.6; filter: blur(1px); color: #555; }
         .eroded-3 { opacity: 0.3; filter: blur(2px); color: #333; text-shadow: none; }
-    </style>
-</head>
-<body class="bg-[#050505] text-gray-400 min-h-screen selection:bg-gray-500/30 overflow-x-hidden">
-
+</style>
     <!-- Nav -->
     <nav class="fixed top-8 left-8 z-50 mix-blend-difference">
         <a href="/" class="text-gray-500 hover:text-white transition-colors text-xl flex items-center gap-2">
@@ -174,5 +162,4 @@ import '@styles/styles.css';
         });
 
     </script>
-</body>
-</html>
+</Layout>

@@ -1,33 +1,22 @@
 ---
+import Layout from '@layouts/Layout.astro';
 import { getDailyVerse } from '../utils/scripture';
-import '@styles/styles.css';
 
 const verse = getDailyVerse();
 ---
 
-<!DOCTYPE html>
-<html lang="da">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Lectio | Ad Majorem Dei Gloriam</title>
-    <meta name="robots" content="noindex, nofollow">
-    
-    <!-- Fonts -->
-    <link rel="icon" type="image/svg+xml" href="/assets/favicon-cross.svg">
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400&family=Cinzel:wght@400;700&family=Playfair+Display:ital,wght@1,400;1,600&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
-    
-    <style>
-        body { font-family: 'Cinzel', serif; }
+<Layout
+    title="Lectio | Ad Majorem Dei Gloriam"
+    extraFonts={["Playfair+Display:ital,wght@1,400;1,600"]}
+    noindex
+    bodyClass="bg-black text-gray-300 h-screen w-screen overflow-hidden m-0 p-0 selection:bg-gold-500/30"
+>
+
+<style is:global>
+body { font-family: 'Cinzel', serif; }
         .sans { font-family: 'Inter', sans-serif; }
         .serif-italic { font-family: 'Playfair Display', serif; font-style: italic; }
-    </style>
-</head>
-<body class="bg-black text-gray-300 h-screen w-screen overflow-hidden m-0 p-0 selection:bg-gold-500/30">
-
+</style>
     <!-- Deep Background -->
     <div class="fixed inset-0 z-0 pointer-events-none bg-[radial-gradient(circle_at_center,_var(--tw-gradient-stops))] from-gray-900/40 via-black to-black">
          <div class="absolute inset-0 opacity-5" style="background-image: url('https://www.transparenttextures.com/patterns/stardust.png');"></div>
@@ -244,5 +233,4 @@ const verse = getDailyVerse();
         });
 
     </script>
-</body>
-</html>
+</Layout>

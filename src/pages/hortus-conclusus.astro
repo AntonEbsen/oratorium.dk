@@ -1,35 +1,23 @@
-
 ---
-import '@styles/styles.css';
+import Layout from '@layouts/Layout.astro';
 ---
 
-<!DOCTYPE html>
-<html lang="da">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Hortus Conclusus | Jomfruens Have</title>
-    <meta name="robots" content="noindex, nofollow">
-    
-    <!-- Fonts -->
-    <link rel="icon" type="image/svg+xml" href="/assets/favicon-cross.svg">
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700&family=Playfair+Display:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
-    
-    <style>
-        body { font-family: 'Cinzel', serif; }
+<Layout
+    title="Hortus Conclusus | Jomfruens Have"
+    extraFonts={["Playfair+Display:ital,wght@0,400;0,700;1,400"]}
+    noindex
+    bodyClass="sky-gradient text-gray-800 min-h-screen relative overflow-hidden flex flex-col items-center select-none"
+>
+
+<style is:global>
+body { font-family: 'Cinzel', serif; }
         .text-body { font-family: 'Playfair Display', serif; }
         
         /* Light/Garden Theme Overrides */
         .sky-gradient {
             background: linear-gradient(to bottom, #87CEEB 0%, #E0F7FA 100%);
         }
-    </style>
-</head>
-<body class="sky-gradient text-gray-800 min-h-screen relative overflow-hidden flex flex-col items-center select-none">
-
+</style>
     <!-- Nav -->
     <nav class="fixed top-8 left-8 z-50">
         <a href="/" class="text-white/80 hover:text-white drop-shadow-md transition-colors text-xl flex items-center gap-2">
@@ -201,5 +189,4 @@ import '@styles/styles.css';
         }
         @keyframes fadeIn { to { opacity: 0.95; } }
     </style>
-</body>
-</html>
+</Layout>

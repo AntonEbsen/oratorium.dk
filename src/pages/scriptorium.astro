@@ -1,25 +1,16 @@
-
 ---
-import '@styles/styles.css';
+import Layout from '@layouts/Layout.astro';
 ---
 
-<!DOCTYPE html>
-<html lang="da">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Scriptorium | Skrivestuen</title>
-    <meta name="robots" content="noindex, nofollow">
-    
-    <!-- Fonts -->
-    <link rel="icon" type="image/svg+xml" href="/assets/favicon-cross.svg">
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700&family=Playfair+Display:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
-    
-    <style>
-        body { font-family: 'Cinzel', serif; }
+<Layout
+    title="Scriptorium | Skrivestuen"
+    extraFonts={["Playfair+Display:ital,wght@0,400;0,700;1,400"]}
+    noindex
+    bodyClass="bg-[#050505] text-gray-400 min-h-screen flex flex-col items-center py-20 px-4 selection:bg-gold-500/30"
+>
+
+<style is:global>
+body { font-family: 'Cinzel', serif; }
         .text-script { font-family: 'Playfair Display', serif; }
 
         .caret {
@@ -58,10 +49,7 @@ import '@styles/styles.css';
             30%, 50%, 70% { transform: translate3d(-4px, 0, 0); }
             40%, 60% { transform: translate3d(4px, 0, 0); }
         }
-    </style>
-</head>
-<body class="bg-[#050505] text-gray-400 min-h-screen flex flex-col items-center py-20 px-4 selection:bg-gold-500/30">
-
+</style>
     <!-- Nav -->
     <nav class="fixed top-8 left-8 z-50">
         <a href="/" class="text-gray-600 hover:text-gold-500 transition-colors text-xl flex items-center gap-2">
@@ -211,5 +199,4 @@ import '@styles/styles.css';
         });
 
     </script>
-</body>
-</html>
+</Layout>

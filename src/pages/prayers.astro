@@ -1,21 +1,15 @@
-
 ---
-import '@styles/styles.css';
+import Layout from '@layouts/Layout.astro';
 ---
 
-<!DOCTYPE html>
-<html lang="da">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Forbøn | Ad Majorem Dei Gloriam</title>
-    <meta name="robots" content="noindex, nofollow">
-    <link rel="icon" type="image/svg+xml" href="/assets/favicon-cross.svg">
-    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700&family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
-    
-    <style>
-        body { font-family: 'Cinzel', serif; background: #050508; color: #e5e7eb; }
+<Layout
+    title="Forbøn | Ad Majorem Dei Gloriam"
+    noindex
+    bodyClass="selection:bg-gold-500/30 min-h-screen flex flex-col"
+>
+
+<style is:global>
+body { font-family: 'Cinzel', serif; background: #050508; color: #e5e7eb; }
         .sans { font-family: 'Inter', sans-serif; }
         
         .prayer-card {
@@ -51,10 +45,7 @@ import '@styles/styles.css';
             animation: float-up 1s ease-out forwards;
             font-size: 10px;
         }
-    </style>
-</head>
-<body class="selection:bg-gold-500/30 min-h-screen flex flex-col">
-
+</style>
     <!-- Background -->
     <div class="fixed inset-0 z-0 pointer-events-none">
          <div class="absolute inset-0 opacity-10" style="background-image: url('https://www.transparenttextures.com/patterns/stardust.png');"></div>
@@ -343,5 +334,4 @@ import '@styles/styles.css';
 
         fetchPrayers();
     </script>
-</body>
-</html>
+</Layout>

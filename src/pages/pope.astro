@@ -1,20 +1,16 @@
 ---
-import '@styles/styles.css';
+import Layout from '@layouts/Layout.astro';
 ---
 
-<!DOCTYPE html>
-<html lang="da">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Paven | Petri Stol</title>
-    <meta name="robots" content="index, follow">
-    <link rel="icon" type="image/svg+xml" href="/assets/favicon-cross.svg">
-    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700&family=Inter:wght@300;400;600&family=UnifrakturMaguntia&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
-    
-    <style>
-        body { font-family: 'Cinzel', serif; background: #fdfbf7; color: #0a0a0a; } /* VATICAN WHITE/GOLD THEME */
+<Layout
+    title="Paven | Petri Stol"
+    description="Paven og Petri Stol — forstå klippen, nøglerne og den apostolske succession fra Sankt Peter til i dag."
+    extraFonts={["UnifrakturMaguntia"]}
+    bodyClass="selection:bg-gold-500/30 min-h-screen flex flex-col pt-32 papal-bg"
+>
+
+<style is:global>
+body { font-family: 'Cinzel', serif; background: #fdfbf7; color: #0a0a0a; } /* VATICAN WHITE/GOLD THEME */
         .sans { font-family: 'Inter', sans-serif; }
         .blackletter { font-family: 'UnifrakturMaguntia', serif; }
         /* Boost contrast for inputs/text */
@@ -25,10 +21,7 @@ import '@styles/styles.css';
             background-color: #fdfbf7;
             background-image: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23e5c100' fill-opacity='0.05'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
         }
-    </style>
-</head>
-<body class="selection:bg-gold-500/30 min-h-screen flex flex-col pt-32 papal-bg">
-
+</style>
     <!-- Nav (Dark for contrast on light bg) -->
     <nav class="fixed top-8 left-8 z-50">
         <a href="/" class="text-black hover:text-gold-700 transition-colors text-xl flex items-center gap-2 sans font-bold">
@@ -145,5 +138,4 @@ import '@styles/styles.css';
     <!-- Footer Decoration -->
     <div class="fixed bottom-0 left-0 w-full h-2 bg-gradient-to-r from-gold-200 via-gold-400 to-gold-200"></div>
 
-</body>
-</html>
+</Layout>

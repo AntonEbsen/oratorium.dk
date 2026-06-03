@@ -1,31 +1,20 @@
 ---
+import Layout from '@layouts/Layout.astro';
 import { libraryBooks } from '../utils/library';
-import '@styles/styles.css';
 ---
 
-<!DOCTYPE html>
-<html lang="da">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Biblioteket | Ad Majorem Dei Gloriam</title>
-    <meta name="robots" content="noindex, nofollow">
-    
-    <!-- Fonts -->
-    <link rel="icon" type="image/svg+xml" href="/assets/favicon-cross.svg">
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700&family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=Inter:wght@300;400&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
-    
-    <style>
-        body { font-family: 'Cinzel', serif; }
+<Layout
+    title="Biblioteket | Ad Majorem Dei Gloriam"
+    extraFonts={["Playfair+Display:ital,wght@0,400;0,700;1,400"]}
+    noindex
+    bodyClass="bg-[#08080a] text-gray-300 min-h-screen w-screen overflow-x-hidden m-0 p-0 selection:bg-gold-500/30"
+>
+
+<style is:global>
+body { font-family: 'Cinzel', serif; }
         .text-body { font-family: 'Playfair Display', serif; }
         .sans { font-family: 'Inter', sans-serif; }
-    </style>
-</head>
-<body class="bg-[#08080a] text-gray-300 min-h-screen w-screen overflow-x-hidden m-0 p-0 selection:bg-gold-500/30">
-
+</style>
     <!-- Background -->
     <div class="fixed inset-0 z-0 pointer-events-none bg-gradient-to-b from-[#15151a] via-[#050508] to-black">
          <div class="absolute inset-0 opacity-10" style="background-image: url('https://www.transparenttextures.com/patterns/wood-pattern.png');"></div>
@@ -177,5 +166,4 @@ import '@styles/styles.css';
 
         init();
     </script>
-</body>
-</html>
+</Layout>
