@@ -76,6 +76,13 @@ const dateStr = now.toLocaleDateString('da-DK', { weekday: 'long', day: 'numeric
             Søger du dagens fulde messelæsninger? Spørg i din lokale menighed eller find dem
             via <a href="/locations" class="text-gold-500/80 hover:text-gold-300 underline">Kirkekortet</a>.
         </p>
+
+        <div class="text-center mt-12">
+            <button id="angelus-optin" class="hidden sans px-6 py-3 border border-gold-500/40 text-gold-300 hover:bg-gold-500 hover:text-black uppercase text-xs tracking-[0.2em] rounded-sm transition-colors">
+                <i class="fa-solid fa-bell mr-2" aria-hidden="true"></i> Mind mig om Angelus
+            </button>
+            <p id="angelus-msg" class="sans text-xs text-gray-600 mt-3 min-h-[1rem]" aria-live="polite"></p>
+        </div>
     </main>
 
     <script>
@@ -120,5 +127,52 @@ const dateStr = now.toLocaleDateString('da-DK', { weekday: 'long', day: 'numeric
 
         set('verse-text', `„${verse.text}”`);
         set('verse-cite', `— ${verse.citation}`);
+    </script>
+
+    <script>
+        // Opt-in Angelus push reminders (only shown when push is supported + a VAPID key is configured).
+        const VAPID = import.meta.env.PUBLIC_VAPID_PUBLIC_KEY || '';
+        const optinBtn = document.getElementById('angelus-optin');
+        const optinMsg = document.getElementById('angelus-msg');
+
+        function urlBase64ToUint8Array(b64: string) {
+            const padding = '='.repeat((4 - (b64.length % 4)) % 4);
+            const base64 = (b64 + padding).replace(/-/g, '+').replace(/_/g, '/');
+            const raw = atob(base64);
+            const arr = new Uint8Array(raw.length);
+            for (let i = 0; i < raw.length; i++) arr[i] = raw.charCodeAt(i);
+            return arr;
+        }
+
+        if (
+            optinBtn && VAPID &&
+            'serviceWorker' in navigator && 'PushManager' in window && 'Notification' in window
+        ) {
+            optinBtn.classList.remove('hidden');
+            optinBtn.addEventListener('click', async () => {
+                try {
+                    const perm = await Notification.requestPermission();
+                    if (perm !== 'granted') {
+                        if (optinMsg) optinMsg.textContent = 'Du afslog notifikationer.';
+                        return;
+                    }
+                    const reg = await navigator.serviceWorker.ready;
+                    const sub = await reg.pushManager.subscribe({
+                        userVisibleOnly: true,
+                        applicationServerKey: urlBase64ToUint8Array(VAPID),
+                    });
+                    const res = await fetch('/api/push/subscribe', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify(sub),
+                    });
+                    if (optinMsg) optinMsg.textContent = res.ok
+                        ? 'Tak! Du får en påmindelse kl. 12 og 18.'
+                        : 'Noget gik galt. Prøv igen.';
+                } catch {
+                    if (optinMsg) optinMsg.textContent = 'Kunne ikke aktivere påmindelser.';
+                }
+            });
+        }
     </script>
 </Layout>

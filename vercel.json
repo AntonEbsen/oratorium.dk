@@ -27,5 +27,8 @@
         { "key": "Cache-Control", "value": "public, max-age=604800" }
       ]
     }
+  ],
+  "crons": [
+    { "path": "/api/push/angelus", "schedule": "0 11,17 * * *" }
   ]
 }

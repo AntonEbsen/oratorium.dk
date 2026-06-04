@@ -69,3 +69,35 @@ self.addEventListener('fetch', (event) => {
         })()
     );
 });
+
+// --- Push notifications (Angelus reminders) ---
+self.addEventListener('push', (event) => {
+    let data = { title: 'Oratorium', body: 'Det er tid til at bede.', url: '/idag' };
+    try {
+        if (event.data) data = { ...data, ...event.data.json() };
+    } catch {
+        /* keep defaults */
+    }
+    event.waitUntil(
+        self.registration.showNotification(data.title, {
+            body: data.body,
+            icon: '/assets/icon-192.png',
+            badge: '/assets/icon-192.png',
+            tag: data.tag || 'oratorium-angelus',
+            data: { url: data.url || '/' },
+        })
+    );
+});
+
+self.addEventListener('notificationclick', (event) => {
+    event.notification.close();
+    const url = (event.notification.data && event.notification.data.url) || '/';
+    event.waitUntil(
+        self.clients.matchAll({ type: 'window', includeUncontrolled: true }).then((wins) => {
+            for (const w of wins) {
+                if (w.url.includes(url) && 'focus' in w) return w.focus();
+            }
+            return self.clients.openWindow ? self.clients.openWindow(url) : undefined;
+        })
+    );
+});
