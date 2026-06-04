@@ -67,11 +67,9 @@ const jsonLd = {
         </a>
 
         <!-- Audio Control (Right) -->
-        <button id="mute-btn" class="pointer-events-auto text-gold-500/60 hover:text-gold-400 transition-colors flex items-center gap-2 group" aria-label="Afspil eller sluk gregoriansk sang">
+        <button id="chant-btn" class="pointer-events-auto text-gold-500/60 hover:text-gold-400 transition-colors flex items-center gap-2 group" aria-label="Afspil gregoriansk sang" aria-pressed="false">
             <span class="text-[10px] uppercase tracking-widest opacity-0 group-hover:opacity-100 transition-opacity sans mr-2">Chant</span>
-            <i class="fa-solid fa-volume-high group-hover:block hidden text-lg" aria-hidden="true"></i>
-            <i class="fa-solid fa-volume-xmark group-hover:hidden block text-lg" aria-hidden="true"></i>
-            <i class="fa-solid fa-play hidden text-gold-500 text-lg" aria-hidden="true"></i>
+            <i id="chant-icon" class="fa-solid fa-music text-lg" aria-hidden="true"></i>
         </button>
     </div>
 
@@ -288,63 +286,57 @@ const jsonLd = {
     </div>
 
     <!-- AUDIO -->
-    <audio id="shrine-audio" loop preload="auto">
+    <audio id="shrine-audio" loop preload="none">
         <source src="/assets/audio/chant.mp3" type="audio/mpeg">
+        <source src="/assets/audio/chant.ogg" type="audio/ogg">
     </audio>
 
 </Layout>
 
 <script>
-    // Audio Elements
-    const audio = document.getElementById('shrine-audio') as HTMLAudioElement;
-    const muteBtn = document.getElementById('mute-btn');
-    const volIcon = muteBtn?.querySelector('.fa-volume-high');
-    const muteIcon = muteBtn?.querySelector('.fa-volume-xmark');
-    const playIcon = muteBtn?.querySelector('.fa-play');
+    const audio = document.getElementById('shrine-audio') as HTMLAudioElement | null;
+    const btn = document.getElementById('chant-btn');
+    const icon = document.getElementById('chant-icon');
 
-    // Start Logic on Load
-    window.addEventListener('load', async () => {
-        // Try Autoplay
-        audio.volume = 1.0;
-        try {
-            await audio.play();
-            // Success
-            volIcon?.classList.remove('hidden');
-            muteIcon?.classList.add('hidden');
-            playIcon?.classList.add('hidden');
-        } catch (e) {
-            console.log("Autoplay blocked. Showing Play button.", e);
-            // Fallback
-            volIcon?.classList.add('hidden');
-            muteIcon?.classList.add('hidden');
-            playIcon?.classList.remove('hidden');
-            muteBtn?.classList.add('animate-pulse');
-        }
-    });
+    if (audio && btn && icon) {
+        const setState = (playing: boolean) => {
+            icon.className = playing ? 'fa-solid fa-volume-high text-lg' : 'fa-solid fa-music text-lg';
+            btn.setAttribute('aria-pressed', String(playing));
+            btn.setAttribute('aria-label', playing ? 'Sæt gregoriansk sang på pause' : 'Afspil gregoriansk sang');
+        };
 
-    // Mute/Play Control
-    muteBtn?.addEventListener('click', async () => {
-        if (audio.paused) {
-            // Manual Start
+        // If the audio file is missing or unsupported, hide the control entirely.
+        audio.addEventListener('error', () => { btn.style.display = 'none'; });
+        audio.addEventListener('play', () => setState(true));
+        audio.addEventListener('pause', () => setState(false));
+
+        // Only reveal the player if the audio file actually exists.
+        window.addEventListener('load', async () => {
             try {
-                await audio.play();
-                volIcon?.classList.remove('hidden');
-                muteIcon?.classList.add('hidden');
-                playIcon?.classList.add('hidden');
-                muteBtn.classList.remove('animate-pulse');
-            } catch(e) { console.error(e); }
-        } else {
-            // Toggle Mute
-            audio.muted = !audio.muted;
-            if(audio.muted) {
-                volIcon?.classList.add('hidden');
-                muteIcon?.classList.remove('hidden');
-            } else {
-                volIcon?.classList.remove('hidden');
-                muteIcon?.classList.add('hidden');
+                const head = await fetch('/assets/audio/chant.mp3', { method: 'HEAD' });
+                if (!head.ok) { btn.style.display = 'none'; return; }
+            } catch {
+                btn.style.display = 'none';
+                return;
             }
-        }
-    });
+            audio.volume = 0.6;
+            // Gentle autoplay attempt — browsers usually block sound until a gesture,
+            // in which case we invite a click with a pulse.
+            audio.play().catch(() => {
+                setState(false);
+                btn.classList.add('animate-pulse');
+            });
+        });
+
+        btn.addEventListener('click', () => {
+            btn.classList.remove('animate-pulse');
+            if (audio.paused) {
+                audio.play().catch(() => {});
+            } else {
+                audio.pause();
+            }
+        });
+    }
 </script>
 
 <style>

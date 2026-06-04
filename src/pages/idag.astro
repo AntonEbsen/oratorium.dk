@@ -1,0 +1,124 @@
+---
+import Layout from '@layouts/Layout.astro';
+import { getLiturgicalSeason, getSaint } from '../utils/liturgy';
+import { getDailyVerse } from '../utils/scripture';
+
+// Server-rendered (build-date) values give crawlers real content; a client
+// script below refreshes everything to the visitor's actual local date.
+const now = new Date();
+const season = getLiturgicalSeason(now);
+const saint = getSaint(now);
+const verse = getDailyVerse();
+
+const colorMap: Record<string, { hex: string; label: string }> = {
+    green: { hex: '#4d7c0f', label: 'Grøn' },
+    purple: { hex: '#7e22ce', label: 'Violet' },
+    white: { hex: '#e7e5e4', label: 'Hvid' },
+    red: { hex: '#b91c1c', label: 'Rød' },
+    rose: { hex: '#db2777', label: 'Rosa' },
+    black: { hex: '#404040', label: 'Sort' },
+};
+const sc = colorMap[season.color] ?? colorMap.green;
+const dateStr = now.toLocaleDateString('da-DK', { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' });
+---
+
+<Layout
+    title="Dagen i Dag | Oratorium"
+    description="Dagens liturgiske farve, kirkeårets tid og dagens helgen — plus dagens ord fra Skriften. Følg Kirkens rytme dag for dag."
+    bodyClass="selection:bg-gold-500/30 min-h-screen flex flex-col pt-32"
+>
+    <!-- Nav -->
+    <nav class="fixed top-8 left-8 z-50">
+        <a href="/" class="text-gold-500/60 hover:text-gold-400 transition-colors text-xl flex items-center gap-2 sans">
+            <i class="fa-solid fa-arrow-left" aria-hidden="true"></i>
+            <span class="text-xs uppercase tracking-widest hidden md:inline">Tilbage til Helligdommen</span>
+        </a>
+    </nav>
+
+    <main class="max-w-2xl mx-auto px-6 pb-24 w-full">
+        <header class="text-center mb-14">
+            <p id="today-date" class="text-xs text-gold-500/60 uppercase tracking-[0.3em] sans mb-4">{dateStr}</p>
+            <h1 class="text-4xl md:text-5xl text-gold-300 font-serif drop-shadow-[0_0_20px_rgba(212,175,55,0.2)]">Dagen i Dag</h1>
+        </header>
+
+        <!-- Liturgical season -->
+        <section class="border border-white/10 rounded-lg bg-white/[0.02] p-8 mb-6 text-center">
+            <div class="flex items-center justify-center gap-3 mb-4">
+                <span id="season-swatch" class="inline-block w-5 h-5 rounded-full border border-white/20" style={`background:${sc.hex}`}></span>
+                <span id="season-color" class="text-[10px] uppercase tracking-[0.3em] text-gray-400 sans">Liturgisk farve: {sc.label}</span>
+            </div>
+            <h2 id="season-name" class="text-2xl text-gold-200 font-serif mb-3">{season.name}</h2>
+            <p id="season-desc" class="text-gray-400 sans text-sm leading-relaxed">{season.description}</p>
+        </section>
+
+        <!-- Saint of the day -->
+        <section id="saint-section" class="border border-white/10 rounded-lg bg-white/[0.02] p-8 mb-6 text-center" style={saint ? '' : 'display:none'}>
+            <p class="text-[10px] uppercase tracking-[0.3em] text-gold-500/60 sans mb-3">Dagens helgen</p>
+            <h2 id="saint-name" class="text-2xl text-gold-200 font-serif">{saint?.name ?? ''}</h2>
+            <p id="saint-title" class="text-gray-500 sans text-sm mt-1">{saint?.title ?? ''}</p>
+        </section>
+
+        <!-- Daily word -->
+        <section class="border border-white/10 rounded-lg bg-white/[0.02] p-8 mb-10 text-center">
+            <p class="text-[10px] uppercase tracking-[0.3em] text-gold-500/60 sans mb-4">Dagens Ord</p>
+            <blockquote id="verse-text" class="text-xl text-gray-200 font-serif italic leading-relaxed">„{verse.text}”</blockquote>
+            <p id="verse-cite" class="text-gold-500/80 sans text-xs uppercase tracking-widest mt-4">— {verse.citation}</p>
+        </section>
+
+        <!-- Links -->
+        <div class="flex flex-wrap gap-4 justify-center sans">
+            <a href="/lectio" class="px-6 py-3 border border-gold-500/40 text-gold-300 hover:bg-gold-500 hover:text-black uppercase text-xs tracking-[0.2em] rounded-sm transition-colors">Lectio Divina</a>
+            <a href="/calendar" class="px-6 py-3 border border-white/10 text-gray-400 hover:border-gold-500/40 hover:text-gold-200 uppercase text-xs tracking-[0.2em] rounded-sm transition-colors">Kirkekalenderen</a>
+            <a href="/mass" class="px-6 py-3 border border-white/10 text-gray-400 hover:border-gold-500/40 hover:text-gold-200 uppercase text-xs tracking-[0.2em] rounded-sm transition-colors">Messen</a>
+        </div>
+
+        <p class="text-center text-gray-600 text-xs sans mt-10 leading-relaxed max-w-md mx-auto">
+            Søger du dagens fulde messelæsninger? Spørg i din lokale menighed eller find dem
+            via <a href="/locations" class="text-gold-500/80 hover:text-gold-300 underline">Kirkekortet</a>.
+        </p>
+    </main>
+
+    <script>
+        import { getLiturgicalSeason, getSaint } from '../utils/liturgy';
+        import { getDailyVerse } from '../utils/scripture';
+
+        const colorMap: Record<string, { hex: string; label: string }> = {
+            green: { hex: '#4d7c0f', label: 'Grøn' },
+            purple: { hex: '#7e22ce', label: 'Violet' },
+            white: { hex: '#e7e5e4', label: 'Hvid' },
+            red: { hex: '#b91c1c', label: 'Rød' },
+            rose: { hex: '#db2777', label: 'Rosa' },
+            black: { hex: '#404040', label: 'Sort' },
+        };
+
+        const now = new Date();
+        const season = getLiturgicalSeason(now);
+        const saint = getSaint(now);
+        const verse = getDailyVerse();
+        const sc = colorMap[season.color] ?? colorMap.green;
+
+        const set = (id: string, txt: string) => {
+            const el = document.getElementById(id);
+            if (el) el.textContent = txt;
+        };
+
+        set('today-date', now.toLocaleDateString('da-DK', { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' }));
+        set('season-color', `Liturgisk farve: ${sc.label}`);
+        set('season-name', season.name);
+        set('season-desc', season.description);
+        const swatch = document.getElementById('season-swatch');
+        if (swatch) swatch.style.background = sc.hex;
+
+        const saintSection = document.getElementById('saint-section');
+        if (saint && saintSection) {
+            saintSection.style.display = '';
+            set('saint-name', saint.name);
+            set('saint-title', saint.title ?? '');
+        } else if (saintSection) {
+            saintSection.style.display = 'none';
+        }
+
+        set('verse-text', `„${verse.text}”`);
+        set('verse-cite', `— ${verse.citation}`);
+    </script>
+</Layout>

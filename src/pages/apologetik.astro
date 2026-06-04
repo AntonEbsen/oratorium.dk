@@ -1,0 +1,103 @@
+---
+import Layout from '@layouts/Layout.astro';
+import { scenarios } from '../data/apologetics';
+
+const categoryIcon: Record<string, string> = {
+    Gud: 'fa-infinity',
+    Jesus: 'fa-cross',
+    Moral: 'fa-scale-balanced',
+    Videnskab: 'fa-atom',
+    Kirken: 'fa-church',
+};
+
+// Build a readable Q&A from each scenario (objection + the correct, reasoned answer).
+const faqs = scenarios.map((s) => {
+    const correct = s.responses.find((r) => r.id === s.correctResponseId);
+    return {
+        category: s.category,
+        question: s.objection,
+        source: s.objectionSource,
+        shortAnswer: correct?.text ?? '',
+        explanation: s.explanation,
+    };
+});
+
+const faqLd = {
+    '@context': 'https://schema.org',
+    '@type': 'FAQPage',
+    mainEntity: faqs.map((f) => ({
+        '@type': 'Question',
+        name: f.question,
+        acceptedAnswer: {
+            '@type': 'Answer',
+            text: [f.shortAnswer, f.explanation].filter(Boolean).join(' '),
+        },
+    })),
+};
+---
+
+<Layout
+    title="Troens Svar | Apologetik"
+    description="Gennemtænkte katolske svar på de svære spørgsmål om troen: det ondes problem, tro og videnskab, moral, Kirkens historie, kvindelige præster og Eukaristien."
+    bodyClass="selection:bg-gold-500/30 min-h-screen flex flex-col pt-32"
+>
+    <script type="application/ld+json" slot="head" set:html={JSON.stringify(faqLd)}></script>
+
+    <!-- Nav -->
+    <nav class="fixed top-8 left-8 z-50">
+        <a
+            href="/seek"
+            class="text-gold-500/60 hover:text-gold-400 transition-colors text-xl flex items-center gap-2 sans"
+        >
+            <i class="fa-solid fa-arrow-left" aria-hidden="true"></i>
+            <span class="text-xs uppercase tracking-widest hidden md:inline">Tilbage</span>
+        </a>
+    </nav>
+
+    <!-- Hero -->
+    <header class="text-center px-6 mb-16 max-w-2xl mx-auto">
+        <i class="fa-solid fa-shield-halved text-gold-500 text-4xl mb-6 drop-shadow-[0_0_15px_rgba(212,175,55,0.4)]" aria-hidden="true"></i>
+        <h1 class="text-4xl md:text-5xl text-gold-300 font-serif mb-6 drop-shadow-[0_0_20px_rgba(212,175,55,0.2)]">
+            Troens Svar
+        </h1>
+        <p class="text-gray-400 sans leading-relaxed">
+            Tvivl er ikke troens fjende — den er ofte begyndelsen på en dybere forståelse.
+            Her er gennemtænkte, katolske svar på de mest almindelige indvendinger mod troen.
+        </p>
+    </header>
+
+    <!-- FAQ list -->
+    <main class="max-w-3xl mx-auto px-6 pb-24 w-full space-y-8 sans">
+        {faqs.map((f) => (
+            <article class="border border-white/10 rounded-lg bg-white/[0.02] overflow-hidden">
+                <div class="p-6 md:p-8">
+                    <div class="flex items-center gap-2 mb-4 text-gold-500/70 text-[10px] uppercase tracking-[0.25em]">
+                        <i class={`fa-solid ${categoryIcon[f.category] ?? 'fa-question'}`} aria-hidden="true"></i>
+                        <span>{f.category}</span>
+                        {f.source && <span class="text-gray-600">· {f.source}</span>}
+                    </div>
+                    <h2 class="text-lg md:text-xl text-gray-100 font-serif leading-snug mb-5">
+                        „{f.question}”
+                    </h2>
+                    <p class="text-gold-200 text-sm leading-relaxed mb-3">{f.shortAnswer}</p>
+                    <p class="text-gray-400 text-sm leading-relaxed">{f.explanation}</p>
+                </div>
+            </article>
+        ))}
+    </main>
+
+    <!-- CTA -->
+    <section class="border-t border-gold-900/40 py-16 px-6 text-center sans">
+        <p class="text-gray-400 mb-8 max-w-lg mx-auto leading-relaxed">
+            Vil du teste, om du selv kan svare på indvendingerne — eller har du et spørgsmål, der ikke er besvaret her?
+        </p>
+        <div class="flex flex-wrap gap-4 justify-center">
+            <a href="/scutum" class="px-8 py-3 border border-gold-500/40 text-gold-300 hover:bg-gold-500 hover:text-black uppercase text-xs tracking-[0.2em] rounded-sm transition-colors">
+                Prøv Troens Skjold
+            </a>
+            <a href="/aquinas" class="px-8 py-3 border border-white/10 text-gray-400 hover:border-gold-500/40 hover:text-gold-200 uppercase text-xs tracking-[0.2em] rounded-sm transition-colors">
+                Spørg Thomas Aquinas
+            </a>
+        </div>
+    </section>
+</Layout>
