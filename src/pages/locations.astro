@@ -1,17 +1,12 @@
 ---
 import Layout from '@layouts/Layout.astro';
-import { createClient } from '@supabase/supabase-js';
-
-const SUPABASE_URL = 'https://sdfwawnviylwwlbnwpnj.supabase.co';
-const SUPABASE_KEY =
-    'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InNkZndhd252aXlsd3dsYm53cG5qIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjkyNzY4MjEsImV4cCI6MjA4NDg1MjgyMX0.oIR0N05DQY6ePfDXVNC0UI9DrLrM-LevsK64ANEJGag';
+import { supabase } from '@lib/supabaseClient';
 
 // Fetch churches at BUILD TIME so the list + mass times are crawlable (SEO).
 // Resilient: if the build host can't reach Supabase, fall back to an empty
 // list and let the client script fetch at runtime (current behaviour).
 let churches: any[] = [];
 try {
-    const supabase = createClient(SUPABASE_URL, SUPABASE_KEY);
     const { data } = await supabase.from('churches').select('*');
     churches = (data ?? []).filter((c) => c && c.name);
 } catch {
@@ -157,10 +152,7 @@ body { font-family: 'Cinzel', serif; background: #020205; color: #e5e7eb; }
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
 
     <script type="module">
-        import { createClient } from 'https://esm.sh/@supabase/supabase-js@2';
-
-        const SUPABASE_URL = 'https://sdfwawnviylwwlbnwpnj.supabase.co';
-        const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InNkZndhd252aXlsd3dsYm53cG5qIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjkyNzY4MjEsImV4cCI6MjA4NDg1MjgyMX0.oIR0N05DQY6ePfDXVNC0UI9DrLrM-LevsK64ANEJGag';
+        import { supabase } from '@lib/supabaseClient';
 
         // Initialize Map (Centered on Denmark)
         const map = L.map('map').setView([56.2639, 9.5018], 7);
@@ -179,8 +171,7 @@ body { font-family: 'Cinzel', serif; background: #020205; color: #e5e7eb; }
                 try { return JSON.parse(el.textContent); } catch (e) { /* fall through */ }
             }
             try {
-                const client = createClient(SUPABASE_URL, SUPABASE_KEY);
-                const { data, error } = await client.from('churches').select('*');
+                const { data, error } = await supabase.from('churches').select('*');
                 if (error) { console.error('Error loading churches:', error); return []; }
                 return data || [];
             } catch (e) {

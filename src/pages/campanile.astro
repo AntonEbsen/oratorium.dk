@@ -49,7 +49,6 @@ body { font-family: 'Cinzel', serif; }
         }
 </style>
 
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <!-- Brick Texture -->
     <div class="absolute inset-0 z-0 opacity-20 bg-[url('https://www.transparenttextures.com/patterns/brick-wall-dark.png')]"></div>
     
@@ -107,8 +106,6 @@ body { font-family: 'Cinzel', serif; }
     <script>
         // CLIENT CONFIG
         // CLIENT CONFIG
-        const SUPABASE_URL = 'https://sdfwawnviylwwlbnwpnj.supabase.co'; 
-        const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InNkZndhd252aXlsd3dsYm53cG5qIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjkyNzY4MjEsImV4cCI6MjA4NDg1MjgyMX0.oIR0N05DQY6ePfDXVNC0UI9DrLrM-LevsK64ANEJGag';
 
         
         const audio = document.getElementById('bell-audio');
@@ -141,8 +138,7 @@ body { font-family: 'Cinzel', serif; }
         }
 
         // --- REALTIME LOGIC ---
-        // @ts-ignore
-        const client = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+import { supabase as client } from '@lib/supabaseClient';
         
         const channel = client.channel('campanile', {
             config: {

@@ -136,14 +136,11 @@ body { font-family: 'Cinzel', serif; background: #050508; color: #e5e7eb; }
     </main>
 
     <script>
-        import { createClient } from '@supabase/supabase-js';
         import { checkAndAwardStamp } from '../utils/stamps';
 
         // CLIENT CONFIG
-        const SUPABASE_URL = 'https://sdfwawnviylwwlbnwpnj.supabase.co'; 
-        const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InNkZndhd252aXlsd3dsYm53cG5qIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjkyNzY4MjEsImV4cCI6MjA4NDg1MjgyMX0.oIR0N05DQY6ePfDXVNC0UI9DrLrM-LevsK64ANEJGag';
         
-        const supabase = createClient(SUPABASE_URL, SUPABASE_KEY);
+import { supabase } from '@lib/supabaseClient';
         
         const feed = document.getElementById('prayer-feed');
         const form = document.getElementById('prayer-form');

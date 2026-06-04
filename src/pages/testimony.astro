@@ -24,7 +24,6 @@ body { font-family: 'Cinzel', serif; background: #020205; color: #e5e7eb; }
         }
 </style>
 
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <!-- Nav -->
     <nav class="fixed top-8 left-8 z-50">
         <a href="/" class="text-white/40 hover:text-white transition-colors text-xl flex items-center gap-2">
@@ -107,11 +106,8 @@ body { font-family: 'Cinzel', serif; background: #020205; color: #e5e7eb; }
 
     <script>
         // CLIENT CONFIG
-        const SUPABASE_URL = 'https://sdfwawnviylwwlbnwpnj.supabase.co'; 
-        const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InNkZndhd252aXlsd3dsYm53cG5qIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjkyNzY4MjEsImV4cCI6MjA4NDg1MjgyMX0.oIR0N05DQY6ePfDXVNC0UI9DrLrM-LevsK64ANEJGag';
         
-        // @ts-ignore
-        const supabase = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+import { supabase } from '@lib/supabaseClient';
         
         const feed = document.getElementById('feed');
         const formDiv = document.getElementById('submit-form');

@@ -181,12 +181,9 @@ body { font-family: 'Cinzel', serif; background: #020205; color: #e5e7eb; }
     </div>
 
     <script>
-        import { createClient } from '@supabase/supabase-js';
         import { libraryBooks } from '../utils/library';
 
-        const SUPABASE_URL = 'https://sdfwawnviylwwlbnwpnj.supabase.co'; 
-        const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InNkZndhd252aXlsd3dsYm53cG5qIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjkyNzY4MjEsImV4cCI6MjA4NDg1MjgyMX0.oIR0N05DQY6ePfDXVNC0UI9DrLrM-LevsK64ANEJGag';
-        const client = createClient(SUPABASE_URL, SUPABASE_KEY);
+import { supabase as client } from '@lib/supabaseClient';
         
         const emailEl = document.getElementById('user-email');
         const joinEl = document.getElementById('join-date');
@@ -301,12 +298,9 @@ body { font-family: 'Cinzel', serif; background: #020205; color: #e5e7eb; }
     </script>
 
     <script>
-        import { createClient } from '@supabase/supabase-js';
         import { libraryBooks } from '../utils/library';
 
-        const SUPABASE_URL = 'https://sdfwawnviylwwlbnwpnj.supabase.co'; 
-        const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InNkZndhd252aXlsd3dsYm53cG5qIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjkyNzY4MjEsImV4cCI6MjA4NDg1MjgyMX0.oIR0N05DQY6ePfDXVNC0UI9DrLrM-LevsK64ANEJGag';
-        const client = createClient(SUPABASE_URL, SUPABASE_KEY);
+import { supabase as client } from '@lib/supabaseClient';
         
         const emailEl = document.getElementById('user-email');
         const joinEl = document.getElementById('join-date');

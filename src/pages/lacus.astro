@@ -103,7 +103,6 @@ body { font-family: 'Cinzel', serif; background: #000205; overflow: hidden; }
         }
 </style>
 
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <!-- Nav -->
     <nav class="fixed top-8 left-8 z-50">
         <a href="/" class="text-white/40 hover:text-white transition-colors text-xl flex items-center gap-2">
@@ -127,8 +126,6 @@ body { font-family: 'Cinzel', serif; background: #000205; overflow: hidden; }
 
     <script>
         // CLIENT CONFIG (Recycled from Campanile)
-        const SUPABASE_URL = 'https://sdfwawnviylwwlbnwpnj.supabase.co'; 
-        const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InNkZndhd252aXlsd3dsYm53cG5qIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjkyNzY4MjEsImV4cCI6MjA4NDg1MjgyMX0.oIR0N05DQY6ePfDXVNC0UI9DrLrM-LevsK64ANEJGag';
         
         const pool = document.getElementById('pool');
         const countDisplay = document.getElementById('count-display');
@@ -139,8 +136,7 @@ body { font-family: 'Cinzel', serif; background: #000205; overflow: hidden; }
         let myPos = { x: Math.random() * 80 + 10, y: Math.random() * 80 + 10 }; // 10-90%
         
         // Supabase
-        // @ts-ignore
-        const client = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+import { supabase as client } from '@lib/supabaseClient';
         
         const channel = client.channel('lacus', {
             config: {
