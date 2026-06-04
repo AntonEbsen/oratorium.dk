@@ -1,0 +1,30 @@
+---
+import Layout from '@layouts/Layout.astro';
+---
+
+<Layout
+    fullscreen
+    title="Offline | Oratorium"
+    description="Du er offline."
+    noindex
+    bodyClass="bg-[#020205] text-gray-300 min-h-screen flex flex-col items-center justify-center text-center px-6"
+>
+    <main class="max-w-md">
+        <i class="fa-solid fa-cloud-arrow-down text-gold-500/70 text-5xl mb-8" aria-hidden="true"></i>
+        <h1 class="text-3xl text-gold-300 font-serif mb-4">Du er offline</h1>
+        <p class="sans text-gray-400 leading-relaxed mb-10">
+            Der er ingen forbindelse lige nu. Sider, du allerede har besøgt, virker stadig —
+            og bønnen kræver ingen forbindelse.
+        </p>
+        <div class="flex flex-wrap gap-4 justify-center sans">
+            <a href="/rosary" class="px-6 py-3 border border-gold-500/40 text-gold-300 hover:bg-gold-500 hover:text-black uppercase text-xs tracking-[0.2em] rounded-sm transition-colors">Rosenkransen</a>
+            <a href="/prayers" class="px-6 py-3 border border-white/10 text-gray-400 hover:border-gold-500/40 hover:text-gold-200 uppercase text-xs tracking-[0.2em] rounded-sm transition-colors">Bønner</a>
+        </div>
+        <button
+            onclick="location.reload()"
+            class="mt-10 text-xs uppercase tracking-widest text-gold-500/70 hover:text-gold-300 sans transition-colors"
+        >
+            Prøv igen
+        </button>
+    </main>
+</Layout>
