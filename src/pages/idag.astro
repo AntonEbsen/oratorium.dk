@@ -167,7 +167,7 @@ const dateStr = now.toLocaleDateString('da-DK', { weekday: 'long', day: 'numeric
                         body: JSON.stringify(sub),
                     });
                     if (optinMsg) optinMsg.textContent = res.ok
-                        ? 'Tak! Du får en påmindelse kl. 12 og 18.'
+                        ? 'Tak! Du får Angelus-påmindelsen omkring kl. 12.'
                         : 'Noget gik galt. Prøv igen.';
                 } catch {
                     if (optinMsg) optinMsg.textContent = 'Kunne ikke aktivere påmindelser.';

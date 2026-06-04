@@ -29,6 +29,6 @@
     }
   ],
   "crons": [
-    { "path": "/api/push/angelus", "schedule": "0 11,17 * * *" }
+    { "path": "/api/push/angelus", "schedule": "0 11 * * *" }
   ]
 }
