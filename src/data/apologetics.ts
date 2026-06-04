@@ -7,6 +7,8 @@ export interface Scenario {
     correctResponseId: string;
     responses: Response[];
     explanation: string;
+    scripture?: string;
+    ccc?: string;
 }
 
 export interface Response {
@@ -18,6 +20,8 @@ export interface Response {
 export const scenarios: Scenario[] = [
     {
         id: 'problem_of_evil',
+        scripture: 'Rom 8,28; Visd 1,13–14',
+        ccc: 'KKK 309–314, 324',
         category: 'Gud',
         objection: "Hvis Gud er almægtig og kærlig, hvorfor findes der så ondskab? Enten kan Han ikke stoppe det (ikke almægtig), eller også vil Han ikke (ikke kærlig).",
         objectionSource: "Det Onde's Problem (Epikur)",
@@ -43,6 +47,8 @@ export const scenarios: Scenario[] = [
     },
     {
         id: 'science_vs_faith',
+        scripture: '1 Mos 1,1; Joh 1,1–3',
+        ccc: 'KKK 159, 283–284',
         category: 'Videnskab',
         objection: "Videnskaben forklarer universets oprindelse (Big Bang, Evolution). Vi har ikke brug for Gud som forklaring længere.",
         objectionSource: "Scientisme",
@@ -68,6 +74,8 @@ export const scenarios: Scenario[] = [
     },
     {
         id: 'morality_subjective',
+        scripture: 'Rom 2,14–15',
+        ccc: 'KKK 1954–1960',
         category: 'Moral',
         objection: "Moral er bare en social konstruktion eller evolutionær overlevelse. Der findes ikke 'Godt' eller 'Ondt' objektivt set.",
         objectionSource: "Moralrelativisme",
@@ -93,6 +101,8 @@ export const scenarios: Scenario[] = [
     },
     {
         id: 'crusades_inquisition',
+        scripture: 'Matt 13,24–30',
+        ccc: 'KKK 827',
         category: 'Moral',
         objection: "Religion er årsag til al krig. Se bare på Korstogene og Inkvisitionen. Kirken har blod på hænderne.",
         objectionSource: "Historisk Kritik",
@@ -118,6 +128,8 @@ export const scenarios: Scenario[] = [
     },
     {
         id: 'male_priesthood',
+        scripture: 'Mark 3,13–19',
+        ccc: 'KKK 1577',
         category: 'Kirken',
         objection: "Kirken er sexistisk, fordi den ikke tillader kvindelige præster. Det er diskrimination i 2026.",
         objectionSource: "Moderne Feminisme",
@@ -143,6 +155,8 @@ export const scenarios: Scenario[] = [
     },
     {
         id: 'eucharist_symbol',
+        scripture: 'Joh 6,51–58; 1 Kor 11,23–29',
+        ccc: 'KKK 1374–1377',
         category: 'Jesus',
         objection: "Eukaristien er bare et symbol. Jesus sagde 'dette er mit legeme' metaforisk, ligesom 'jeg er døren'.",
         objectionSource: "Protestantisme",

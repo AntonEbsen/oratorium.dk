@@ -19,6 +19,8 @@ const faqs = scenarios.map((s) => {
         source: s.objectionSource,
         shortAnswer: correct?.text ?? '',
         explanation: s.explanation,
+        scripture: s.scripture,
+        ccc: s.ccc,
     };
 });
 
@@ -81,6 +83,12 @@ const faqLd = {
                     </h2>
                     <p class="text-gold-200 text-sm leading-relaxed mb-3">{f.shortAnswer}</p>
                     <p class="text-gray-400 text-sm leading-relaxed">{f.explanation}</p>
+                    {(f.scripture || f.ccc) && (
+                        <p class="text-[11px] text-gold-500/70 mt-4 pt-3 border-t border-white/5">
+                            <span class="uppercase tracking-widest text-gold-500/50">Kilder:</span>
+                            {f.scripture ? ` ${f.scripture}` : ''}{f.scripture && f.ccc ? ' · ' : ''}{f.ccc ?? ''}
+                        </p>
+                    )}
                 </div>
             </article>
         ))}
