@@ -56,9 +56,13 @@ const ogImage = new URL(image, SITE).href;
 <meta name="twitter:description" content={description} />
 <meta name="twitter:image" content={ogImage} />
 
-<!-- Service Worker -->
+<!-- Service Worker (production only; avoids interfering with the Vite dev server) -->
 <script is:inline>
-    if ('serviceWorker' in navigator) {
+    if (
+        'serviceWorker' in navigator &&
+        location.hostname !== 'localhost' &&
+        location.hostname !== '127.0.0.1'
+    ) {
         window.addEventListener('load', () => navigator.serviceWorker.register('/sw.js'));
     }
 </script>
