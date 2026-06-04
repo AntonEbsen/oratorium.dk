@@ -560,6 +560,17 @@ body { font-family: 'Cinzel', serif; }
              return html;
         }
 
+        // Prefill + auto-send a question from ?q= (e.g. the library's "Spørg Thomas" button).
+        const presetQ = new URLSearchParams(window.location.search).get('q');
+        if (presetQ && input && form) {
+            input.value = presetQ;
+            setTimeout(() => {
+                const f = form as HTMLFormElement;
+                if (typeof f.requestSubmit === 'function') f.requestSubmit();
+                else f.dispatchEvent(new Event('submit', { cancelable: true }));
+            }, 300);
+        }
+
     </script>
     
     <style>

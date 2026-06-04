@@ -3,38 +3,35 @@ import Layout from '@layouts/Layout.astro';
 import { libraryBooks } from '../utils/library';
 
 const tagLabels: Record<string, string> = {
-    theology: 'Teologi',
-    philosophy: 'Filosofi',
-    apologetics: 'Apologetik',
-    classic: 'Klassiker',
-    devotional: 'Andagt',
-    history: 'Historie',
-    biography: 'Biografi',
-    fiction: 'Fiktion',
-    psychology: 'Psykologi',
-    spirituality: 'Spiritualitet',
-    repentance: 'Omvendelse',
+    theology: 'Teologi', philosophy: 'Filosofi', apologetics: 'Apologetik', classic: 'Klassiker',
+    devotional: 'Andagt', history: 'Historie', biography: 'Biografi', fiction: 'Fiktion',
+    psychology: 'Psykologi', spirituality: 'Spiritualitet', repentance: 'Omvendelse', mysticism: 'Mystik',
+};
+const eraOf = (y?: string) => {
+    const n = parseInt(y || '0', 10);
+    return n < 800 ? 'Kirkefædrene' : n <= 1500 ? 'Middelalderen' : 'Moderne';
 };
 const allTags = [...new Set(libraryBooks.flatMap((b) => b.tags))].sort();
+const books = [...libraryBooks].sort((a, b) => parseInt(a.year || '0') - parseInt(b.year || '0'));
 
 const jsonLd = {
     '@context': 'https://schema.org',
     '@type': 'CollectionPage',
     name: 'Biblioteket — kristne klassikere',
     description: 'En kurateret samling af kristne klassikere til fordybelse.',
-    hasPart: libraryBooks.map((b) => ({
+    hasPart: books.map((b) => ({
         '@type': 'Book',
         name: b.title,
         author: { '@type': 'Person', name: b.author },
+        url: `https://oratorium.dk/library/${b.id}`,
         ...(b.year ? { datePublished: b.year } : {}),
-        ...(b.link ? { url: b.link } : {}),
     })),
 };
 ---
 
 <Layout
     title="Biblioteket | Ad Majorem Dei Gloriam"
-    description="Biblioteket — en kurateret samling af kristne klassikere: Augustin, Thomas Aquinas, Chesterton, C.S. Lewis, Pascal og flere. Læs dem online."
+    description="Biblioteket — en kurateret samling af kristne klassikere: kirkefædrene, middelalderens mystikere og moderne apologeter. Læs og lyt online."
     extraFonts={["Playfair+Display:ital,wght@0,400;0,700;1,400"]}
     bodyClass="bg-[#08080a] text-gray-300 min-h-screen w-screen overflow-x-hidden m-0 p-0 selection:bg-gold-500/30"
 >
@@ -46,18 +43,18 @@ body { font-family: 'Cinzel', serif; }
         .sans { font-family: 'Inter', sans-serif; }
 
         .tag-chip {
-            font-size: 10px;
-            text-transform: uppercase;
-            letter-spacing: 0.15em;
-            padding: 0.4rem 0.9rem;
-            border-radius: 999px;
-            border: 1px solid rgba(212, 175, 55, 0.25);
-            color: rgba(212, 175, 55, 0.8);
-            transition: all 0.2s ease;
-            cursor: pointer;
+            font-size: 10px; text-transform: uppercase; letter-spacing: 0.15em;
+            padding: 0.4rem 0.9rem; border-radius: 999px;
+            border: 1px solid rgba(212, 175, 55, 0.25); color: rgba(212, 175, 55, 0.8);
+            transition: all 0.2s ease; cursor: pointer;
         }
         .tag-chip:hover { border-color: rgba(212, 175, 55, 0.6); color: #f2e0a0; }
         .tag-chip.active { background: #d4af37; color: #000; border-color: #d4af37; }
+        .lib-control {
+            background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1);
+            border-radius: 6px; color: #e5e7eb; padding: 0.5rem 0.9rem; font-size: 0.8rem;
+        }
+        .lib-control:focus { outline: none; border-color: rgba(212,175,55,0.5); }
 </style>
     <!-- Background -->
     <div class="fixed inset-0 z-0 pointer-events-none bg-gradient-to-b from-[#15151a] via-[#050508] to-black">
@@ -72,13 +69,25 @@ body { font-family: 'Cinzel', serif; }
         </a>
     </nav>
 
-    <!-- Main Content -->
     <main class="relative z-10 w-full min-h-screen flex flex-col items-center pt-24 pb-24 px-8 max-w-6xl mx-auto">
 
         <!-- Header -->
         <div class="text-center mb-10 animate-fade-in-up">
             <h1 class="text-3xl md:text-5xl text-gold-100 font-bold tracking-wide mb-4">Biblioteket</h1>
             <p class="text-xs text-gold-500/60 uppercase tracking-[0.3em] sans">Visdommens Kilde</p>
+        </div>
+
+        <!-- Controls -->
+        <div class="flex flex-wrap items-center justify-center gap-3 mb-6 sans w-full max-w-2xl">
+            <input id="lib-search" type="search" placeholder="Søg titel eller forfatter…" class="lib-control flex-grow min-w-[200px]" aria-label="Søg i biblioteket" />
+            <select id="lib-sort" class="lib-control" aria-label="Sortér">
+                <option value="year">Kronologisk</option>
+                <option value="title">Titel (A–Å)</option>
+                <option value="author">Forfatter</option>
+            </select>
+            <button id="saved-toggle" class="tag-chip" aria-pressed="false">
+                <i class="fa-regular fa-bookmark mr-1" aria-hidden="true"></i> Mine gemte
+            </button>
         </div>
 
         <!-- Tag filter -->
@@ -90,146 +99,150 @@ body { font-family: 'Cinzel', serif; }
         </div>
 
         <!-- Bookshelf Grid -->
-        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-x-8 gap-y-12 w-full items-start">
-            {libraryBooks.map((book, index) => (
-                <div class="book flex flex-col animate-fade-in-up" data-tags={book.tags.join(' ')} style={`animation-delay: ${index * 0.08}s`}>
-                    <!-- Book Cover -->
-                    <div class={`group relative h-64 md:h-72 w-full rounded-tr-md rounded-br-md shadow-[5px_5px_15px_rgba(0,0,0,0.5)] transition-transform duration-500 hover:-translate-y-2 hover:shadow-[10px_10px_30px_rgba(0,0,0,0.6)] overflow-hidden book-card ${book.coverColor}`}>
-                        <div class="absolute inset-0 opacity-20 mix-blend-multiply bg-[url('https://www.transparenttextures.com/patterns/leather.png')]"></div>
-                        <div class="absolute left-0 top-0 bottom-0 w-8 bg-black/20 border-r border-white/5"></div>
-
-                        <!-- Bookmark Toggle -->
-                        <button class="bookmark-btn absolute top-2 right-2 z-20 p-2" data-id={book.id} aria-label={`Gem ${book.title} i dit Scriptorium`}>
+        <div id="book-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-x-8 gap-y-12 w-full items-start">
+            {books.map((book, index) => (
+                <div class="book flex flex-col animate-fade-in-up"
+                    data-tags={book.tags.join(' ')}
+                    data-title={book.title.toLowerCase()}
+                    data-author={book.author.toLowerCase()}
+                    data-year={parseInt(book.year || '0')}
+                    data-id={book.id}
+                    style={`animation-delay: ${Math.min(index, 8) * 0.06}s`}>
+                    <div class="relative">
+                        <a href={`/library/${book.id}`} aria-label={`${book.title} af ${book.author}`}
+                            class={`block group relative h-64 md:h-72 w-full rounded-tr-md rounded-br-md shadow-[5px_5px_15px_rgba(0,0,0,0.5)] transition-transform duration-500 hover:-translate-y-2 hover:shadow-[10px_10px_30px_rgba(0,0,0,0.6)] overflow-hidden ${book.coverColor}`}>
+                            <div class="absolute inset-0 opacity-20 mix-blend-multiply bg-[url('https://www.transparenttextures.com/patterns/leather.png')]"></div>
+                            <div class="absolute left-0 top-0 bottom-0 w-8 bg-black/20 border-r border-white/5"></div>
+                            <div class="absolute top-8 left-12 right-4">
+                                <h2 class="text-gold-100 text-lg md:text-xl font-bold leading-tight drop-shadow-md border-b border-gold-500/30 pb-2">{book.title}</h2>
+                                <p class="text-gold-500/80 text-xs uppercase tracking-widest mt-2 font-mono">{book.author}</p>
+                            </div>
+                            <div class="absolute bottom-4 right-4 text-xs text-white/30 font-mono">{book.year}</div>
+                        </a>
+                        <button class="bookmark-btn absolute top-2 right-2 z-20 p-2" data-id={book.id} aria-label={`Gem ${book.title}`}>
                             <i class="fa-regular fa-bookmark text-white/50 hover:text-gold-500"></i>
                         </button>
-
-                        <!-- Title -->
-                        <div class="absolute top-8 left-12 right-4">
-                            <h2 class="text-gold-100 text-lg md:text-xl font-bold leading-tight drop-shadow-md border-b border-gold-500/30 pb-2">
-                                {book.title}
-                            </h2>
-                            <p class="text-gold-500/80 text-xs uppercase tracking-widest mt-2 font-mono">
-                                {book.author}
-                            </p>
-                        </div>
-
-                        <div class="absolute bottom-4 right-4 text-xs text-white/30 font-mono">
-                            {book.year}
-                        </div>
                     </div>
 
-                    <!-- Always-visible info (mobile + keyboard friendly) -->
                     <div class="mt-4 px-1">
-                        <div class="flex flex-wrap gap-1.5 mb-3">
+                        <div class="flex flex-wrap items-center gap-2 mb-2">
+                            <span class="text-[9px] uppercase tracking-[0.2em] text-gold-500/50 sans">{eraOf(book.year)}</span>
                             {book.tags.map((t) => (
-                                <span class="text-[9px] uppercase tracking-wider text-gold-500/70 bg-gold-900/20 border border-gold-500/20 px-2 py-0.5 rounded sans">
-                                    {tagLabels[t] ?? t}
-                                </span>
+                                <span class="text-[9px] uppercase tracking-wider text-gold-500/70 bg-gold-900/20 border border-gold-500/20 px-2 py-0.5 rounded sans">{tagLabels[t] ?? t}</span>
                             ))}
                         </div>
-                        <p class="text-sm text-gray-400 text-body italic leading-relaxed mb-3">
-                            {book.description}
-                        </p>
-                        {book.link && (
-                            <a
-                                href={book.link}
-                                target="_blank"
-                                rel="noopener noreferrer"
-                                class="inline-flex items-center gap-2 text-xs uppercase tracking-widest text-gold-500 hover:text-gold-200 border-b border-gold-500/30 hover:border-gold-400 pb-0.5 transition-colors sans"
-                            >
-                                {book.linkLabel ?? 'Læs online'}
-                                <i class="fa-solid fa-arrow-up-right-from-square text-[10px]" aria-hidden="true"></i>
-                            </a>
-                        )}
+                        <p class="text-sm text-gray-400 text-body italic leading-relaxed mb-3">{book.description}</p>
+                        <a href={`/library/${book.id}`} class="text-xs uppercase tracking-widest text-gold-500 hover:text-gold-200 border-b border-gold-500/30 pb-0.5 transition-colors sans">Læs mere →</a>
                     </div>
                 </div>
             ))}
 
-            <p id="no-results" class="hidden col-span-full text-center text-gray-500 italic font-serif py-12">
-                Ingen bøger i denne kategori endnu.
-            </p>
+            <p id="no-results" class="hidden col-span-full text-center text-gray-500 italic font-serif py-12">Ingen bøger matcher.</p>
         </div>
 
     </main>
 
     <div id="toast" class="fixed bottom-8 right-8 bg-gold-600 text-black px-6 py-3 rounded shadow-lg transform translate-y-20 transition-transform duration-300 z-50 font-serif">
-        Bogen er gemt i dit Scriptorium
+        Gemt i dit bibliotek
     </div>
 
     <script>
         import { supabase as client } from '@lib/supabaseClient';
 
+        const grid = document.getElementById('book-grid');
+        const search = document.getElementById('lib-search') as HTMLInputElement;
+        const sortSel = document.getElementById('lib-sort') as HTMLSelectElement;
+        const savedToggle = document.getElementById('saved-toggle');
+        const tagChips = document.querySelectorAll<HTMLElement>('#tag-filter .tag-chip');
+        const noResults = document.getElementById('no-results');
         const toast = document.getElementById('toast');
+
         let currentUser: any = null;
         const myBookmarks = new Set<string>();
+        let activeTag = 'all';
+        let savedOnly = false;
 
-        // --- Tag filtering ---
-        function initFilter() {
-            const chips = document.querySelectorAll<HTMLElement>('.tag-chip');
-            const books = document.querySelectorAll<HTMLElement>('.book');
-            const noResults = document.getElementById('no-results');
-
-            chips.forEach((chip) => {
-                chip.addEventListener('click', () => {
-                    const tag = chip.dataset.tag;
-                    chips.forEach((c) => c.classList.toggle('active', c === chip));
-
-                    let shown = 0;
-                    books.forEach((b) => {
-                        const tags = (b.dataset.tags || '').split(' ');
-                        const match = tag === 'all' || tags.includes(tag!);
-                        b.classList.toggle('hidden', !match);
-                        if (match) shown++;
-                    });
-                    noResults?.classList.toggle('hidden', shown > 0);
-                });
+        function applySort() {
+            if (!grid) return;
+            const key = sortSel?.value || 'year';
+            const cards = [...grid.querySelectorAll<HTMLElement>('.book')];
+            cards.sort((a, b) => {
+                if (key === 'year') return Number(a.dataset.year) - Number(b.dataset.year);
+                const av = a.dataset[key as 'title' | 'author'] || '';
+                const bv = b.dataset[key as 'title' | 'author'] || '';
+                return av.localeCompare(bv, 'da');
             });
+            cards.forEach((c) => grid.appendChild(c)); // no-results <p> stays last
+            if (noResults) grid.appendChild(noResults);
         }
+
+        function applyFilters() {
+            const q = (search?.value || '').toLowerCase().trim();
+            let shown = 0;
+            document.querySelectorAll<HTMLElement>('.book').forEach((b) => {
+                const tags = (b.dataset.tags || '').split(' ');
+                const matchTag = activeTag === 'all' || tags.includes(activeTag);
+                const matchQ = !q || (b.dataset.title || '').includes(q) || (b.dataset.author || '').includes(q);
+                const matchSaved = !savedOnly || myBookmarks.has(b.dataset.id || '');
+                const show = matchTag && matchQ && matchSaved;
+                b.classList.toggle('hidden', !show);
+                if (show) shown++;
+            });
+            noResults?.classList.toggle('hidden', shown > 0);
+        }
+
+        tagChips.forEach((chip) => chip.addEventListener('click', () => {
+            activeTag = chip.dataset.tag || 'all';
+            tagChips.forEach((c) => c.classList.toggle('active', c === chip));
+            applyFilters();
+        }));
+        search?.addEventListener('input', applyFilters);
+        sortSel?.addEventListener('change', () => { applySort(); applyFilters(); });
+
+        savedToggle?.addEventListener('click', () => {
+            if (!currentUser) { window.location.href = '/login'; return; }
+            savedOnly = !savedOnly;
+            savedToggle.classList.toggle('active', savedOnly);
+            savedToggle.setAttribute('aria-pressed', String(savedOnly));
+            applyFilters();
+        });
 
         // --- Bookmarks ---
         function updateUI() {
             document.querySelectorAll<HTMLElement>('.bookmark-btn').forEach((btn) => {
-                const id = btn.dataset.id!;
-                btn.innerHTML = myBookmarks.has(id)
+                btn.innerHTML = myBookmarks.has(btn.dataset.id || '')
                     ? '<i class="fa-solid fa-bookmark text-gold-500"></i>'
                     : '<i class="fa-regular fa-bookmark text-white/50 hover:text-gold-500"></i>';
             });
         }
-
         function showToast(msg: string) {
             if (!toast) return;
             toast.innerText = msg;
             toast.classList.remove('translate-y-20');
             setTimeout(() => toast.classList.add('translate-y-20'), 3000);
         }
-
-        function initBookmarks() {
-            document.querySelectorAll<HTMLElement>('.bookmark-btn').forEach((btn) => {
-                btn.addEventListener('click', async (e) => {
-                    e.preventDefault();
-                    e.stopPropagation();
-                    if (!currentUser) {
-                        window.location.href = '/login';
-                        return;
-                    }
-                    const bookId = btn.dataset.id!;
-                    if (myBookmarks.has(bookId)) {
-                        await client.from('bookmarks').delete().match({ user_id: currentUser.id, book_id: bookId });
-                        myBookmarks.delete(bookId);
-                        showToast('Bogen er fjernet fra Scriptorium');
-                    } else {
-                        await client.from('bookmarks').insert([{ user_id: currentUser.id, book_id: bookId }]);
-                        myBookmarks.add(bookId);
-                        showToast('Bogen er gemt i dit Scriptorium');
-                    }
-                    updateUI();
-                });
+        document.querySelectorAll<HTMLElement>('.bookmark-btn').forEach((btn) => {
+            btn.addEventListener('click', async (e) => {
+                e.preventDefault();
+                e.stopPropagation();
+                if (!currentUser) { window.location.href = '/login'; return; }
+                const id = btn.dataset.id!;
+                if (myBookmarks.has(id)) {
+                    await client.from('bookmarks').delete().match({ user_id: currentUser.id, book_id: id });
+                    myBookmarks.delete(id);
+                    showToast('Fjernet fra dit bibliotek');
+                } else {
+                    await client.from('bookmarks').insert([{ user_id: currentUser.id, book_id: id }]);
+                    myBookmarks.add(id);
+                    showToast('Gemt i dit bibliotek');
+                }
+                updateUI();
+                if (savedOnly) applyFilters();
             });
-        }
+        });
 
         async function init() {
-            initFilter();
-            initBookmarks();
+            applySort();
             try {
                 const { data: { session } } = await client.auth.getSession();
                 currentUser = session?.user;
@@ -238,11 +251,8 @@ body { font-family: 'Cinzel', serif; }
                     data?.forEach((b: any) => myBookmarks.add(b.book_id));
                     updateUI();
                 }
-            } catch (e) {
-                /* offline / not configured — bookmarks just stay inactive */
-            }
+            } catch (e) { /* offline / not configured */ }
         }
-
         init();
     </script>
 </Layout>

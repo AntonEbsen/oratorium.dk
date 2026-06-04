@@ -1,0 +1,142 @@
+---
+import Layout from '@layouts/Layout.astro';
+import { libraryBooks } from '../../utils/library';
+
+export function getStaticPaths() {
+    return libraryBooks.map((book) => ({ params: { id: book.id }, props: { book } }));
+}
+
+const { book } = Astro.props;
+
+const tagLabels: Record<string, string> = {
+    theology: 'Teologi', philosophy: 'Filosofi', apologetics: 'Apologetik', classic: 'Klassiker',
+    devotional: 'Andagt', history: 'Historie', biography: 'Biografi', fiction: 'Fiktion',
+    psychology: 'Psykologi', spirituality: 'Spiritualitet', repentance: 'Omvendelse', mysticism: 'Mystik',
+};
+const eraOf = (y?: string) => {
+    const n = parseInt(y || '0', 10);
+    return n < 800 ? 'Kirkefædrene' : n <= 1500 ? 'Middelalderen' : 'Moderne';
+};
+const era = eraOf(book.year);
+
+const related = libraryBooks
+    .filter((b) => b.id !== book.id && (b.tags.some((t) => book.tags.includes(t)) || eraOf(b.year) === era))
+    .slice(0, 3);
+
+const askUrl = `/aquinas?q=${encodeURIComponent(`Fortæl mig om bogen "${book.title}" af ${book.author}`)}`;
+
+const jsonLd = {
+    '@context': 'https://schema.org',
+    '@graph': [
+        {
+            '@type': 'Book',
+            name: book.title,
+            author: { '@type': 'Person', name: book.author },
+            inLanguage: 'da',
+            ...(book.year ? { datePublished: book.year } : {}),
+            ...(book.link ? { url: book.link } : {}),
+        },
+        {
+            '@type': 'BreadcrumbList',
+            itemListElement: [
+                { '@type': 'ListItem', position: 1, name: 'Biblioteket', item: 'https://oratorium.dk/library' },
+                { '@type': 'ListItem', position: 2, name: book.title },
+            ],
+        },
+    ],
+};
+---
+
+<Layout
+    title={`${book.title} — ${book.author} | Biblioteket`}
+    description={`${book.title} af ${book.author} (${book.year}). ${book.description}`}
+    extraFonts={["Playfair+Display:ital,wght@0,400;0,700;1,400"]}
+    bodyClass="bg-[#08080a] text-gray-300 min-h-screen flex flex-col pt-32 selection:bg-gold-500/30"
+>
+    <script type="application/ld+json" slot="head" set:html={JSON.stringify(jsonLd)}></script>
+
+    <style is:global>
+        body { font-family: 'Cinzel', serif; }
+        .text-body { font-family: 'Playfair Display', serif; }
+        .sans { font-family: 'Inter', sans-serif; }
+    </style>
+
+    <!-- Nav / breadcrumb -->
+    <nav class="fixed top-8 left-8 z-50" aria-label="Brødkrumme">
+        <a href="/library" class="text-gold-500/60 hover:text-gold-400 transition-colors text-xl flex items-center gap-2 sans">
+            <i class="fa-solid fa-arrow-left" aria-hidden="true"></i>
+            <span class="text-xs uppercase tracking-widest hidden md:inline">Biblioteket</span>
+        </a>
+    </nav>
+
+    <main class="max-w-4xl mx-auto px-6 pb-24 w-full">
+        <p class="text-[11px] text-gray-600 sans mb-8">
+            <a href="/library" class="hover:text-gold-400">Biblioteket</a> › <span class="text-gray-500">{book.title}</span>
+        </p>
+
+        <div class="flex flex-col md:flex-row gap-10 mb-12">
+            <!-- Cover -->
+            <div class="shrink-0 mx-auto md:mx-0">
+                <div class={`relative h-72 w-52 rounded-tr-md rounded-br-md shadow-[8px_8px_25px_rgba(0,0,0,0.6)] overflow-hidden ${book.coverColor}`}>
+                    <div class="absolute inset-0 opacity-20 mix-blend-multiply bg-[url('https://www.transparenttextures.com/patterns/leather.png')]"></div>
+                    <div class="absolute left-0 top-0 bottom-0 w-8 bg-black/20 border-r border-white/5"></div>
+                    <div class="absolute top-8 left-12 right-4">
+                        <h1 class="text-gold-100 text-xl font-bold leading-tight drop-shadow-md border-b border-gold-500/30 pb-2">{book.title}</h1>
+                        <p class="text-gold-500/80 text-xs uppercase tracking-widest mt-2 font-mono">{book.author}</p>
+                    </div>
+                    <div class="absolute bottom-4 right-4 text-xs text-white/30 font-mono">{book.year}</div>
+                </div>
+            </div>
+
+            <!-- Info -->
+            <div class="flex-grow">
+                <div class="flex flex-wrap items-center gap-2 mb-4 sans">
+                    <span class="text-[10px] uppercase tracking-[0.25em] text-gold-500/70">{era}</span>
+                    <span class="text-gray-700">·</span>
+                    {book.tags.map((t) => (
+                        <span class="text-[9px] uppercase tracking-wider text-gold-500/70 bg-gold-900/20 border border-gold-500/20 px-2 py-0.5 rounded">{tagLabels[t] ?? t}</span>
+                    ))}
+                </div>
+
+                <p class="text-gray-300 text-body text-lg leading-relaxed mb-6">{book.description}</p>
+
+                {book.quote && (
+                    <blockquote class="border-l-2 border-gold-500/40 pl-5 my-8 text-gold-200/90 text-body italic text-lg leading-relaxed">
+                        „{book.quote}”
+                    </blockquote>
+                )}
+
+                <div class="flex flex-wrap gap-4 mt-8 sans">
+                    {book.link && (
+                        <a href={book.link} target="_blank" rel="noopener noreferrer" class="inline-flex items-center gap-2 px-6 py-3 border border-gold-500/40 text-gold-300 hover:bg-gold-500 hover:text-black uppercase text-xs tracking-[0.2em] rounded-sm transition-colors">
+                            {book.linkLabel ?? 'Læs online'} <i class="fa-solid fa-arrow-up-right-from-square text-[10px]" aria-hidden="true"></i>
+                        </a>
+                    )}
+                    {book.audio && (
+                        <a href={book.audio} target="_blank" rel="noopener noreferrer" class="inline-flex items-center gap-2 px-6 py-3 border border-white/10 text-gray-400 hover:border-gold-500/40 hover:text-gold-200 uppercase text-xs tracking-[0.2em] rounded-sm transition-colors">
+                            <i class="fa-solid fa-headphones text-[11px]" aria-hidden="true"></i> Lyt (LibriVox)
+                        </a>
+                    )}
+                    <a href={askUrl} class="inline-flex items-center gap-2 px-6 py-3 border border-white/10 text-gray-400 hover:border-gold-500/40 hover:text-gold-200 uppercase text-xs tracking-[0.2em] rounded-sm transition-colors">
+                        <i class="fa-solid fa-feather text-[11px]" aria-hidden="true"></i> Spørg Thomas
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <!-- Related -->
+        {related.length > 0 && (
+            <section class="border-t border-white/5 pt-10">
+                <h2 class="text-[10px] uppercase tracking-[0.3em] text-gold-500/60 sans mb-6">Beslægtede værker</h2>
+                <div class="grid grid-cols-1 sm:grid-cols-3 gap-5">
+                    {related.map((b) => (
+                        <a href={`/library/${b.id}`} class="block border border-white/10 rounded-lg p-5 bg-white/[0.02] hover:border-gold-500/30 transition-colors group">
+                            <h3 class="text-gold-200 font-serif group-hover:text-gold-100">{b.title}</h3>
+                            <p class="text-gold-500/70 text-[10px] uppercase tracking-widest mt-1 sans">{b.author}</p>
+                        </a>
+                    ))}
+                </div>
+            </section>
+        )}
+    </main>
+</Layout>
