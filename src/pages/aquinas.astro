@@ -546,11 +546,18 @@ body { font-family: 'Cinzel', serif; }
         }
 
         function formatText(text: string) {
-             // Simple markdown
-             return text
+             const PAGES = ['/mass','/rosary','/prayers','/sakramenter','/catechism','/confession','/speculum','/apologetik','/dictionary','/saints','/calendar','/idag','/locations','/convert','/latina','/lectio','/seek'];
+             let html = text
+                .replace(/\*\*([^\*]+)\*\*/g, '<strong>$1</strong>') // Bold (before italics)
                 .replace(/\*([^\*]+)\*/g, '<em>$1</em>') // Italics
-                .replace(/\*\*([^\*]+)\*\*/g, '<strong>$1</strong>') // Bold
                 .replace(/\n/g, '<br>');
+             // Citation links: [tekst](/sti) -> anchor, but only for known on-site paths
+             html = html.replace(/\[([^\]]+)\]\((\/[a-z-]+)\)/g, (_m, label, path) =>
+                 PAGES.includes(path)
+                     ? `<a href="${path}" class="text-gold-400 underline underline-offset-2 hover:text-gold-200">${label}</a>`
+                     : label
+             );
+             return html;
         }
 
     </script>

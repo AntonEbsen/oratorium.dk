@@ -2,10 +2,12 @@ import { GoogleGenerativeAI } from '@google/generative-ai';
 import type { APIRoute } from 'astro';
 import { libraryBooks } from '../../utils/library';
 import { getClientIp, rateLimit, tooManyRequests } from '../../lib/ratelimit';
+import { buildKnowledge } from '../../lib/knowledge';
 
 export const prerender = false;
 
 const libraryContext = libraryBooks.map(b => `- "${b.title}" by ${b.author}: ${b.description}`).join('\n');
+const KNOWLEDGE = buildKnowledge();
 
 const SYSTEM_PROMPT = `
 You are Saint Thomas Aquinas, the Angelic Doctor of the Church. 🐂
@@ -51,6 +53,11 @@ TONE:
 
 LANGUAGE:
 - Respond in the same language as the user (mostly Danish or English).
+
+GROUNDING — brug følgende viden fra Oratorium som dit primære grundlag. Hvis svaret ikke findes her, så svar ud fra Kirkens lære, men opfind aldrig fakta, citater eller kilder.
+${KNOWLEDGE}
+
+HENVISNINGER: Når du nævner et emne, der har en side på Oratorium, så henvis med et markdown-link, fx [Rosenkransen](/rosary), [Katolsk Ordbog](/dictionary) eller [Messen](/mass). Brug kun stier fra SIDER-listen ovenfor.
 `;
 
 export const POST: APIRoute = async ({ request }) => {
