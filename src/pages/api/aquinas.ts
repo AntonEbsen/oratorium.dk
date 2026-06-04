@@ -1,6 +1,7 @@
 import { GoogleGenerativeAI } from '@google/generative-ai';
 import type { APIRoute } from 'astro';
 import { libraryBooks } from '../../utils/library';
+import { getClientIp, rateLimit, tooManyRequests } from '../../lib/ratelimit';
 
 export const prerender = false;
 
@@ -53,6 +54,8 @@ LANGUAGE:
 `;
 
 export const POST: APIRoute = async ({ request }) => {
+    if (!rateLimit('aquinas:' + getClientIp(request), 8, 60000)) return tooManyRequests();
+
     try {
         const body = await request.json();
         const userMessage = body.message;

@@ -75,6 +75,8 @@ body { font-family: 'Cinzel', serif; background: #020205; color: #e5e7eb; }
         }
 
         function renderPilgrims(list) {
+            // Escape user-supplied values before inserting into innerHTML (prevents stored XSS).
+            const esc = (s) => String(s ?? '').replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
             container.innerHTML = '';
             
             if(!list || list.length === 0) {
@@ -99,10 +101,10 @@ body { font-family: 'Cinzel', serif; background: #020205; color: #e5e7eb; }
                 const streak = p.prayer_streak || 0;
                 const roses = p.rosary_count || 0;
 
-                // Avatar Logic
+                // Avatar Logic (only allow http(s) URLs; escape to prevent injection)
                 let avatarHtml = `<i class="fa-solid fa-cross text-lg"></i>`;
-                if(p.avatar_url) {
-                    avatarHtml = `<img src="${p.avatar_url}" class="w-full h-full object-cover">`;
+                if(p.avatar_url && /^https?:\/\//.test(p.avatar_url)) {
+                    avatarHtml = `<img src="${esc(p.avatar_url)}" class="w-full h-full object-cover" alt="">`;
                 }
 
                 const el = document.createElement('a');
@@ -114,7 +116,7 @@ body { font-family: 'Cinzel', serif; background: #020205; color: #e5e7eb; }
                             ${avatarHtml}
                         </div>
                         <div class="text-left">
-                            <h3 class="text-gray-200 group-hover:text-white font-serif text-lg leading-tight transition-colors">${name}</h3>
+                            <h3 class="text-gray-200 group-hover:text-white font-serif text-lg leading-tight transition-colors">${esc(name)}</h3>
                             <p class="text-[10px] text-gray-600 uppercase tracking-wider mt-1">Siden ${joined}</p>
                         </div>
                     </div>

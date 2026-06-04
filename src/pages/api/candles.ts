@@ -1,6 +1,7 @@
 
 import type { APIRoute } from "astro";
 import { createClient } from "@supabase/supabase-js";
+import { getClientIp, rateLimit, tooManyRequests, cleanText } from "../../lib/ratelimit";
 
 export const prerender = false;
 
@@ -41,6 +42,8 @@ export const GET: APIRoute = async () => {
 };
 
 export const POST: APIRoute = async ({ request }) => {
+    if (!rateLimit('candles:' + getClientIp(request), 5, 60000)) return tooManyRequests();
+
     const supabaseUrl = import.meta.env.SUPABASE_URL;
     const supabaseKey = import.meta.env.SUPABASE_ANON_KEY || import.meta.env.SUPABASE_KEY;
 
@@ -54,7 +57,9 @@ export const POST: APIRoute = async ({ request }) => {
     const supabase = createClient(supabaseUrl, supabaseKey);
 
     try {
-        const { message, position } = await request.json();
+        const body = await request.json();
+        const message = cleanText(body.message, 200);
+        const pos = Number.isInteger(body.position) ? Math.min(49, Math.max(0, body.position)) : 0;
 
         if (!message) {
             return new Response(JSON.stringify({ error: "Message is required" }), {
@@ -69,7 +74,7 @@ export const POST: APIRoute = async ({ request }) => {
             .insert([
                 {
                     message: message, // Intention
-                    position: position || 0, // Slot index (0-49)
+                    position: pos, // Slot index (0-49)
                     created_at: new Date().toISOString()
                 },
             ])

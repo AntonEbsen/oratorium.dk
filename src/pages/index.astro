@@ -287,6 +287,7 @@ const jsonLd = {
 
     <!-- AUDIO -->
     <audio id="shrine-audio" loop preload="none">
+        <source src="/assets/audio/chant.m4a" type="audio/mp4">
         <source src="/assets/audio/chant.mp3" type="audio/mpeg">
         <source src="/assets/audio/chant.ogg" type="audio/ogg">
     </audio>
@@ -313,7 +314,7 @@ const jsonLd = {
         // Only reveal the player if the audio file actually exists.
         window.addEventListener('load', async () => {
             try {
-                const head = await fetch('/assets/audio/chant.mp3', { method: 'HEAD' });
+                const head = await fetch('/assets/audio/chant.m4a', { method: 'HEAD' });
                 if (!head.ok) { btn.style.display = 'none'; return; }
             } catch {
                 btn.style.display = 'none';

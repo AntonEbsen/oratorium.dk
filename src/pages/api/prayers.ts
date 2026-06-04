@@ -1,6 +1,7 @@
 
 import { createClient } from '@supabase/supabase-js';
 import type { APIRoute } from 'astro';
+import { getClientIp, rateLimit, tooManyRequests, cleanText } from '../../lib/ratelimit';
 
 export const prerender = false;
 
@@ -25,6 +26,8 @@ export const GET: APIRoute = async ({ request }) => {
 
 // POST: Add new prayer
 export const POST: APIRoute = async ({ request }) => {
+    if (!rateLimit('prayers:' + getClientIp(request), 5, 60000)) return tooManyRequests();
+
     const supabaseUrl = import.meta.env.SUPABASE_URL;
     const supabaseKey = import.meta.env.SUPABASE_ANON_KEY;
     const supabase = createClient(supabaseUrl, supabaseKey);
@@ -32,16 +35,17 @@ export const POST: APIRoute = async ({ request }) => {
     try {
         const body = await request.json();
 
-        // Basic Validation
-        if (!body.content || body.content.length > 500) {
-            return new Response(JSON.stringify({ error: "Invalid content length" }), { status: 400 });
+        const content = cleanText(body.content, 500);
+        const author = cleanText(body.author, 60) || 'Anonym';
+        if (!content) {
+            return new Response(JSON.stringify({ error: "Invalid content" }), { status: 400 });
         }
 
         const { data, error } = await supabase
             .from('prayers')
             .insert([{
-                content: body.content,
-                author: body.author || 'Anonym'
+                content: content,
+                author: author
             }])
             .select();
 
