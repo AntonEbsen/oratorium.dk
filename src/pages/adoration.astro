@@ -1,5 +1,7 @@
 ---
 import Layout from '@layouts/Layout.astro';
+import { Image } from 'astro:assets';
+import monstrance from '@assets/img/monstrance.png';
 ---
 
 <Layout
@@ -50,8 +52,8 @@ body { font-family: 'Cinzel', serif; }
         <!-- MONSTRANCE -->
         <div class="relative z-20 transition-all duration-3000 ease-in-out transform scale-95 hover:scale-100" id="monstrance-container">
             <div class="absolute inset-0 bg-gold-500/10 rounded-full blur-[100px] animate-pulse-slow"></div>
-            <img src="/assets/monstrance.png" alt="Monstrance showing the Blessed Sacrament" 
-                 class="w-[300px] md:w-[500px] h-auto object-contain monstrance-glow relative z-10 drop-shadow-2xl">
+            <Image src={monstrance} alt="Monstrance showing the Blessed Sacrament" width={500} format="webp"
+                 class="w-[300px] md:w-[500px] h-auto object-contain monstrance-glow relative z-10 drop-shadow-2xl" />
         </div>
 
         <!-- CONTROLS (Initial State) -->

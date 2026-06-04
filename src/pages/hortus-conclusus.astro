@@ -1,5 +1,7 @@
 ---
 import Layout from '@layouts/Layout.astro';
+import { Image } from 'astro:assets';
+import statue from '@assets/img/statue_virgin_mary.png';
 ---
 
 <Layout
@@ -41,7 +43,7 @@ body { font-family: 'Cinzel', serif; }
         
         <!-- STATUE -->
          <div class="absolute bottom-[5vh] z-10 drop-shadow-2xl transition-opacity animate-in">
-            <img src="/assets/statue_virgin_mary.png" alt="Statue of Virgin Mary" class="h-[50vh] md:h-[60vh] object-contain opacity-95">
+            <Image src={statue} alt="Statue of Virgin Mary" width={700} format="webp" class="h-[50vh] md:h-[60vh] w-auto object-contain opacity-95" />
          </div>
 
         <!-- Flowers Container (Spans full width) -->

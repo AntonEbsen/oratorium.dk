@@ -1,5 +1,8 @@
 ---
 import Layout from '@layouts/Layout.astro';
+import { Image } from 'astro:assets';
+import keysToPeter from '@assets/img/keys_to_peter.png';
+import popeOfficial from '@assets/img/pope_leo_xiv_official.png';
 ---
 
 <Layout
@@ -63,7 +66,7 @@ body { font-family: 'Cinzel', serif; background: #fdfbf7; color: #0a0a0a; } /* V
             <div class="bg-white p-2 border border-gold-400 shadow-xl rotate-1">
                  <!-- St Peter Image -->
                  <div class="aspect-[1/1] bg-gray-200 flex items-center justify-center text-gray-400 italic font-serif relative overflow-hidden">
-                     <img src="/assets/keys_to_peter.png" class="w-full h-full object-cover" alt="Nøgleoverdragelsen">
+                     <Image src={keysToPeter} width={800} format="webp" class="w-full h-full object-cover" alt="Nøgleoverdragelsen" />
                  </div>
                  <p class="text-[12px] text-center text-black mt-2 uppercase tracking-widest font-bold">Kristus giver Himmerigets Nøgler til Peter</p>
             </div>
@@ -90,7 +93,7 @@ body { font-family: 'Cinzel', serif; background: #fdfbf7; color: #0a0a0a; } /* V
             <h2 class="text-3xl text-black font-serif mb-12 font-bold">Leo XIV</h2>
             <div class="relative inline-block group">
                  <div class="absolute inset-0 bg-gold-400 rounded-full blur-[50px] opacity-20 group-hover:opacity-40 transition-opacity"></div>
-                 <img src="/assets/pope_leo_xiv_official.png" class="relative z-10 w-64 h-64 rounded-full object-cover border-4 border-white shadow-2xl mx-auto mb-6" alt="Pave Leo XIV">
+                 <Image src={popeOfficial} width={512} format="webp" class="relative z-10 w-64 h-64 rounded-full object-cover border-4 border-white shadow-2xl mx-auto mb-6" alt="Pave Leo XIV" />
             </div>
             <p class="text-xl font-serif text-black mb-2 font-bold">Pave Leo XIV</p>
             <p class="text-xs uppercase tracking-widest text-gray-900 mb-6 font-bold">(Nuværende Pontifex)</p>
