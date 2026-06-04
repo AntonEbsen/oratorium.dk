@@ -20,6 +20,25 @@ const prayLinks = [
 ---
 
 <footer class="sans mt-auto border-t border-gold-900/40 bg-black/40 text-gray-400" data-pagefind-ignore>
+    <!-- Newsletter / formation signup -->
+    <div class="border-b border-white/5 py-10 px-6 text-center">
+        <h2 class="font-serif text-gold-200 text-lg mb-2">Bliv på vejen</h2>
+        <p class="text-xs text-gray-500 mb-5 max-w-md mx-auto leading-relaxed">
+            Få en stille åndelig påmindelse i din indbakke — ikke spam, kun det væsentlige.
+        </p>
+        <form id="newsletter-form" class="flex flex-col sm:flex-row gap-3 max-w-md mx-auto">
+            <label for="newsletter-email" class="sr-only">E-mailadresse</label>
+            <input id="newsletter-email" type="email" name="email" required autocomplete="email"
+                placeholder="din@email.dk"
+                class="flex-grow bg-white/5 border border-white/10 rounded px-4 py-2 text-sm text-gray-200 placeholder-gray-600 focus:border-gold-500/50 outline-none" />
+            <button type="submit"
+                class="px-6 py-2 bg-gold-600 text-black text-xs uppercase tracking-widest rounded hover:bg-gold-500 transition-colors whitespace-nowrap">
+                Tilmeld
+            </button>
+        </form>
+        <p id="newsletter-msg" class="text-xs mt-3 min-h-[1rem]" aria-live="polite"></p>
+    </div>
+
     <div class="max-w-6xl mx-auto px-6 py-16 grid grid-cols-1 md:grid-cols-4 gap-10">
         <!-- Brand -->
         <div class="md:col-span-1">
@@ -74,4 +93,30 @@ const prayLinks = [
     <div class="border-t border-white/5 py-6 px-6 text-center text-[11px] text-gray-600">
         © {year} Oratorium · oratorium.dk
     </div>
+
+    <script>
+        const nForm = document.getElementById('newsletter-form') as HTMLFormElement | null;
+        const nMsg = document.getElementById('newsletter-msg');
+        nForm?.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const email = new FormData(nForm).get('email');
+            if (nMsg) { nMsg.textContent = 'Tilmelder…'; nMsg.className = 'text-xs mt-3 min-h-[1rem] text-gray-500'; }
+            try {
+                const res = await fetch('/api/subscribe', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ email }),
+                });
+                if (res.ok) {
+                    nForm.reset();
+                    if (nMsg) { nMsg.textContent = 'Tak! Du er tilmeldt.'; nMsg.className = 'text-xs mt-3 min-h-[1rem] text-gold-400'; }
+                } else {
+                    const d = await res.json().catch(() => ({}));
+                    if (nMsg) { nMsg.textContent = (d && d.error) || 'Noget gik galt. Prøv igen.'; nMsg.className = 'text-xs mt-3 min-h-[1rem] text-red-400'; }
+                }
+            } catch {
+                if (nMsg) { nMsg.textContent = 'Netværksfejl. Prøv igen.'; nMsg.className = 'text-xs mt-3 min-h-[1rem] text-red-400'; }
+            }
+        });
+    </script>
 </footer>
