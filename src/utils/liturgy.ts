@@ -57,84 +57,66 @@ export function getSaint(date: Date): Saint | null {
 }
 
 export function getLiturgicalSeason(date: Date = new Date()): LiturgicalSeason {
-    const year = date.getFullYear();
-    const easter = getEasterDate(year);
+    const atMidnight = (x: Date) => { const c = new Date(x); c.setHours(0, 0, 0, 0); return c; };
+    const addDays = (base: Date, n: number) => { const c = atMidnight(base); c.setDate(c.getDate() + n); return c; };
 
-    // Advent: 4th Sunday before Christmas
-    const christmas = new Date(year, 11, 25); // Dec 25
-    const adventStart = new Date(christmas);
-    adventStart.setDate(christmas.getDate() - (christmas.getDay() + 21)); // Approx logic
+    const d = atMidnight(date);
+    const y = d.getFullYear();
+    const t = d.getTime();
 
-    // Lent: Ash Wednesday (46 days before Easter)
-    const ashWednesday = new Date(easter);
-    ashWednesday.setDate(easter.getDate() - 46);
+    // Movable dates derived from Easter (Gauss).
+    const easter = atMidnight(getEasterDate(y));
+    const ashWed = addDays(easter, -46);
+    const laetare = addDays(easter, -21);  // 4th Sunday of Lent
+    const palmSun = addDays(easter, -7);
+    const holyThu = addDays(easter, -3);
+    const goodFri = addDays(easter, -2);
+    const holySat = addDays(easter, -1);
+    const pentecost = addDays(easter, 49);
 
-    // Pentecost: 50 days after Easter
-    const pentecost = new Date(easter);
-    pentecost.setDate(easter.getDate() + 49);
+    // Advent: 1st Sunday = the Sunday on/before 24 Dec, minus three weeks.
+    const christmas = atMidnight(new Date(y, 11, 25));
+    const dec24 = new Date(y, 11, 24);
+    const fourthAdvent = addDays(dec24, -dec24.getDay());
+    const firstAdvent = addDays(fourthAdvent, -21);
+    const gaudete = addDays(firstAdvent, 14);  // 3rd Sunday of Advent
 
-    const now = date.getTime();
+    // Baptism of the Lord: the Sunday after Epiphany (6 Jan).
+    const epiphany = new Date(y, 0, 6);
+    const baptism = addDays(epiphany, ((7 - epiphany.getDay()) % 7) || 7);
 
-    // 1. ADVENT (Purple)
-    if (now >= adventStart.getTime() && now < christmas.getTime()) {
-        return {
-            name: "Advent",
-            color: 'purple',
-            description: "Ventetiden. Vi forbereder os på Kristi komme i ydmyghed og bod."
-        };
+    // ADVENT
+    if (t >= firstAdvent.getTime() && t < christmas.getTime()) {
+        return isSameDay(d, gaudete)
+            ? { name: "3. søndag i advent", color: 'rose', description: "Gaudete — glæd jer, for Herren er nær." }
+            : { name: "Advent", color: 'purple', description: "Ventetiden. Vi forbereder os på Kristi komme i ydmyghed og bod." };
     }
 
-    // 2. CHRISTMAS (White)
-
-    if (now >= christmas.getTime() || (date.getMonth() === 0 && date.getDate() <= 6)) {
-        return {
-            name: "Juletiden",
-            color: 'white',
-            description: "Glæden over Guds inkarnation. Kristus er født!"
-        };
+    // CHRISTMAS (25 Dec → Baptism of the Lord, across the new year)
+    if (t >= christmas.getTime() || t <= baptism.getTime()) {
+        return { name: "Juletiden", color: 'white', description: "Glæden over Guds inkarnation. Kristus er født!" };
     }
 
-    // 3. LENT (Purple)
-    if (now >= ashWednesday.getTime() && now < easter.getTime()) {
-        if (now >= easter.getTime() - (7 * 24 * 60 * 60 * 1000)) {
-            // Holy Week (Red/Purple? Usually Red for Palms/Friday, White for Thursday.. simpler to keep Purple/Red mix)
-            return {
-                name: "Den Stille Uge",
-                color: 'purple',
-                description: "Vi vandrer med Jesus mod korset og graven."
-            }
-        }
-        return {
-            name: "Fasten",
-            color: 'purple',
-            description: "40 dage i ørkenen. Bøn, faste og almisse."
-        };
+    // TRIDUUM (individual days)
+    if (isSameDay(d, holyThu)) return { name: "Skærtorsdag", color: 'white', description: "Herrens nadver — den nat, da han blev forrådt." };
+    if (isSameDay(d, goodFri)) return { name: "Langfredag", color: 'red', description: "Korset. Kristus dør for vores skyld." };
+    if (isSameDay(d, holySat)) return { name: "Påskelørdag", color: 'white', description: "Graven og stilheden — og påskenattens lys." };
+
+    // LENT (Ash Wednesday → Holy Thursday)
+    if (t >= ashWed.getTime() && t < holyThu.getTime()) {
+        if (isSameDay(d, laetare)) return { name: "4. søndag i fasten", color: 'rose', description: "Laetare — glæd dig, påsken nærmer sig." };
+        if (t >= palmSun.getTime()) return { name: "Den Stille Uge", color: 'purple', description: "Vi vandrer med Jesus mod korset og graven." };
+        return { name: "Fasten", color: 'purple', description: "40 dage i ørkenen. Bøn, faste og almisse." };
     }
 
-    // 4. EASTER (White)
-    if (now >= easter.getTime() && now <= pentecost.getTime()) {
-        return {
-            name: "Påsketiden",
-            color: 'white',
-            description: "Han er opstanden! Døden er overvundet. Alleluia!"
-        };
+    // EASTER (Easter Sunday → Pentecost)
+    if (isSameDay(d, pentecost)) return { name: "Pinse", color: 'red', description: "Helligånden kommer. Kirkens fødselsdag." };
+    if (t >= easter.getTime() && t < pentecost.getTime()) {
+        return { name: "Påsketiden", color: 'white', description: "Han er opstanden! Døden er overvundet. Alleluia!" };
     }
 
-    // 5. PENTECOST (Red) - Just the day/week? Let's say the day.
-    if (isSameDay(date, pentecost)) {
-        return {
-            name: "Pinse",
-            color: 'red',
-            description: "Helligånden kommer. Kirkens fødselsdag."
-        };
-    }
-
-    // 6. ORDINARY TIME (Green)
-    return {
-        name: "Almindelig Tid",
-        color: 'green',
-        description: "Kirken vokser. Vi lever i troen i hverdagen."
-    };
+    // ORDINARY TIME
+    return { name: "Almindelig Tid", color: 'green', description: "Kirken vokser. Vi lever i troen i hverdagen." };
 }
 
 // Gauss Algorithm for Easter Date
