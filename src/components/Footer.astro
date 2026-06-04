@@ -4,6 +4,7 @@
 const year = new Date().getFullYear();
 
 const findLinks = [
+    { label: 'Søg', href: '/soeg' },
     { label: 'Dagen i dag', href: '/idag' },
     { label: 'Vejen Hjem', href: '/seek' },
     { label: 'Messetider', href: '/locations' },
@@ -18,7 +19,7 @@ const prayLinks = [
 ];
 ---
 
-<footer class="sans mt-auto border-t border-gold-900/40 bg-black/40 text-gray-400">
+<footer class="sans mt-auto border-t border-gold-900/40 bg-black/40 text-gray-400" data-pagefind-ignore>
     <div class="max-w-6xl mx-auto px-6 py-16 grid grid-cols-1 md:grid-cols-4 gap-10">
         <!-- Brand -->
         <div class="md:col-span-1">

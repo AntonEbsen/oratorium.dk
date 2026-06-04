@@ -68,7 +68,7 @@ const {
         />
         <slot name="head" />
     </head>
-    <body id={bodyId} class:list={['selection:bg-gold-500/30', bodyClass]}>
+    <body id={bodyId} class:list={['selection:bg-gold-500/30', bodyClass]} data-pagefind-ignore={fullscreen || undefined}>
         <a href="#hovedindhold" class="skip-link sans">Spring til indhold</a>
         <slot />
         {!fullscreen && <Footer />}

@@ -5,7 +5,7 @@
     "scripts": {
         "dev": "astro dev",
         "start": "astro dev",
-        "build": "astro build",
+        "build": "astro build && pagefind --site .vercel/output/static",
         "preview": "astro preview",
         "astro": "astro"
     },
@@ -35,5 +35,8 @@
     },
     "engines": {
         "node": ">=20.0.0 <23.0.0"
+    },
+    "devDependencies": {
+        "pagefind": "^1.5.2"
     }
 }
